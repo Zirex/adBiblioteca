@@ -1,0 +1,91 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Vistas;
+
+import Clases.Libro;
+import java.awt.Component;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.AbstractCellEditor;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JTable;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+
+/**
+ *
+ * @author zirex
+ */
+public class MyTableRenderer {
+    
+    public static class BotonLibroRenderer implements TableCellRenderer{
+
+        public final Icon PREVIEW_ICON = new ImageIcon(getClass().getResource("/Imagenes/editar.png"));
+        private JButton btnLibro= new JButton(PREVIEW_ICON);    
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            btnLibro.setFocusable(false); 
+            btnLibro.setFocusPainted(false);
+            btnLibro.setMargin(new Insets(0, 0, 0, 0));
+            btnLibro.setToolTipText("Clic para mirar con detalle el producto");
+            return btnLibro;
+        }
+    }
+    
+    public static class BotonLibroEditor extends AbstractCellEditor implements TableCellEditor{
+        public final Icon PREVIEW_ICON = new ImageIcon(getClass().getResource("/Imagenes/editar.png"));
+        private JButton btn= new JButton(PREVIEW_ICON);  
+        
+        public BotonLibroEditor(final JTable table){
+            btn.setFocusable(false);
+            btn.setFocusPainted(false); 
+            btn.setMargin(new Insets(0, 0, 0, 0));
+            btn.setToolTipText("Clic para mirar con detalle el producto");
+            btn.addActionListener(new ActionListener(){
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int row= table.convertRowIndexToModel(table.getEditingRow());
+                    String id_libro= table.getValueAt(row, 0).toString();
+                    Libro libro = Libro.libroBD(id_libro);
+                    internalLibro.txtNomLibro.setText(libro.getNomLibro());
+                    internalLibro.txtEditorial.setText(libro.getEditorial());
+                    internalLibro.txtAutor.setText(libro.getNomAutor());
+                    internalLibro.cmbGrado.setSelectedIndex(Integer.parseInt(libro.getGrado()));
+                    internalLibro.txtArea.setText(libro.getArea());
+                    internalLibro.txaCota.setText(libro.getCota());
+                    internalLibro.txtEjemplares.setText(libro.getEjemplar());
+                    internalLibro.txtUbicacion.setText(libro.getUbicacion());
+                    if(libro.getPrestamo().equals("0")){
+                        internalLibro.rdbNo.setSelected(true);
+                    }
+                    else{
+                        internalLibro.rdbSi.setSelected(true);
+                    }
+                    internalLibro.btnGuardar.setText("Actualizar");
+                    internalLibro.libroTabla = libro;
+                }
+                
+            });
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return null;
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            return btn;
+        }
+        
+    }
+    
+}
