@@ -34,7 +34,7 @@ public class MyTableRenderer {
             btnLibro.setFocusable(false); 
             btnLibro.setFocusPainted(false);
             btnLibro.setMargin(new Insets(0, 0, 0, 0));
-            btnLibro.setToolTipText("Clic para mirar con detalle el producto");
+            btnLibro.setToolTipText("Clic para modificar el libro de la fila");
             return btnLibro;
         }
     }

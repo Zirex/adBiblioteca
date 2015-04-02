@@ -6,6 +6,7 @@
 package Vistas;
 
 import Clases.Libro;
+import Clases.Usuario;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
@@ -21,6 +22,7 @@ public class internalResumen extends javax.swing.JInternalFrame {
     public internalResumen() {
         initComponents();
         this.cargarTablaLibro();
+        this.cargarTablaUsuario();
     }
     
     private void cargarTablaLibro(){
@@ -31,6 +33,12 @@ public class internalResumen extends javax.swing.JInternalFrame {
         TableColumn column = this.tablaLibro.getColumnModel().getColumn(7);
         column.setCellRenderer(new MyTableRenderer.BotonLibroRenderer());
         column.setCellEditor(new MyTableRenderer.BotonLibroEditor(tablaLibro));
+    }
+    
+    private void cargarTablaUsuario(){
+        AbstractTableModel model= Usuario.ultimosUsuarios();
+        this.tablaUsuario.setModel(model);
+        this.tablaUsuario.getTableHeader().setReorderingAllowed(false);
     }
 
     /**
@@ -47,6 +55,8 @@ public class internalResumen extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaLibro = new javax.swing.JTable();
         panelUsuarios = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tablaUsuario = new javax.swing.JTable();
         panelPrestamos = new javax.swing.JPanel();
         panelEstadistico = new javax.swing.JPanel();
 
@@ -77,17 +87,22 @@ public class internalResumen extends javax.swing.JInternalFrame {
         contenedor.add(panelLibro);
 
         panelUsuarios.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Resumen de usuarios"));
+        panelUsuarios.setLayout(new javax.swing.BoxLayout(panelUsuarios, javax.swing.BoxLayout.LINE_AXIS));
 
-        javax.swing.GroupLayout panelUsuariosLayout = new javax.swing.GroupLayout(panelUsuarios);
-        panelUsuarios.setLayout(panelUsuariosLayout);
-        panelUsuariosLayout.setHorizontalGroup(
-            panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 687, Short.MAX_VALUE)
-        );
-        panelUsuariosLayout.setVerticalGroup(
-            panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 95, Short.MAX_VALUE)
-        );
+        tablaUsuario.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tablaUsuario);
+
+        panelUsuarios.add(jScrollPane2);
 
         contenedor.add(panelUsuarios);
 
@@ -125,7 +140,7 @@ public class internalResumen extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(contenedor, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
+            .addComponent(contenedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -139,10 +154,12 @@ public class internalResumen extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel contenedor;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel panelEstadistico;
     private javax.swing.JPanel panelLibro;
     private javax.swing.JPanel panelPrestamos;
     private javax.swing.JPanel panelUsuarios;
     private javax.swing.JTable tablaLibro;
+    private javax.swing.JTable tablaUsuario;
     // End of variables declaration//GEN-END:variables
 }

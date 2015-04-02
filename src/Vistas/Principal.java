@@ -15,6 +15,8 @@ import javax.swing.JInternalFrame;
 public class Principal extends javax.swing.JFrame {
     private internalLibro iLibro;
     private internalResumen iResumen;
+    private internalUsuario iUsuario;
+    private internalMostrarUsuarios iMUsuario;
 
     /**
      * Creates new form Principal
@@ -52,9 +54,9 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        menuLibros = new javax.swing.JPopupMenu();
-        CrearLibro = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jpmUsuario = new javax.swing.JPopupMenu();
+        jmGestionUsuario = new javax.swing.JMenuItem();
+        jmMostrarUsuarios = new javax.swing.JMenuItem();
         jToolBar1 = new javax.swing.JToolBar();
         btnLibro = new javax.swing.JButton();
         btnUsuario = new javax.swing.JButton();
@@ -62,18 +64,21 @@ public class Principal extends javax.swing.JFrame {
         btnResumen = new javax.swing.JButton();
         panel = new javax.swing.JDesktopPane();
 
-        CrearLibro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/anadir.png"))); // NOI18N
-        CrearLibro.setText("Crear libro");
-        CrearLibro.addActionListener(new java.awt.event.ActionListener() {
+        jmGestionUsuario.setText("Registrar usuario");
+        jmGestionUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CrearLibroActionPerformed(evt);
+                jmGestionUsuarioActionPerformed(evt);
             }
         });
-        menuLibros.add(CrearLibro);
+        jpmUsuario.add(jmGestionUsuario);
 
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/editar20px.png"))); // NOI18N
-        jMenuItem1.setText("Modificar libro");
-        menuLibros.add(jMenuItem1);
+        jmMostrarUsuarios.setText("Tabla usuarios");
+        jmMostrarUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmMostrarUsuariosActionPerformed(evt);
+            }
+        });
+        jpmUsuario.add(jmMostrarUsuarios);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ADBiapp");
@@ -90,9 +95,9 @@ public class Principal extends javax.swing.JFrame {
         btnLibro.setFocusable(false);
         btnLibro.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnLibro.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnLibro.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnLibroMouseClicked(evt);
+        btnLibro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLibroActionPerformed(evt);
             }
         });
         jToolBar1.add(btnLibro);
@@ -105,6 +110,11 @@ public class Principal extends javax.swing.JFrame {
         btnUsuario.setFocusable(false);
         btnUsuario.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnUsuario.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnUsuarioMouseClicked(evt);
+            }
+        });
         jToolBar1.add(btnUsuario);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/prestamo1.png"))); // NOI18N
@@ -164,14 +174,7 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnResumenActionPerformed
 
-    private void btnLibroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLibroMouseClicked
-        // TODO add your handling code here:
-        if(evt.getButton() == 1){
-            this.menuLibros.show(evt.getComponent(), evt.getX(), evt.getY());
-        }
-    }//GEN-LAST:event_btnLibroMouseClicked
-
-    private void CrearLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearLibroActionPerformed
+    private void btnLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLibroActionPerformed
         // TODO add your handling code here:
         if(this.estaCerrado(iLibro)){
             iLibro= new internalLibro();
@@ -181,8 +184,41 @@ public class Principal extends javax.swing.JFrame {
         }
         else{
             iLibro.moveToFront();
+        }        
+    }//GEN-LAST:event_btnLibroActionPerformed
+
+    private void btnUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuarioMouseClicked
+        // TODO add your handling code here:
+        if(evt.getButton()==1){
+            this.jpmUsuario.show(this.btnUsuario, evt.getX(), evt.getY());
         }
-    }//GEN-LAST:event_CrearLibroActionPerformed
+    }//GEN-LAST:event_btnUsuarioMouseClicked
+
+    private void jmGestionUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmGestionUsuarioActionPerformed
+        // TODO add your handling code here:
+        if(this.estaCerrado(iUsuario)){
+            iUsuario= new internalUsuario();
+            panel.add(iUsuario);
+            this.posicion(iUsuario);
+            iUsuario.show();
+        }
+        else{
+            iUsuario.moveToFront();
+        }
+    }//GEN-LAST:event_jmGestionUsuarioActionPerformed
+
+    private void jmMostrarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmMostrarUsuariosActionPerformed
+        // TODO add your handling code here:
+        if(this.estaCerrado(iMUsuario)){
+            iMUsuario = new internalMostrarUsuarios();
+            panel.add(iMUsuario);
+            this.posicion(iMUsuario);
+            iMUsuario.show();
+        }
+        else{
+            iMUsuario.moveToFront();
+        }
+    }//GEN-LAST:event_jmMostrarUsuariosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -220,14 +256,14 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem CrearLibro;
     private javax.swing.JButton btnLibro;
     private javax.swing.JButton btnResumen;
     private javax.swing.JButton btnUsuario;
     private javax.swing.JButton jButton1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JPopupMenu menuLibros;
+    private javax.swing.JMenuItem jmGestionUsuario;
+    private javax.swing.JMenuItem jmMostrarUsuarios;
+    private javax.swing.JPopupMenu jpmUsuario;
     private javax.swing.JDesktopPane panel;
     // End of variables declaration//GEN-END:variables
 }
