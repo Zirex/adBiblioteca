@@ -14,12 +14,16 @@ import javax.swing.table.DefaultTableModel;
  */
 public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
     private Usuario usuario;
+    private Principal principal;
+    private internalUsuario usuTabla;
 
     /**
      * Creates new form internalMostrarUsuarios
      */
-    public internalMostrarUsuarios() {
+    public internalMostrarUsuarios(Principal principal, internalUsuario usuTabla) {
         initComponents();
+        this.principal= principal;
+        this.usuTabla= usuTabla;
         this.usuario= new Usuario();
         this.cargarTabla();
     }
@@ -42,8 +46,18 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jpmUsuario = new javax.swing.JPopupMenu();
+        jmiActualizar = new javax.swing.JMenuItem();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaUsuarios = new javax.swing.JTable();
+
+        jmiActualizar.setText("Modificar usuario");
+        jmiActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiActualizarActionPerformed(evt);
+            }
+        });
+        jpmUsuario.add(jmiActualizar);
 
         setClosable(true);
         setIconifiable(true);
@@ -61,6 +75,7 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tablaUsuarios.setComponentPopupMenu(jpmUsuario);
         jScrollPane1.setViewportView(tablaUsuarios);
 
         getContentPane().add(jScrollPane1);
@@ -68,9 +83,27 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jmiActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiActualizarActionPerformed
+        // TODO add your handling code here:
+        int fila =  this.tablaUsuarios.getSelectedRow();
+        this.usuario = this.usuario.getUsuario(this.tablaUsuarios.getValueAt(fila, 0).toString());        
+        if(this.principal.estaCerrado(this.usuTabla)){
+            this.usuTabla= new internalUsuario();
+            this.usuTabla.cargarUsuario(this.usuario);
+            this.principal.panel.add(usuTabla);
+            this.usuTabla.show();
+        }
+        else{
+            this.usuTabla.cargarUsuario(this.usuario);
+            this.usuTabla.moveToFront();
+        }
+    }//GEN-LAST:event_jmiActualizarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenuItem jmiActualizar;
+    private javax.swing.JPopupMenu jpmUsuario;
     private javax.swing.JTable tablaUsuarios;
     // End of variables declaration//GEN-END:variables
 }

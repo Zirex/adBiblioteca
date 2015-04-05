@@ -132,6 +132,108 @@ public class Usuario extends Conexion{
         }
     }
     
+    // Metodos set para actualizar los datos de un usuario registrado
+    private void updateCampo(String nombreCampo, String dato, Date fecha){
+        try{
+            String q = "UPDATE usuario SET "+nombreCampo+"=? WHERE id_usuario =?;";
+            PreparedStatement pstm= this.getConexion().prepareStatement(q);
+            if(!dato.equals(""))
+                pstm.setString(1, dato);
+            else
+                pstm.setDate(1, new java.sql.Date(fecha.getTime()));
+            pstm.setString(2, this.idUsuario);
+            pstm.execute();
+            pstm.close();
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public void setCedUsuario(String cedUsuario) {
+        this.cedUsuario = cedUsuario;
+        this.updateCampo("ced_usuario", this.cedUsuario, null);
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+        this.updateCampo("nombre_usu", this.nombre, null);
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+        this.updateCampo("apellido_usu", this.apellido, null);
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
+        this.updateCampo("sexo", this.sexo, null);
+    }
+
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+        this.updateCampo("fecha_nac_usu", "", this.fechaNacimiento);
+    }
+
+    public void setTlf1(String tlf1) {
+        this.tlf1 = tlf1;
+        this.updateCampo("telf1_usuario", this.tlf1, null);
+    }
+
+    public void setTlf2(String tlf2) {
+        this.tlf2 = tlf2;
+        this.updateCampo("telf2_usuario", this.tlf2, null);
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+        this.updateCampo("direccion_usu", this.direccion, null);
+    }
+
+    public void setEstudia(String estudia) {
+        this.estudia = estudia;
+        this.updateCampo("estudia", this.estudia, null);
+    }
+
+    public void setMiembro(String miembro) {
+        this.miembro = miembro;
+        this.updateCampo("miembro", this.miembro, null);
+    }
+
+    public void setNombreInstitucion(String nombreInstitucion) {
+        this.nombreInstitucion = nombreInstitucion;
+        this.updateCampo("nombre_inst", this.nombreInstitucion, null);
+    }
+
+    public void setNombreRepresentante(String nombreRepresentante) {
+        this.nombreRepresentante = nombreRepresentante;
+        this.updateCampo("representante", this.nombreRepresentante, null);
+    }
+
+    public void setFotoString(String fotoString) {
+        this.fotoString = fotoString;
+        FileInputStream fis = null;
+        try{
+            File file= new File(this.fotoString);
+            fis = new FileInputStream(file);
+            
+            String q= "UPDATE usuario SET foto_usu=? WHERE id_usuario=?";
+            PreparedStatement pstm= this.getConexion().prepareStatement(q);
+            pstm.setBinaryStream(1, fis, (int)file.length());
+            pstm.setString(2, this.idUsuario);
+            pstm.execute();
+            pstm.close();
+        }catch(FileNotFoundException ex){
+            System.out.println(ex.getMessage());
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void setFechaExpedicion(Date fechaExpedicion) {
+        this.fechaExpedicion = fechaExpedicion;
+        this.updateCampo("fecha_expedicion", "", this.fechaExpedicion);
+    }
+    
     //metodo que dada una cadena de bytes la convierte en una imagen con extension png
     private Image ConvertirImagen(byte[] bytes) throws IOException {
         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
@@ -146,7 +248,7 @@ public class Usuario extends Conexion{
     
     public Usuario getUsuario(String id){
         Usuario usuario = null;
-        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyy", new Locale("es_ES"));
+        SimpleDateFormat formateador = new SimpleDateFormat("yyyy-MM-dd", new Locale("es_ES"));
         try{
             String sql = "SELECT * FROM usuario WHERE id_usuario = ?;";
             PreparedStatement pstm= this.getConexion().prepareStatement(sql);
@@ -268,4 +370,65 @@ public class Usuario extends Conexion{
         
     return model;
     }
+
+    public String getIdUsuario() {
+        return idUsuario;
+    }
+
+    public String getCedUsuario() {
+        return cedUsuario;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public String getTlf1() {
+        return tlf1;
+    }
+
+    public String getTlf2() {
+        return tlf2;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public String getEstudia() {
+        return estudia;
+    }
+
+    public String getMiembro() {
+        return miembro;
+    }
+
+    public String getNombreInstitucion() {
+        return nombreInstitucion;
+    }
+
+    public String getNombreRepresentante() {
+        return nombreRepresentante;
+    }
+
+    public Date getFechaExpedicion() {
+        return fechaExpedicion;
+    }
+
+    public Image getFoto() {
+        return foto;
+    }
+  
 }

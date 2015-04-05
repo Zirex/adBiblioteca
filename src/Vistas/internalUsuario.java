@@ -16,14 +16,132 @@ import javax.swing.JOptionPane;
  * @author zirex
  */
 public class internalUsuario extends javax.swing.JInternalFrame {
-    private Usuario usuario; 
+    private Usuario usuario = null; 
     private Date fechaSistema = null;
+    private SimpleDateFormat formateador= new SimpleDateFormat("yyyy-MM-dd", new Locale("es_ES"));
+    private String cedula = null;
+    private String nombreUsu= null;
+    private String apellidoUsu= null;
+    private String sexo = null;
+    private Date fechaNac = null;
+    private String tlf1 = null;
+    private String tlf2 = null;
+    private String direccion = null;
+    private String estudia = "0";
+    private String miembro = "0";
+    private String nombreInstituto = null;
+    private String representante = null;
+    private String foto = null;
 
     /**
      * Creates new form internalUsuario
      */
     public internalUsuario() {
         initComponents();
+    }
+    
+    public void cargarUsuario(Usuario usuario){
+        this.limpiarCampo();
+        this.usuario = usuario;
+        this.txtCedula.setText(this.usuario.getCedUsuario());
+        this.txtNomUsuario.setText(this.usuario.getNombre());
+        this.txtApUsuario.setText(this.usuario.getApellido());
+        this.cmbSexo.setSelectedItem(this.usuario.getSexo());
+        this.jdtFechaNacimiento.setDate(this.usuario.getFechaNacimiento());
+        this.txtTlf1.setText(this.usuario.getTlf1());
+        this.txtTlf2.setText(this.usuario.getTlf2());
+        this.txtDireccion.setText(this.usuario.getDireccion());
+        if(this.usuario.getEstudia().equals("1")){
+            this.jcbEstudia.setSelected(true);
+            this.txtInstitucion.setText(this.usuario.getNombreInstitucion());
+        }
+        this.txtRepresentante.setText(this.usuario.getNombreRepresentante());
+        if(this.usuario.getMiembro().equals("1")){
+            this.jcbMiembro.setSelected(true);
+            this.txtFechaMiembro.setText(this.formateador.format(this.usuario.getFechaExpedicion()));
+        }
+        this.jcfFoto.setFoto(new javax.swing.ImageIcon(this.usuario.getFoto()));
+        
+        this.btnGuardar.setText("Actualizar");
+    }
+    
+    private void limpiarCampo(){
+        this.usuario = null;
+        this.txtCedula.setText("");
+        this.txtNomUsuario.setText("");
+        this.txtApUsuario.setText("");
+        this.cmbSexo.setSelectedItem("");
+        this.jdtFechaNacimiento.setDate(null);
+        this.txtTlf1.setText("");
+        this.txtTlf2.setText("");
+        this.txtDireccion.setText("");
+        this.jcbEstudia.setSelected(false);
+        this.txtRepresentante.setText("");
+        this.jcbMiembro.setSelected(false);
+        this.jcfFoto.getFotoDefault();
+        this.btnGuardar.setText("Guardar");
+    }
+    
+    private boolean updateUsuario(){
+        boolean cambio= false;
+        if(!this.usuario.getCedUsuario().equals(this.cedula)){
+            this.usuario.setCedUsuario(this.cedula);
+            cambio = true;
+        }
+        if(!this.usuario.getNombre().equals(this.nombreUsu)){
+            this.usuario.setNombre(this.nombreUsu);
+            cambio = true;
+        }
+        if(!this.usuario.getApellido().equals(this.apellidoUsu)){
+            this.usuario.setApellido(this.apellidoUsu);
+            cambio = true;
+        }
+        if(!this.usuario.getSexo().equals(this.sexo)){
+            this.usuario.setSexo(this.sexo);
+            cambio = true;
+        }
+        if(!this.usuario.getFechaNacimiento().equals(this.fechaNac)){
+            this.usuario.setFechaNacimiento(this.fechaNac);
+            cambio = true;
+        }
+        if(!this.usuario.getTlf1().equals(this.tlf1)){
+            this.usuario.setTlf1(this.tlf1);
+            cambio = true;
+        }
+        if(!this.usuario.getTlf2().equals(this.tlf2)){
+            this.usuario.setTlf2(this.tlf2);
+            cambio = true;
+        }
+        if(!this.usuario.getDireccion().equals(this.direccion)){
+            this.usuario.setDireccion(this.direccion);
+            cambio = true;
+        }
+        if(!this.usuario.getEstudia().equals(this.estudia)){
+            this.usuario.setEstudia(this.estudia);
+            cambio = true;
+        }
+        if(!this.usuario.getMiembro().equals(this.miembro)){
+            this.usuario.setMiembro(this.miembro);
+            cambio = true;
+        }
+        if(!this.usuario.getNombreInstitucion().equals(this.nombreInstituto)){
+            this.usuario.setNombreInstitucion(this.nombreInstituto);
+            cambio = true;
+        }
+        if(!this.usuario.getNombreRepresentante().equals(this.representante)){
+            this.usuario.setNombreRepresentante(this.representante);
+            cambio = true;
+        }
+        if(!new javax.swing.ImageIcon(this.usuario.getFoto()).equals(this.jcfFoto.getFoto())){
+            this.usuario.setFotoString(this.foto);
+            cambio = true;
+        }
+        if(!this.usuario.getFechaExpedicion().equals(this.fechaSistema)){
+            this.usuario.setFechaExpedicion(this.fechaSistema);
+            cambio = true;
+        }
+        
+        return cambio;
     }
 
     /**
@@ -152,7 +270,6 @@ public class internalUsuario extends javax.swing.JInternalFrame {
                 .addGap(13, 13, 13)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(cmbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtNomUsuario)
                         .addComponent(txtCedula)
                         .addComponent(txtApUsuario)
@@ -161,7 +278,8 @@ public class internalUsuario extends javax.swing.JInternalFrame {
                         .addComponent(txtTlf2)
                         .addComponent(txtDireccion)
                         .addComponent(txtInstitucion, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-                        .addComponent(txtRepresentante))
+                        .addComponent(txtRepresentante)
+                        .addComponent(cmbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtFechaMiembro, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -223,6 +341,11 @@ public class internalUsuario extends javax.swing.JInternalFrame {
 
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cancelar.png"))); // NOI18N
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -286,49 +409,65 @@ public class internalUsuario extends javax.swing.JInternalFrame {
     private void jcbMiembroStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jcbMiembroStateChanged
         // TODO add your handling code here:
         if(this.jcbMiembro.isSelected()){
-            this.fechaSistema = new Date();
-            SimpleDateFormat formateador= new SimpleDateFormat("dd/MM/yyyy", new Locale("es_ES"));
-            this.txtFechaMiembro.setText(formateador.format(this.fechaSistema));
+            this.fechaSistema = new Date();            
+            this.txtFechaMiembro.setText(this.formateador.format(this.fechaSistema));
         }
         else{
             this.txtFechaMiembro.setText("");
+            this.fechaSistema = null;
         }
     }//GEN-LAST:event_jcbMiembroStateChanged
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        String cedula = this.txtCedula.getText().trim();
-        String nombreUsu= this.txtNomUsuario.getText().trim();
-        String apellidoUsu= this.txtApUsuario.getText().trim();
-        String sexo = this.cmbSexo.getSelectedItem().toString();
-        Date fechaNac = this.jdtFechaNacimiento.getDate();
-        String tlf1 = this.txtTlf1.getText().trim();
-        String tlf2 = this.txtTlf2.getText().trim();
-        String direccion = this.txtDireccion.getText().trim();
-        String estudia = "1";
-        String miembro = "1";
-        String nombreInstituto = this.txtInstitucion.getText().trim();
-        String representante = this.txtRepresentante.getText().trim();
-        String foto = this.jcfFoto.getPathFoto();
-        Date fechaExp= this.fechaSistema;
+        this.cedula = this.txtCedula.getText().trim();
+        this.nombreUsu= this.txtNomUsuario.getText().trim();
+        this.apellidoUsu= this.txtApUsuario.getText().trim();
+        this.sexo = this.cmbSexo.getSelectedItem().toString();
+        this.fechaNac = this.jdtFechaNacimiento.getDate();
+        this.tlf1 = this.txtTlf1.getText().trim();
+        this.tlf2 = this.txtTlf2.getText().trim();
+        this.direccion = this.txtDireccion.getText().trim();
+        this.nombreInstituto = this.txtInstitucion.getText().trim();
+        this.representante = this.txtRepresentante.getText().trim();
+        this.foto = this.jcfFoto.getPathFoto();
         
-        if(!this.jcbEstudia.isSelected()){
-            estudia = "0";
+        if(this.jcbEstudia.isSelected()){
+            this.estudia = "1";
         }
-        if(!this.jcbMiembro.isSelected()){
-            miembro= "0";
+        if(this.jcbMiembro.isSelected()){
+            this.miembro= "1";
         }
-        
-        System.out.println(cedula+" "+nombreUsu+" "+apellidoUsu+" "+sexo+" "+fechaNac+" "+tlf1+" "+tlf2+" "+direccion+" "+estudia+" "+miembro+" "+nombreInstituto+" "+representante+" \n"+foto+" \n"+fechaExp);
-        
-        this.usuario = new Usuario(cedula, nombreUsu, apellidoUsu, sexo, fechaNac, tlf1, tlf2, direccion, estudia, miembro, nombreInstituto, representante, foto, fechaExp);
-        if(this.usuario.insertarUsuario()){
-            JOptionPane.showMessageDialog(this, "Exito se guardo un nuevo Usuario", "Dialogo de confirmación", JOptionPane.INFORMATION_MESSAGE);
+        if(this.usuario == null){
+            
+            this.usuario = new Usuario(this.cedula, this.nombreUsu, this.apellidoUsu, 
+                                       this.sexo, this.fechaNac, this.tlf1, this.tlf2, 
+                                       this.direccion, this.estudia, this.miembro, 
+                                       this.nombreInstituto, this.representante, 
+                                       this.foto, this.fechaSistema);            
+            if(this.usuario.insertarUsuario()){
+                this.limpiarCampo();
+                JOptionPane.showMessageDialog(this, "Exito se guardo un nuevo Usuario", "Dialogo de confirmación", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "No se pudo registrar el usuario", "Dialogo de error", JOptionPane.ERROR_MESSAGE);
+            }
         }
         else{
-            JOptionPane.showMessageDialog(this, "No se pudo registrar el usuario", "Dialogo de error", JOptionPane.ERROR_MESSAGE);
+            if(this.updateUsuario()){
+                JOptionPane.showMessageDialog(this, "Exito, se actualizo el usuario", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "No se ha modificado ningun campo del usuario \n No se hizo ningun cambio en la base de datos",
+                                              "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        this.limpiarCampo();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

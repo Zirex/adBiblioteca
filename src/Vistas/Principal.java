@@ -26,7 +26,7 @@ public class Principal extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
     
-    private boolean estaCerrado(Object obj){
+    public boolean estaCerrado(Object obj){
         JInternalFrame[] activos=panel.getAllFrames();
     boolean cerrado=true;
     int i=0;
@@ -210,7 +210,7 @@ public class Principal extends javax.swing.JFrame {
     private void jmMostrarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmMostrarUsuariosActionPerformed
         // TODO add your handling code here:
         if(this.estaCerrado(iMUsuario)){
-            iMUsuario = new internalMostrarUsuarios();
+            iMUsuario = new internalMostrarUsuarios(this, this.iUsuario);
             panel.add(iMUsuario);
             this.posicion(iMUsuario);
             iMUsuario.show();
@@ -264,6 +264,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmGestionUsuario;
     private javax.swing.JMenuItem jmMostrarUsuarios;
     private javax.swing.JPopupMenu jpmUsuario;
-    private javax.swing.JDesktopPane panel;
+    public javax.swing.JDesktopPane panel;
     // End of variables declaration//GEN-END:variables
 }
