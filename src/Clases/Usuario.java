@@ -84,52 +84,69 @@ public class Usuario extends Conexion{
     }
     
     public boolean insertarUsuario(){
-        {
-            FileInputStream fis = null;
-            try{
+        FileInputStream fis= null;
+        File archivo = null;
+        String sql = "";
+        try{
+            PreparedStatement pstm;
+            
+            if(this.fotoString != null){
                 //Variables para guardar una foto en la base de datos en formato blob
-                File archivo = new File(this.fotoString);
-                fis = new FileInputStream(archivo);
-
-                String sql= "INSERT INTO usuario(ced_usuario, nombre_usu, apellido_usu,"
-                        + "sexo, fecha_nac_usu, telf1_usuario, telf2_usuario, direccion_usu,"
-                        + "estudia, miembro, nombre_inst, representante, foto_usu, fecha_expedicion)"
-                        + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
-                PreparedStatement pstm= this.getConexion().prepareStatement(sql);
-                pstm.setString(1, this.cedUsuario);
-                pstm.setString(2, this.nombre);
-                pstm.setString(3, this.apellido);
-                pstm.setString(4, this.sexo);
-                pstm.setDate(5, new java.sql.Date(this.fechaNacimiento.getTime()));
-                pstm.setString(6, this.tlf1);
-                pstm.setString(7, this.tlf2);
-                pstm.setString(8, this.direccion);
-                pstm.setString(9, this.estudia);
-                pstm.setString(10, this.miembro);
-                pstm.setString(11, this.nombreInstitucion);
-                pstm.setString(12, this.nombreRepresentante);
-                pstm.setBinaryStream(13, fis,(int) archivo.length());
-                pstm.setDate(14, new java.sql.Date(this.fechaExpedicion.getTime()));
+                archivo = new File(this.fotoString);
+                fis = new FileInputStream(archivo);                
                 
-                pstm.execute();
-                pstm.close();
-                return true;
-            }catch(FileNotFoundException ex){
+                sql= "INSERT INTO usuario(ced_usuario, nombre_usu, apellido_usu, "
+                   + "sexo, fecha_nac_usu, telf1_usuario, telf2_usuario, direccion_usu, "
+                   + "estudia, miembro, nombre_inst, representante, fecha_expedicion, foto_usu) "
+                   + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+                
+                pstm= this.getConexion().prepareStatement(sql);
+                pstm.setDate(13, new java.sql.Date(this.fechaExpedicion.getTime()));
+                pstm.setBinaryStream(14, fis,(int) archivo.length());
+            }
+            else{
+                sql= "INSERT INTO usuario(ced_usuario, nombre_usu, apellido_usu, "
+                   + "sexo, fecha_nac_usu, telf1_usuario, telf2_usuario, direccion_usu, "
+                   + "estudia, miembro, nombre_inst, representante) "
+                   + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?);";
+                
+                pstm= this.getConexion().prepareStatement(sql);
+            }
+            
+            pstm.setString(1, this.cedUsuario);
+            pstm.setString(2, this.nombre);
+            pstm.setString(3, this.apellido);
+            pstm.setString(4, this.sexo);
+            pstm.setDate(5, new java.sql.Date(this.fechaNacimiento.getTime()));
+            pstm.setString(6, this.tlf1);
+            pstm.setString(7, this.tlf2);
+            pstm.setString(8, this.direccion);
+            pstm.setString(9, this.estudia);
+            pstm.setString(10, this.miembro);
+            pstm.setString(11, this.nombreInstitucion);
+            pstm.setString(12, this.nombreRepresentante);
+
+            pstm.execute();
+            pstm.close();
+            return true;
+        }catch(FileNotFoundException ex){
+            System.out.println(ex.getMessage());
+            return false;
+        }
+        catch(SQLException e){
+            System.out.println(e.getMessage());
+            return false;
+        }finally{
+            try{
+                if(fis != null){
+                    fis.close();
+                }
+            }catch(IOException ex){
                 System.out.println(ex.getMessage());
                 return false;
             }
-            catch(SQLException e){
-                System.out.println(e.getMessage());
-                return false;
-            }finally{
-                try{
-                    fis.close();
-                }catch(IOException ex){
-                    System.out.println(ex.getMessage());
-                    return false;
-                }
-            }
         }
+        
     }
     
     // Metodos set para actualizar los datos de un usuario registrado
@@ -226,6 +243,14 @@ public class Usuario extends Conexion{
             System.out.println(ex.getMessage());
         }catch(SQLException e){
             System.out.println(e.getMessage());
+        }finally{
+            try{
+                if(fis != null){
+                    fis.close();
+                }
+            }catch(IOException ex){
+                System.out.println(ex.getMessage());
+            }
         }
     }
 

@@ -15,9 +15,8 @@ import javax.swing.JOptionPane;
  *
  * @author zirex
  */
-public class internalUsuario extends javax.swing.JInternalFrame {
+public class internalUsuario extends Interfaz {
     private Usuario usuario = null; 
-    private Date fechaSistema = null;
     private SimpleDateFormat formateador= new SimpleDateFormat("yyyy-MM-dd", new Locale("es_ES"));
     private String cedula = null;
     private String nombreUsu= null;
@@ -32,6 +31,7 @@ public class internalUsuario extends javax.swing.JInternalFrame {
     private String nombreInstituto = null;
     private String representante = null;
     private String foto = null;
+    private Date fechaMiembro = null;
 
     /**
      * Creates new form internalUsuario
@@ -58,11 +58,47 @@ public class internalUsuario extends javax.swing.JInternalFrame {
         this.txtRepresentante.setText(this.usuario.getNombreRepresentante());
         if(this.usuario.getMiembro().equals("1")){
             this.jcbMiembro.setSelected(true);
-            this.txtFechaMiembro.setText(this.formateador.format(this.usuario.getFechaExpedicion()));
+            this.fechaMiembro = this.usuario.getFechaExpedicion();
+            this.txtFechaMiembro.setText(this.formateador.format(this.fechaMiembro));
         }
         this.jcfFoto.setFoto(new javax.swing.ImageIcon(this.usuario.getFoto()));
         
         this.btnGuardar.setText("Actualizar");
+    }
+    
+    private boolean validarCampos(){
+        boolean error = false;
+        if(this.txtNomUsuario.getText().isEmpty()){
+            showError(txtNomUsuario, "Por favor digite el nombre del usuario.");
+            error= true; 
+        }
+        if(this.txtApUsuario.getText().isEmpty()){
+            showError(txtApUsuario, "Por favor digite el apellido del usuario.");
+            error= true;
+        }
+        if(this.cmbSexo.getSelectedItem().equals("Sexo")){
+            showError(cmbSexo, "Por favor seleccione el sexo del usuario.");
+            error = true;
+        }
+        if(this.jdtFechaNacimiento.getDate() == null){
+            showError(jdtFechaNacimiento, "Por favor digite la fecha de nacimiento del usuario.");
+            error = true;
+        }
+        if(this.jcbMiembro.isSelected()){
+            if(this.txtTlf1.getText().isEmpty()){
+                showError(txtTlf1, "Por favor digite un numero de telefono.");
+                error = true;
+            }
+            if(this.txtTlf2.getText().isEmpty()){
+                showError(txtTlf2, "Por favor digite un numero de telefono.");
+                error = true;
+            }
+            if(this.txtDireccion.getText().isEmpty()){
+                showError(txtDireccion, "Por favor digite la dirección del usuario.");
+                error = true;
+            }
+        }
+        return error;
     }
     
     private void limpiarCampo(){
@@ -79,6 +115,15 @@ public class internalUsuario extends javax.swing.JInternalFrame {
         this.txtRepresentante.setText("");
         this.jcbMiembro.setSelected(false);
         this.jcfFoto.getFotoDefault();
+        
+        normalizeInput(txtNomUsuario);
+        normalizeInput(txtApUsuario);
+        normalizeInput(cmbSexo);
+        normalizeInput(jdtFechaNacimiento);
+        normalizeInput(txtTlf1);
+        normalizeInput(txtTlf2);
+        normalizeInput(txtDireccion);
+                
         this.btnGuardar.setText("Guardar");
     }
     
@@ -132,12 +177,12 @@ public class internalUsuario extends javax.swing.JInternalFrame {
             this.usuario.setNombreRepresentante(this.representante);
             cambio = true;
         }
-        if(!new javax.swing.ImageIcon(this.usuario.getFoto()).equals(this.jcfFoto.getFoto())){
+        if(this.jcfFoto.getPathFoto() != null){
             this.usuario.setFotoString(this.foto);
             cambio = true;
         }
-        if(!this.usuario.getFechaExpedicion().equals(this.fechaSistema)){
-            this.usuario.setFechaExpedicion(this.fechaSistema);
+        if(!this.usuario.getFechaExpedicion().equals(this.fechaMiembro)){
+            this.usuario.setFechaExpedicion(this.fechaMiembro);
             cambio = true;
         }
         
@@ -211,17 +256,62 @@ public class internalUsuario extends javax.swing.JInternalFrame {
 
         jLabel2.setText("Nombre usuario:");
 
+        txtNomUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtNomUsuarioFocusLost(evt);
+            }
+        });
+        txtNomUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNomUsuarioKeyTyped(evt);
+            }
+        });
+
         jLabel3.setText("Apellidos usuario:");
+
+        txtApUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtApUsuarioFocusLost(evt);
+            }
+        });
+        txtApUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtApUsuarioKeyTyped(evt);
+            }
+        });
 
         jLabel4.setText("Sexo usuario:");
 
         cmbSexo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sexo", "M", "F" }));
+        cmbSexo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                cmbSexoFocusLost(evt);
+            }
+        });
 
         jLabel5.setText("Fecha nac. usuario:");
 
+        jdtFechaNacimiento.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jdtFechaNacimientoFocusLost(evt);
+            }
+        });
+
         jLabel6.setText("Tlf. Contacto 1:");
 
+        txtTlf1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTlf1KeyTyped(evt);
+            }
+        });
+
         jLabel7.setText("Tlf. Contacto 2:");
+
+        txtTlf2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTlf2KeyTyped(evt);
+            }
+        });
 
         jLabel8.setText("Dirección usuario:");
 
@@ -292,7 +382,7 @@ public class internalUsuario extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtNomUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNomUsuario))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -409,18 +499,18 @@ public class internalUsuario extends javax.swing.JInternalFrame {
     private void jcbMiembroStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jcbMiembroStateChanged
         // TODO add your handling code here:
         if(this.jcbMiembro.isSelected()){
-            this.fechaSistema = new Date();            
-            this.txtFechaMiembro.setText(this.formateador.format(this.fechaSistema));
+            this.fechaMiembro = new Date();            
+            this.txtFechaMiembro.setText(this.formateador.format(this.fechaMiembro));
         }
         else{
             this.txtFechaMiembro.setText("");
-            this.fechaSistema = null;
+            this.fechaMiembro = null;
         }
     }//GEN-LAST:event_jcbMiembroStateChanged
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        this.cedula = this.txtCedula.getText().trim();
+        this.cedula = this.txtCedula.getText().trim().toUpperCase();
         this.nombreUsu= this.txtNomUsuario.getText().trim();
         this.apellidoUsu= this.txtApUsuario.getText().trim();
         this.sexo = this.cmbSexo.getSelectedItem().toString();
@@ -438,19 +528,24 @@ public class internalUsuario extends javax.swing.JInternalFrame {
         if(this.jcbMiembro.isSelected()){
             this.miembro= "1";
         }
+        
         if(this.usuario == null){
-            
-            this.usuario = new Usuario(this.cedula, this.nombreUsu, this.apellidoUsu, 
-                                       this.sexo, this.fechaNac, this.tlf1, this.tlf2, 
-                                       this.direccion, this.estudia, this.miembro, 
-                                       this.nombreInstituto, this.representante, 
-                                       this.foto, this.fechaSistema);            
-            if(this.usuario.insertarUsuario()){
-                this.limpiarCampo();
-                JOptionPane.showMessageDialog(this, "Exito se guardo un nuevo Usuario", "Dialogo de confirmación", JOptionPane.INFORMATION_MESSAGE);
+            if(!this.validarCampos()){
+                this.usuario = new Usuario(this.cedula, this.nombreUsu, this.apellidoUsu, 
+                                           this.sexo, this.fechaNac, this.tlf1, this.tlf2, 
+                                           this.direccion, this.estudia, this.miembro, 
+                                           this.nombreInstituto, this.representante, 
+                                           this.foto, this.fechaMiembro);
+                if(this.usuario.insertarUsuario()){
+                    this.limpiarCampo();
+                    JOptionPane.showMessageDialog(this, "Exito se guardo un nuevo Usuario", "Dialogo de confirmación", JOptionPane.INFORMATION_MESSAGE);
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "No se pudo registrar el usuario", "Dialogo de error", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else{
-                JOptionPane.showMessageDialog(this, "No se pudo registrar el usuario", "Dialogo de error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Por favor verifique los datos obligatorios \n para el registros de usuarios", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         else{
@@ -469,6 +564,53 @@ public class internalUsuario extends javax.swing.JInternalFrame {
         this.limpiarCampo();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void txtTlf1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTlf1KeyTyped
+        // TODO add your handling code here:
+        soloNum(evt);
+    }//GEN-LAST:event_txtTlf1KeyTyped
+
+    private void txtTlf2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTlf2KeyTyped
+        // TODO add your handling code here:
+        soloNum(evt);
+    }//GEN-LAST:event_txtTlf2KeyTyped
+
+    private void txtNomUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNomUsuarioFocusLost
+        // TODO add your handling code here:
+        if(!txtNomUsuario.getText().isEmpty()){
+            normalizeInput(txtNomUsuario);
+        }
+    }//GEN-LAST:event_txtNomUsuarioFocusLost
+
+    private void txtNomUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomUsuarioKeyTyped
+        // TODO add your handling code here:
+        soloABC(evt);
+    }//GEN-LAST:event_txtNomUsuarioKeyTyped
+
+    private void txtApUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtApUsuarioFocusLost
+        // TODO add your handling code here:
+        if(!txtApUsuario.getText().isEmpty()){
+            normalizeInput(txtApUsuario);
+        }
+    }//GEN-LAST:event_txtApUsuarioFocusLost
+
+    private void txtApUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApUsuarioKeyTyped
+        // TODO add your handling code here:
+        soloABC(evt);
+    }//GEN-LAST:event_txtApUsuarioKeyTyped
+
+    private void cmbSexoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cmbSexoFocusLost
+        // TODO add your handling code here:
+        if(!cmbSexo.getSelectedItem().equals("Sexo")){
+            normalizeInput(cmbSexo);
+        }
+    }//GEN-LAST:event_cmbSexoFocusLost
+
+    private void jdtFechaNacimientoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jdtFechaNacimientoFocusLost
+        // TODO add your handling code here:
+        if(jdtFechaNacimiento.getDate() != null){
+            normalizeInput(jdtFechaNacimiento);
+        }
+    }//GEN-LAST:event_jdtFechaNacimientoFocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
