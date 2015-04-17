@@ -47,7 +47,7 @@ public class MyTableRenderer {
             btn.setFocusable(false);
             btn.setFocusPainted(false); 
             btn.setMargin(new Insets(0, 0, 0, 0));
-            btn.setToolTipText("Clic para mirar con detalle el producto");
+            btn.setToolTipText("Clic para modificar el libro de la fila");
             btn.addActionListener(new ActionListener(){
 
                 @Override

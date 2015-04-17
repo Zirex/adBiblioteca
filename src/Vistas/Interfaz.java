@@ -27,7 +27,7 @@ public abstract class Interfaz extends javax.swing.JInternalFrame {
     }
     
     public static void showError(javax.swing.JTextField txt, String msj) {
-        txt.setBorder(javax.swing.BorderFactory.createLineBorder(Color.red));
+        txt.setBorder(javax.swing.BorderFactory.createEtchedBorder(Color.lightGray, Color.red));
         txt.setToolTipText(msj);
     }
     
@@ -62,7 +62,7 @@ public abstract class Interfaz extends javax.swing.JInternalFrame {
     }
     
     public static void normalizeInput(com.toedter.calendar.JDateChooser dateChooser){
-        dateChooser.setBorder(javax.swing.BorderFactory.createLineBorder(Color.lightGray));
+        dateChooser.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         dateChooser.setToolTipText(null);
     }
     

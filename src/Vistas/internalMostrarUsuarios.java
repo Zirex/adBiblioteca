@@ -6,6 +6,8 @@
 package Vistas;
 
 import Clases.Usuario;
+import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -32,7 +34,18 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
         String [] ColumnName = {"id Usuario", "Apellidos", "Nombres", "Direccion", "Telefonos"};
         String q= "SELECT id_usuario, apellido_usu, nombre_usu, direccion_usu, telf1_usuario, telf2_usuario"
                 + " FROM usuario ORDER BY id_usuario DESC;";
-        Object [][] datos = this.usuario.usuarios(q);
+        ArrayList<HashMap> usuarios= this.usuario.usuarios(q);
+        Object [][] datos = new Object [usuarios.size()][ColumnName.length];
+        int i = 0;
+        for (HashMap usu : usuarios) {
+            String linea [] = {usu.get("id_usuario").toString(), usu.get("apellido_usu").toString(),
+                               usu.get("nombre_usu").toString(), usu.get("direccion_usu").toString(),
+                               usu.get("telf1_usuario").toString()+" / "+ usu.get("telf2_usuario").toString()};
+            for (int j = 0; j < datos[i].length; j++) {
+                datos[i][j] = linea[j];
+            }
+            i++;
+        }
         DefaultTableModel model= new DefaultTableModel(datos, ColumnName);
         this.tablaUsuarios.setModel(model);
     }

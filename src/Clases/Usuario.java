@@ -281,15 +281,15 @@ public class Usuario extends Conexion{
             ResultSet res = pstm.executeQuery();
             HashMap map= new HashMap();
             while(res.next()){
-                ResultSetMetaData data = res.getMetaData();
-                for (int i = 1, j=  data.getColumnCount(); i <=j; i++) {
+                ResultSetMetaData datos = res.getMetaData();
+                for (int i = 1, j=  datos.getColumnCount(); i <=j; i++) {
                     if(i == 14){
                         //se lee la cadena de bytes de la base de datos
                         byte[] b= res.getBytes(i);
                         // esta cadena de bytes sera convertida en una imagen
                         this.foto = this.ConvertirImagen(b);
                     }
-                    map.put(data.getColumnLabel(i).toLowerCase(), res.getString(i));
+                    map.put(datos.getColumnLabel(i).toLowerCase(), res.getString(i));
                 }
                 
                 usuario = new Usuario(map.get("id_usuario")+"", map.get("ced_usuario")+"",
@@ -313,7 +313,7 @@ public class Usuario extends Conexion{
         return usuario;
     }
     
-    public Object[][] usuarios(String q){
+    public ArrayList<HashMap> usuarios(String q){
         ArrayList<HashMap> listaUsuarios = new ArrayList<>();
         try{
             PreparedStatement pstm = this.getConexion().prepareStatement(q);
@@ -330,32 +330,40 @@ public class Usuario extends Conexion{
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
-        Object[][] data = new Object[listaUsuarios.size()][6];
-        int i=0;
-        for (HashMap usuario : listaUsuarios) {
-            String [] linea = {usuario.get("id_usuario").toString(), usuario.get("apellido_usu").toString(), 
-                               usuario.get("nombre_usu").toString(), usuario.get("direccion_usu").toString(),
-                               usuario.get("telf1_usuario").toString()+" / "+ usuario.get("telf2_usuario").toString(),
-                               ""};
-            for (int j = 0; j < data[i].length; j++) {
-                if(j==5){
-                        data[i][j]= new JButton();
-                    }
-                    else{
-                        data[i][j]= linea[j];
-                    }
-            }
-            i++;
-        }
-        return data;
+        
+        return listaUsuarios;
     }
     
     public static AbstractTableModel ultimosUsuarios(){
-        Usuario usuario = new Usuario();
+        final Usuario usuario = new Usuario();
         AbstractTableModel model = new AbstractTableModel(){
             private String q= "SELECT id_usuario, apellido_usu, nombre_usu, direccion_usu, telf1_usuario, telf2_usuario"
                             + " FROM usuario ORDER BY id_usuario DESC LIMIT 5;";
-            private Object[][] datos = usuario.usuarios(q);
+            private ArrayList<HashMap> lista = usuario.usuarios(q);
+            private Object [][] datos = usuarios();
+            
+            //Metodo para cargar los usuarios en una matriz objecto
+            private Object [][] usuarios(){
+                Object [][] datos = new Object[lista.size()][6];
+                int i=0;
+                for (HashMap usu : lista) {
+                    String [] linea = {usu.get("id_usuario").toString(), usu.get("apellido_usu").toString(), 
+                                       usu.get("nombre_usu").toString(), usu.get("direccion_usu").toString(),
+                                       usu.get("telf1_usuario").toString()+" / "+ usu.get("telf2_usuario").toString(),
+                                       ""};
+                    for (int j = 0; j < datos[i].length; j++) {
+                        if(j==5){
+                                datos[i][j]= new JButton();
+                            }
+                            else{
+                                datos[i][j]= linea[j];
+                            }
+                    }
+                    i++;
+                }
+                return datos;
+            }
+            
             private String[] nameColumn = {"id", "Apellidos", "Nombres", "dirección", "Telefonos",
                                             "Actualizar"};
             @Override
