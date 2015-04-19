@@ -61,7 +61,9 @@ public class internalUsuario extends Interfaz {
             this.fechaMiembro = this.usuario.getFechaExpedicion();
             this.txtFechaMiembro.setText(this.formateador.format(this.fechaMiembro));
         }
-        this.jcfFoto.setFoto(new javax.swing.ImageIcon(this.usuario.getFoto()));
+        if(this.usuario.getFoto() != null){
+            this.jcfFoto.setFoto(new javax.swing.ImageIcon(this.usuario.getFoto()));            
+        }
         
         this.btnGuardar.setText("Actualizar");
     }
@@ -163,10 +165,13 @@ public class internalUsuario extends Interfaz {
         }
         if(!this.usuario.getEstudia().equals(this.estudia)){
             this.usuario.setEstudia(this.estudia);
+            this.usuario.setNombreInstitucion("");
             cambio = true;
         }
         if(!this.usuario.getMiembro().equals(this.miembro)){
             this.usuario.setMiembro(this.miembro);
+            if(this.miembro.equals("0"))
+                this.usuario.setFechaExpedicion(null);
             cambio = true;
         }
         if(!this.usuario.getNombreInstitucion().equals(this.nombreInstituto)){
@@ -181,11 +186,17 @@ public class internalUsuario extends Interfaz {
             this.usuario.setFotoString(this.foto);
             cambio = true;
         }
-        if(!this.usuario.getFechaExpedicion().equals(this.fechaMiembro)){
+        if(this.usuario.getFechaExpedicion() == null && this.fechaMiembro != null){
             this.usuario.setFechaExpedicion(this.fechaMiembro);
             cambio = true;
         }
-        
+        else{
+            System.out.println("Entre en opción 1");
+            if(this.usuario.getFechaExpedicion() != this.fechaMiembro){
+                this.usuario.setFechaExpedicion(this.fechaMiembro);
+                cambio = true;                
+            }
+        }        
         return cambio;
     }
 
@@ -461,11 +472,11 @@ public class internalUsuario extends Interfaz {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnGuardar)
                     .addComponent(btnCancelar))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -551,6 +562,7 @@ public class internalUsuario extends Interfaz {
         else{
             if(this.updateUsuario()){
                 JOptionPane.showMessageDialog(this, "Exito, se actualizo el usuario", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+                this.limpiarCampo();
             }
             else{
                 JOptionPane.showMessageDialog(this, "No se ha modificado ningun campo del usuario \n No se hizo ningun cambio en la base de datos",

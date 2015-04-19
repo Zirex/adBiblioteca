@@ -157,7 +157,10 @@ public class Usuario extends Conexion{
             if(!dato.equals(""))
                 pstm.setString(1, dato);
             else
-                pstm.setDate(1, new java.sql.Date(fecha.getTime()));
+                if(fecha == null)
+                    pstm.setDate(1, null);
+                else
+                    pstm.setDate(1, new java.sql.Date(fecha.getTime()));                    
             pstm.setString(2, this.idUsuario);
             pstm.execute();
             pstm.close();
@@ -273,6 +276,8 @@ public class Usuario extends Conexion{
     
     public Usuario getUsuario(String id){
         Usuario usuario = null;
+        Image foto= null;
+        Date fechaExpedicion= null; 
         SimpleDateFormat formateador = new SimpleDateFormat("yyyy-MM-dd", new Locale("es_ES"));
         try{
             String sql = "SELECT * FROM usuario WHERE id_usuario = ?;";
@@ -283,13 +288,17 @@ public class Usuario extends Conexion{
             while(res.next()){
                 ResultSetMetaData datos = res.getMetaData();
                 for (int i = 1, j=  datos.getColumnCount(); i <=j; i++) {
-                    if(i == 14){
+                    if(i == 14 && res.getBytes(i) != null){
                         //se lee la cadena de bytes de la base de datos
                         byte[] b= res.getBytes(i);
                         // esta cadena de bytes sera convertida en una imagen
-                        this.foto = this.ConvertirImagen(b);
+                        foto = this.ConvertirImagen(b);
                     }
                     map.put(datos.getColumnLabel(i).toLowerCase(), res.getString(i));
+                }               
+                
+                if(map.get("fecha_expedicion") != null){
+                    fechaExpedicion = formateador.parse(map.get("fecha_expedicion").toString());
                 }
                 
                 usuario = new Usuario(map.get("id_usuario")+"", map.get("ced_usuario")+"",
@@ -298,8 +307,8 @@ public class Usuario extends Conexion{
                                       map.get("telf1_usuario")+"", map.get("telf2_usuario")+"",
                                       map.get("direccion_usu")+"", map.get("estudia")+"",
                                       map.get("miembro")+"", map.get("nombre_inst")+"",
-                                      map.get("representante")+"", this.foto,
-                                      formateador.parse(map.get("fecha_expedicion").toString()));    
+                                      map.get("representante")+"", foto,
+                                      fechaExpedicion);    
                 
             }
             res.close();
