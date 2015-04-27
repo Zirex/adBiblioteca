@@ -39,16 +39,18 @@ public class Usuario extends Conexion{
     private String tlf2;
     private String direccion;
     private String estudia;
-    private String miembro;
     private String nombreInstitucion;
+    private String gradoEstudio;
     private String nombreRepresentante;
+    private String trabaja;
+    private String miembro;
     private String fotoString;
     private Date fechaExpedicion;
     private Image foto;
 
     public Usuario(){}
     
-    public Usuario(String cedUsuario, String nombre, String apellido, String sexo, Date fechaNacimiento, String tlf1, String tlf2, String direccion, String estudia, String miembro, String nombreInstitucion, String nombreRepresentante, String foto, Date fechaExpedicion) {
+    public Usuario(String cedUsuario, String nombre, String apellido, String sexo, Date fechaNacimiento, String tlf1, String tlf2, String direccion, String estudia, String nombreInstitucion, String gradoEstudio, String nombreRepresentante, String trabaja, String miembro, Date fechaExpedicion, String foto) {
         this.cedUsuario = cedUsuario;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -58,14 +60,16 @@ public class Usuario extends Conexion{
         this.tlf2 = tlf2;
         this.direccion = direccion;
         this.estudia = estudia;
-        this.miembro = miembro;
         this.nombreInstitucion = nombreInstitucion;
+        this.gradoEstudio = gradoEstudio;
         this.nombreRepresentante = nombreRepresentante;
-        this.fotoString = foto;
+        this.trabaja= trabaja;
+        this.miembro = miembro;
         this.fechaExpedicion = fechaExpedicion;
+        this.fotoString = foto;
     }
 
-    private Usuario(String idUsuario, String cedUsuario, String nombre, String apellido, String sexo, Date fechaNacimiento, String tlf1, String tlf2, String direccion, String estudia, String miembro, String nombreInstitucion, String nombreRepresentante, Image foto, Date fechaExpedicion) {
+    private Usuario(String idUsuario, String cedUsuario, String nombre, String apellido, String sexo, Date fechaNacimiento, String tlf1, String tlf2, String direccion, String estudia, String nombreInstitucion, String gradoEstudio, String nombreRepresentante, String trabaja, String miembro, Date fechaExpedicion, Image foto) {
         this.idUsuario = idUsuario;
         this.cedUsuario = cedUsuario;
         this.nombre = nombre;
@@ -76,11 +80,13 @@ public class Usuario extends Conexion{
         this.tlf2 = tlf2;
         this.direccion = direccion;
         this.estudia = estudia;
-        this.miembro = miembro;
         this.nombreInstitucion = nombreInstitucion;
+        this.gradoEstudio = gradoEstudio;
         this.nombreRepresentante = nombreRepresentante;
-        this.foto = foto;
+        this.trabaja = trabaja;
+        this.miembro = miembro;
         this.fechaExpedicion = fechaExpedicion;
+        this.foto = foto;
     }
     
     public boolean insertarUsuario(){
@@ -97,18 +103,18 @@ public class Usuario extends Conexion{
                 
                 sql= "INSERT INTO usuario(ced_usuario, nombre_usu, apellido_usu, "
                    + "sexo, fecha_nac_usu, telf1_usuario, telf2_usuario, direccion_usu, "
-                   + "estudia, miembro, nombre_inst, representante, fecha_expedicion, foto_usu) "
-                   + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+                   + "estudia, nombre_inst, grado_estudio, representante, trabaja, miembro, fecha_expedicion, foto_usu) "
+                   + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
                 
                 pstm= this.getConexion().prepareStatement(sql);
-                pstm.setDate(13, new java.sql.Date(this.fechaExpedicion.getTime()));
-                pstm.setBinaryStream(14, fis,(int) archivo.length());
+                pstm.setDate(15, new java.sql.Date(this.fechaExpedicion.getTime()));
+                pstm.setBinaryStream(16, fis,(int) archivo.length());
             }
             else{
                 sql= "INSERT INTO usuario(ced_usuario, nombre_usu, apellido_usu, "
                    + "sexo, fecha_nac_usu, telf1_usuario, telf2_usuario, direccion_usu, "
-                   + "estudia, miembro, nombre_inst, representante) "
-                   + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?);";
+                   + "estudia, nombre_inst, grado_estudio, representante, trabaja, miembro) "
+                   + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
                 
                 pstm= this.getConexion().prepareStatement(sql);
             }
@@ -122,9 +128,11 @@ public class Usuario extends Conexion{
             pstm.setString(7, this.tlf2);
             pstm.setString(8, this.direccion);
             pstm.setString(9, this.estudia);
-            pstm.setString(10, this.miembro);
-            pstm.setString(11, this.nombreInstitucion);
+            pstm.setString(10, this.nombreInstitucion);
+            pstm.setString(11, this.gradoEstudio);
             pstm.setString(12, this.nombreRepresentante);
+            pstm.setString(13, this.trabaja);
+            pstm.setString(14, this.miembro);
 
             pstm.execute();
             pstm.close();
@@ -261,6 +269,16 @@ public class Usuario extends Conexion{
         this.fechaExpedicion = fechaExpedicion;
         this.updateCampo("fecha_expedicion", "", this.fechaExpedicion);
     }
+
+    public void setGradoEstudio(String gradoEstudio) {
+        this.gradoEstudio = gradoEstudio;
+        this.updateCampo("grado_estudio", this.gradoEstudio, null);
+    }
+
+    public void setTrabaja(String trabaja) {
+        this.trabaja = trabaja;
+        this.updateCampo("trabaja", this.trabaja, null);
+    }
     
     //metodo que dada una cadena de bytes la convierte en una imagen con extension png
     private Image ConvertirImagen(byte[] bytes) throws IOException {
@@ -288,7 +306,7 @@ public class Usuario extends Conexion{
             while(res.next()){
                 ResultSetMetaData datos = res.getMetaData();
                 for (int i = 1, j=  datos.getColumnCount(); i <=j; i++) {
-                    if(i == 14 && res.getBytes(i) != null){
+                    if(i == 17 && res.getBytes(i) != null){
                         //se lee la cadena de bytes de la base de datos
                         byte[] b= res.getBytes(i);
                         // esta cadena de bytes sera convertida en una imagen
@@ -306,9 +324,9 @@ public class Usuario extends Conexion{
                                       map.get("sexo")+"", formateador.parse(map.get("fecha_nac_usu").toString()),
                                       map.get("telf1_usuario")+"", map.get("telf2_usuario")+"",
                                       map.get("direccion_usu")+"", map.get("estudia")+"",
-                                      map.get("miembro")+"", map.get("nombre_inst")+"",
-                                      map.get("representante")+"", foto,
-                                      fechaExpedicion);    
+                                      map.get("nombre_inst")+"", map.get("grado_estudio")+"",
+                                      map.get("representante")+"", map.get("trabaja")+"", map.get("miembro")+"",
+                                      fechaExpedicion, foto);    
                 
             }
             res.close();
@@ -471,6 +489,14 @@ public class Usuario extends Conexion{
 
     public Image getFoto() {
         return foto;
+    }
+
+    public String getGradoEstudio() {
+        return gradoEstudio;
+    }
+
+    public String getTrabaja() {
+        return trabaja;
     }
   
 }

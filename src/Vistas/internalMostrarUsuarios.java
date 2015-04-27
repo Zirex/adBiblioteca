@@ -22,6 +22,21 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
     /**
      * Creates new form internalMostrarUsuarios
      */
+    
+    private void seleccionarUsuario(int fila){
+        this.usuario = this.usuario.getUsuario(this.tablaUsuarios.getValueAt(fila, 0).toString());        
+        if(this.principal.estaCerrado(this.usuTabla)){
+            this.usuTabla= new internalUsuario();
+            this.usuTabla.cargarUsuario(this.usuario);
+            this.principal.panel.add(usuTabla);
+            this.usuTabla.show();
+        }
+        else{
+            this.usuTabla.cargarUsuario(this.usuario);
+            this.usuTabla.moveToFront();
+        }
+    }
+    
     public internalMostrarUsuarios(Principal principal, internalUsuario usuTabla) {
         initComponents();
         this.principal= principal;
@@ -46,7 +61,11 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
             }
             i++;
         }
-        DefaultTableModel model= new DefaultTableModel(datos, ColumnName);
+        DefaultTableModel model= new DefaultTableModel(datos, ColumnName){
+            public boolean isCellEditable(int i, int il){
+                return false;
+            }
+        };
         this.tablaUsuarios.setModel(model);
     }
 
@@ -89,6 +108,11 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
             }
         ));
         tablaUsuarios.setComponentPopupMenu(jpmUsuario);
+        tablaUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaUsuariosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaUsuarios);
 
         getContentPane().add(jScrollPane1);
@@ -99,18 +123,16 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
     private void jmiActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiActualizarActionPerformed
         // TODO add your handling code here:
         int fila =  this.tablaUsuarios.getSelectedRow();
-        this.usuario = this.usuario.getUsuario(this.tablaUsuarios.getValueAt(fila, 0).toString());        
-        if(this.principal.estaCerrado(this.usuTabla)){
-            this.usuTabla= new internalUsuario();
-            this.usuTabla.cargarUsuario(this.usuario);
-            this.principal.panel.add(usuTabla);
-            this.usuTabla.show();
-        }
-        else{
-            this.usuTabla.cargarUsuario(this.usuario);
-            this.usuTabla.moveToFront();
-        }
+        this.seleccionarUsuario(fila);
     }//GEN-LAST:event_jmiActualizarActionPerformed
+
+    private void tablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaUsuariosMouseClicked
+        // TODO add your handling code here:
+        if(evt.getClickCount() == 2){
+            int fila = this.tablaUsuarios.getSelectedRow();
+            this.seleccionarUsuario(fila);
+        }
+    }//GEN-LAST:event_tablaUsuariosMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

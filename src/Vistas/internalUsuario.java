@@ -27,11 +27,13 @@ public class internalUsuario extends Interfaz {
     private String tlf2 = null;
     private String direccion = null;
     private String estudia = "0";
-    private String miembro = "0";
     private String nombreInstituto = null;
+    private String gradoEstudio= null;
     private String representante = null;
-    private String foto = null;
+    private String trabaja= "0";
+    private String miembro = "0";
     private Date fechaMiembro = null;
+    private String foto = null;
 
     /**
      * Creates new form internalUsuario
@@ -55,14 +57,19 @@ public class internalUsuario extends Interfaz {
             this.jcbEstudia.setSelected(true);
             this.txtInstitucion.setText(this.usuario.getNombreInstitucion());
         }
+        this.cmbGrado.setSelectedItem(this.usuario.getGradoEstudio());
         this.txtRepresentante.setText(this.usuario.getNombreRepresentante());
-        if(this.usuario.getMiembro().equals("1")){
+        if(this.usuario.getTrabaja().equals("1")){
+            this.jcbEstudia.setSelected(true);
+        }
+        if(this.usuario.getFoto() != null){
             this.jcbMiembro.setSelected(true);
             this.fechaMiembro = this.usuario.getFechaExpedicion();
             this.txtFechaMiembro.setText(this.formateador.format(this.fechaMiembro));
-        }
-        if(this.usuario.getFoto() != null){
             this.jcfFoto.setFoto(new javax.swing.ImageIcon(this.usuario.getFoto()));            
+        }
+        if(this.usuario.getTrabaja().equals("1")){
+            this.jcbTrabaja.setSelected(true);
         }
         
         this.btnGuardar.setText("Actualizar");
@@ -100,6 +107,20 @@ public class internalUsuario extends Interfaz {
                 error = true;
             }
         }
+        if(this.jcbEstudia.isSelected()){
+            if(this.txtInstitucion.getText().trim().equals("Nombre institución")){
+                showError(txtInstitucion, "Por favor digite el nombre de la institución");
+                error = true;
+            }
+        }
+        if(this.cmbGrado.getSelectedIndex() == 0){
+            showError(cmbGrado, "Seleccione un grado de estudio para el usuario");
+            error = true;
+        }
+        if(this.jcfFoto.getPathFoto() != null && this.txtFechaMiembro.getText().isEmpty()){
+            showError(txtFechaMiembro, "Por favor seleccione ser miembro");
+            error = true;
+        }
         return error;
     }
     
@@ -114,7 +135,9 @@ public class internalUsuario extends Interfaz {
         this.txtTlf2.setText("");
         this.txtDireccion.setText("");
         this.jcbEstudia.setSelected(false);
+        this.cmbGrado.setSelectedIndex(0);
         this.txtRepresentante.setText("");
+        this.jcbTrabaja.setSelected(false);
         this.jcbMiembro.setSelected(false);
         this.jcfFoto.setFoto(this.jcfFoto.getFotoDefault());
         
@@ -125,6 +148,7 @@ public class internalUsuario extends Interfaz {
         normalizeInput(txtTlf1);
         normalizeInput(txtTlf2);
         normalizeInput(txtDireccion);
+        normalizeInput(cmbGrado);
                 
         this.btnGuardar.setText("Guardar");
     }
@@ -191,12 +215,19 @@ public class internalUsuario extends Interfaz {
             cambio = true;
         }
         else{
-            System.out.println("Entre en opción 1");
             if(this.usuario.getFechaExpedicion() != this.fechaMiembro){
                 this.usuario.setFechaExpedicion(this.fechaMiembro);
                 cambio = true;                
             }
-        }        
+        }
+        if(!this.usuario.getGradoEstudio().equals(this.cmbGrado.getSelectedItem())){
+            this.usuario.setGradoEstudio(this.cmbGrado.getSelectedItem().toString());
+            cambio = true;
+        }
+        if(!this.usuario.getTrabaja().equals(this.trabaja)){
+            this.usuario.setTrabaja(this.trabaja);
+            cambio = true;
+        }
         return cambio;
     }
 
@@ -235,6 +266,9 @@ public class internalUsuario extends Interfaz {
         txtRepresentante = new javax.swing.JTextField();
         jcbMiembro = new javax.swing.JCheckBox();
         txtFechaMiembro = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jcbTrabaja = new javax.swing.JCheckBox();
+        cmbGrado = new javax.swing.JComboBox();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
@@ -264,6 +298,12 @@ public class internalUsuario extends Interfaz {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos personales"));
 
         jLabel1.setText("Cedula usuario:");
+
+        txtCedula.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCedulaKeyTyped(evt);
+            }
+        });
 
         jLabel2.setText("Nombre usuario:");
 
@@ -350,6 +390,13 @@ public class internalUsuario extends Interfaz {
 
         txtFechaMiembro.setEditable(false);
 
+        jLabel10.setText("Grado de estudio:");
+
+        jcbTrabaja.setText("Trabaja");
+        jcbTrabaja.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
+        cmbGrado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Grado de estudio", "Primaria", "Secundaria", "Tecnico", "Universitario" }));
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -357,31 +404,36 @@ public class internalUsuario extends Interfaz {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8)
-                    .addComponent(jcbEstudia)
-                    .addComponent(jLabel9)
-                    .addComponent(jcbMiembro))
-                .addGap(13, 13, 13)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtNomUsuario)
-                        .addComponent(txtCedula)
-                        .addComponent(txtApUsuario)
-                        .addComponent(jdtFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtTlf1)
-                        .addComponent(txtTlf2)
-                        .addComponent(txtDireccion)
-                        .addComponent(txtInstitucion, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-                        .addComponent(txtRepresentante)
-                        .addComponent(cmbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtFechaMiembro, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jcbTrabaja, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addComponent(jcbEstudia)
+                            .addComponent(jLabel9)
+                            .addComponent(jcbMiembro)
+                            .addComponent(jLabel10))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtNomUsuario)
+                                .addComponent(txtCedula)
+                                .addComponent(txtApUsuario)
+                                .addComponent(jdtFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtTlf1)
+                                .addComponent(txtTlf2)
+                                .addComponent(txtDireccion)
+                                .addComponent(txtInstitucion, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                                .addComponent(txtRepresentante)
+                                .addComponent(cmbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtFechaMiembro, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbGrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -424,12 +476,18 @@ public class internalUsuario extends Interfaz {
                     .addComponent(txtInstitucion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(cmbGrado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(txtRepresentante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jcbMiembro, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtFechaMiembro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jcbTrabaja)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtFechaMiembro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcbMiembro, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/guardar32px.png"))); // NOI18N
@@ -458,12 +516,12 @@ public class internalUsuario extends Interfaz {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(140, 140, 140)
                 .addComponent(btnGuardar)
-                .addGap(109, 109, 109)
+                .addGap(115, 115, 115)
                 .addComponent(btnCancelar)
-                .addGap(143, 143, 143))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -472,18 +530,18 @@ public class internalUsuario extends Interfaz {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnGuardar)
-                    .addComponent(btnCancelar))
-                .addContainerGap(18, Short.MAX_VALUE))
+                    .addComponent(btnCancelar)
+                    .addComponent(btnGuardar))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -530,11 +588,15 @@ public class internalUsuario extends Interfaz {
         this.tlf2 = this.txtTlf2.getText().trim();
         this.direccion = this.txtDireccion.getText().trim();
         this.nombreInstituto = this.txtInstitucion.getText().trim();
+        this.gradoEstudio = this.cmbGrado.getSelectedItem().toString();
         this.representante = this.txtRepresentante.getText().trim();
         this.foto = this.jcfFoto.getPathFoto();
         
         if(this.jcbEstudia.isSelected()){
             this.estudia = "1";
+        }
+        if(this.jcbTrabaja.isSelected()){
+            this.trabaja = "1";
         }
         if(this.jcbMiembro.isSelected()){
             this.miembro= "1";
@@ -544,9 +606,9 @@ public class internalUsuario extends Interfaz {
             if(!this.validarCampos()){
                 this.usuario = new Usuario(this.cedula, this.nombreUsu, this.apellidoUsu, 
                                            this.sexo, this.fechaNac, this.tlf1, this.tlf2, 
-                                           this.direccion, this.estudia, this.miembro, 
-                                           this.nombreInstituto, this.representante, 
-                                           this.foto, this.fechaMiembro);
+                                           this.direccion, this.estudia, this.nombreInstituto, 
+                                           this.gradoEstudio, this.representante,
+                                           this.trabaja, this.miembro, this.fechaMiembro, this.foto);
                 if(this.usuario.insertarUsuario()){
                     this.limpiarCampo();
                     JOptionPane.showMessageDialog(this, "Exito se guardo un nuevo Usuario", "Dialogo de confirmación", JOptionPane.INFORMATION_MESSAGE);
@@ -624,11 +686,18 @@ public class internalUsuario extends Interfaz {
         }
     }//GEN-LAST:event_jdtFechaNacimientoFocusLost
 
+    private void txtCedulaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyTyped
+        // TODO add your handling code here:
+        soloNum(evt);
+    }//GEN-LAST:event_txtCedulaKeyTyped
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JComboBox cmbGrado;
     private javax.swing.JComboBox cmbSexo;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -642,6 +711,7 @@ public class internalUsuario extends Interfaz {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JCheckBox jcbEstudia;
     private javax.swing.JCheckBox jcbMiembro;
+    private javax.swing.JCheckBox jcbTrabaja;
     private jcFoto.jcFoto jcfFoto;
     private com.toedter.calendar.JDateChooser jdtFechaNacimiento;
     private javax.swing.JTextField txtApUsuario;

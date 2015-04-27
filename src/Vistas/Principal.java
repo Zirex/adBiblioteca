@@ -17,6 +17,7 @@ public class Principal extends javax.swing.JFrame {
     private internalResumen iResumen;
     private internalUsuario iUsuario;
     private internalMostrarUsuarios iMUsuario;
+    private internalVisitante iVisitante;
 
     /**
      * Creates new form Principal
@@ -60,6 +61,7 @@ public class Principal extends javax.swing.JFrame {
         jToolBar1 = new javax.swing.JToolBar();
         btnLibro = new javax.swing.JButton();
         btnUsuario = new javax.swing.JButton();
+        btnLector = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         btnResumen = new javax.swing.JButton();
         panel = new javax.swing.JDesktopPane();
@@ -116,6 +118,20 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(btnUsuario);
+
+        btnLector.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/lector.png"))); // NOI18N
+        btnLector.setText("Lectores");
+        btnLector.setContentAreaFilled(false);
+        btnLector.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnLector.setFocusable(false);
+        btnLector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnLector.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnLector.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLectorActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnLector);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/prestamo1.png"))); // NOI18N
         jButton1.setText("Prestamos");
@@ -220,6 +236,19 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jmMostrarUsuariosActionPerformed
 
+    private void btnLectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLectorActionPerformed
+        // TODO add your handling code here:
+        if(this.estaCerrado(iVisitante)){
+            iVisitante = new internalVisitante(this, iUsuario);
+            panel.add(iVisitante);
+            this.posicion(iVisitante);
+            iVisitante.show();
+        }
+        else{
+            iVisitante.moveToFront();
+        }
+    }//GEN-LAST:event_btnLectorActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -256,6 +285,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLector;
     private javax.swing.JButton btnLibro;
     private javax.swing.JButton btnResumen;
     private javax.swing.JButton btnUsuario;

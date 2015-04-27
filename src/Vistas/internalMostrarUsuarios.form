@@ -65,6 +65,9 @@
               <ComponentRef name="jpmUsuario"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tablaUsuariosMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
