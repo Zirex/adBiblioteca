@@ -62,6 +62,7 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
             i++;
         }
         DefaultTableModel model= new DefaultTableModel(datos, ColumnName){
+            @Override
             public boolean isCellEditable(int i, int il){
                 return false;
             }

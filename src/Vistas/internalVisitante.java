@@ -111,7 +111,7 @@ public class internalVisitante extends Interfaz {
                             .addComponent(txtEdad, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
                             .addComponent(lblTrabaja)
                             .addComponent(txtGradoUsuario))
-                        .addGap(0, 149, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(txtNombreUsuario))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnBuscarUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -245,7 +245,7 @@ public class internalVisitante extends Interfaz {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout contenedorLayout = new javax.swing.GroupLayout(contenedor);
@@ -310,13 +310,13 @@ public class internalVisitante extends Interfaz {
                 }
             }
             else{
-                contenedor.removeAll();
-                contenedor.repaint();
+                BuscarLector bl= new BuscarLector(usuarios);
+                bl.setSize(504, 440);
+                bl.setLocation(0, 0);
 
-                javax.swing.JPanel buscarLector = new BuscarLector();
-                buscarLector.setLocation(0, 0);
-
-                contenedor.add(buscarLector);
+                contenedor.removeAll();                
+                contenedor.add(bl);
+                bl.setVisible(true);
             }
         }
     }//GEN-LAST:event_btnBuscarUsuActionPerformed

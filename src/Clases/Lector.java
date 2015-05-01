@@ -71,7 +71,7 @@ public class Lector extends Conexion{
         ArrayList<HashMap> usuarios = new ArrayList<>();
         String [] usu = usuario.split(" ");
         String sql= "SELECT id_usuario, nombre_usu, apellido_usu, fecha_nac_usu,"
-                  + " grado_estudio, trabaja FROM usuario WHERE nombre_usu LIKE '"+usu[0]+"%' AND apellido_usu LIKE '"+usu[1]+"%'";
+                  + " grado_estudio, trabaja, miembro FROM usuario WHERE nombre_usu LIKE '"+usu[0]+"%' AND apellido_usu LIKE '"+usu[1]+"%'";
         try{
             PreparedStatement pstm = this.getConexion().prepareStatement(sql);
             ResultSet res= pstm.executeQuery();
