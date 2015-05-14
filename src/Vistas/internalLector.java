@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -46,6 +47,29 @@ public class internalLector extends javax.swing.JInternalFrame {
                 Logger.getLogger(internalLector.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+    private void cargarTabla(ArrayList<HashMap> usuarios){
+        String [] Column = {"Id de usuario", "Apellidos", "Nombres", "Miembro"};
+        Object [][] datos = new Object [usuarios.size()][Column.length];
+        int i = 0;
+        for (HashMap dato : usuarios) {
+            String [] linea = {dato.get("id_usuario").toString(),
+                               dato.get("apellido_usu").toString(), 
+                               dato.get("nombre_usu").toString(),
+                               dato.get("miembro").toString()};
+            for(int j=0; j < datos[i].length; j++){
+                datos[i][j] = linea[j];
+            }
+            i++;
+        }
+        DefaultTableModel model = new DefaultTableModel(datos, Column){
+          @Override
+          public boolean isCellEditable(int i, int il){
+                return false;
+            }  
+        };
+        this.tablaUsuario.setModel(model);
     }
 
     /**
@@ -428,6 +452,7 @@ public class internalLector extends javax.swing.JInternalFrame {
                 }
             }
             else{
+                this.cargarTabla(usuarios);
                 contenedor.removeAll();
                 contenedor.add(panelUsuario);
                 contenedor.repaint();
