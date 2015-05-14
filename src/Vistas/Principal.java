@@ -6,6 +6,9 @@
 package Vistas;
 
 import java.awt.Dimension;
+import java.beans.PropertyVetoException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JInternalFrame;
 
 /**
@@ -17,7 +20,7 @@ public class Principal extends javax.swing.JFrame {
     private internalResumen iResumen;
     private internalUsuario iUsuario;
     private internalMostrarUsuarios iMUsuario;
-    private internalVisitante iVisitante;
+    private internalLector iLector;
 
     /**
      * Creates new form Principal
@@ -187,6 +190,11 @@ public class Principal extends javax.swing.JFrame {
         }
         else{
             iResumen.moveToFront();
+            try {
+                iResumen.setIcon(false);
+            } catch (PropertyVetoException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnResumenActionPerformed
 
@@ -200,6 +208,11 @@ public class Principal extends javax.swing.JFrame {
         }
         else{
             iLibro.moveToFront();
+            try {
+                iLibro.setIcon(false);
+            } catch (PropertyVetoException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }        
     }//GEN-LAST:event_btnLibroActionPerformed
 
@@ -220,6 +233,11 @@ public class Principal extends javax.swing.JFrame {
         }
         else{
             iUsuario.moveToFront();
+            try {
+                iUsuario.setIcon(false);
+            } catch (PropertyVetoException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_jmGestionUsuarioActionPerformed
 
@@ -233,19 +251,29 @@ public class Principal extends javax.swing.JFrame {
         }
         else{
             iMUsuario.moveToFront();
+            try {
+                iMUsuario.setIcon(false);
+            } catch (PropertyVetoException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_jmMostrarUsuariosActionPerformed
 
     private void btnLectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLectorActionPerformed
         // TODO add your handling code here:
-        if(this.estaCerrado(iVisitante)){
-            iVisitante = new internalVisitante(this, iUsuario);
-            panel.add(iVisitante);
-            this.posicion(iVisitante);
-            iVisitante.show();
+        if(this.estaCerrado(iLector)){
+            iLector = new internalLector(this, iUsuario);
+            panel.add(iLector);
+            this.posicion(iLector);
+            iLector.show();
         }
         else{
-            iVisitante.moveToFront();
+            iLector.moveToFront();
+            try {
+                iLector.setIcon(false);
+            } catch (PropertyVetoException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnLectorActionPerformed
 

@@ -6,8 +6,11 @@
 package Vistas;
 
 import Clases.Usuario;
+import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -34,6 +37,11 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
         else{
             this.usuTabla.cargarUsuario(this.usuario);
             this.usuTabla.moveToFront();
+            try {
+                this.usuTabla.setIcon(false);
+            } catch (PropertyVetoException ex) {
+                Logger.getLogger(internalMostrarUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     

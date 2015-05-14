@@ -14,18 +14,17 @@ import javax.swing.JOptionPane;
  *
  * @author zirex
  */
-public class internalVisitante extends Interfaz {
-    private Lector lector = new Lector();
-    private Principal principal;
-    private internalUsuario iusuario;
+public class PanelLector extends javax.swing.JPanel {
+    private internalLector iLector;
+    private Lector lector;
 
     /**
-     * Creates new form internalVisitante
+     * Creates new form PanelLector
      */
-    public internalVisitante(Principal principal, internalUsuario iusuario) {
+    public PanelLector(internalLector iLector) {
         initComponents();
-        this.principal = principal;
-        this.iusuario = iusuario;
+        this.iLector = iLector;
+        this.lector = new Lector();
     }
 
     /**
@@ -37,7 +36,6 @@ public class internalVisitante extends Interfaz {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        contenedor = new javax.swing.JLayeredPane();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -61,10 +59,6 @@ public class internalVisitante extends Interfaz {
         btnBuscarLibro = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-
-        setClosable(true);
-        setIconifiable(true);
-        setTitle("Registro de lectores");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Nuevo visitante"));
 
@@ -162,6 +156,11 @@ public class internalVisitante extends Interfaz {
         btnBuscarLibro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/buscar1.png"))); // NOI18N
         btnBuscarLibro.setBorderPainted(false);
         btnBuscarLibro.setContentAreaFilled(false);
+        btnBuscarLibro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarLibroActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -180,7 +179,7 @@ public class internalVisitante extends Interfaz {
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtGradoLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblPrestamo))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 106, Short.MAX_VALUE))
                     .addComponent(txtEditorial)
                     .addComponent(txtNombreLibro, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -227,12 +226,12 @@ public class internalVisitante extends Interfaz {
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(77, 77, 77)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(104, 104, 104)
                 .addComponent(jButton2)
-                .addContainerGap(94, Short.MAX_VALUE))
+                .addGap(43, 43, 43))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,63 +240,42 @@ public class internalVisitante extends Interfaz {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout contenedorLayout = new javax.swing.GroupLayout(contenedor);
-        contenedor.setLayout(contenedorLayout);
-        contenedorLayout.setHorizontalGroup(
-            contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(contenedorLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        contenedorLayout.setVerticalGroup(
-            contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(contenedorLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        contenedor.setLayer(jPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(contenedor)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(contenedor)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarUsuActionPerformed
         // TODO add your handling code here:
-        
+
         String usuario = txtNombreUsuario.getText().trim().toLowerCase();
         ArrayList<HashMap> usuarios= lector.getUsuarios(usuario);
-        
+
         if(usuarios.isEmpty()){
             String msj= "No hay ningún usuario que coincida con los datos suministrados. \nDesea crear un nuevo usuario?";
             int opc= JOptionPane.showConfirmDialog(this, msj, "adBiblioteca", JOptionPane.OK_OPTION);
             if(opc == 0){
-                if(this.principal.estaCerrado(this.iusuario)){
-                    this.iusuario = new internalUsuario();
-                    this.principal.panel.add(this.iusuario);
-                    this.iusuario.show();
-                }
-                else{
-                    this.iusuario.moveToFront();
-                }
+                iLector.registrarUsuario();
             }
         }
         else{
@@ -310,22 +288,32 @@ public class internalVisitante extends Interfaz {
                 }
             }
             else{
-                BuscarLector bl= new BuscarLector(usuarios);
-                bl.setSize(504, 440);
+                PanelUsuarios bl= new PanelUsuarios(usuarios);
+                bl.setSize(525, 467);
                 bl.setLocation(0, 0);
 
-                contenedor.removeAll();                
-                contenedor.add(bl);
+                iLector.contenedor.removeAll();
+                iLector.contenedor.add(bl);
                 bl.setVisible(true);
             }
         }
     }//GEN-LAST:event_btnBuscarUsuActionPerformed
 
+    private void btnBuscarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarLibroActionPerformed
+        // TODO add your handling code here:
+        PanelLibros pl = new PanelLibros();
+        pl.setSize(525, 467);
+        pl.setLocation(0, 0);
+
+        iLector.contenedor.removeAll();
+        iLector.contenedor.add(pl);
+        pl.setVisible(true);
+    }//GEN-LAST:event_btnBuscarLibroActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarLibro;
     private javax.swing.JButton btnBuscarUsu;
-    private javax.swing.JLayeredPane contenedor;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;

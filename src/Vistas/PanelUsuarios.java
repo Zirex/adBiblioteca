@@ -8,22 +8,24 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author zirex
  */
-public class BuscarLector extends javax.swing.JPanel {
+public class PanelUsuarios extends javax.swing.JPanel {
+    private ArrayList<HashMap> usuarios;
 
     /**
      * Creates new form NuevoLector
      */
     
-    public BuscarLector(ArrayList<HashMap> usuarios) {
+    public PanelUsuarios(ArrayList<HashMap> usuarios) {
         initComponents();
-        this.cargarTabla(usuarios);
+        this.usuarios = usuarios;
+        this.cargarTabla();
     }
     
-    private void cargarTabla(ArrayList<HashMap> usuarios){
+    private void cargarTabla(){
         String [] Column = {"Id de usuario", "Apellidos", "Nombres", "Miembro"};
-        Object [][] datos = new Object [usuarios.size()][Column.length];
+        Object [][] datos = new Object [this.usuarios.size()][Column.length];
         int i = 0;
-        for (HashMap dato : usuarios) {
+        for (HashMap dato : this.usuarios) {
             String [] linea = {dato.get("id_usuario").toString(),
                                dato.get("apellido_usu").toString(), 
                                dato.get("nombre_usu").toString(),
@@ -75,6 +77,11 @@ public class BuscarLector extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tablaUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaUsuarioMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaUsuario);
 
         jLabel1.setText("Hacer doble clic para seleccionar al usuario");
@@ -99,7 +106,7 @@ public class BuscarLector extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -109,12 +116,13 @@ public class BuscarLector extends javax.swing.JPanel {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(60, 60, 60)
-                                .addComponent(jLabel1)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 119, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(88, 88, 88)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,8 +154,8 @@ public class BuscarLector extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -159,6 +167,14 @@ public class BuscarLector extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void tablaUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaUsuarioMouseClicked
+        // TODO add your handling code here:
+        if(evt.getClickCount() == 2){
+            int fila= tablaUsuario.getSelectedRow();
+//            this.seleccionarUsuario(fila);
+        }
+    }//GEN-LAST:event_tablaUsuarioMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
