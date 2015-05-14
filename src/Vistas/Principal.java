@@ -261,8 +261,7 @@ public class Principal extends javax.swing.JFrame {
     private void btnLectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLectorActionPerformed
         // TODO add your handling code here:
         if(this.estaCerrado(iLector)){
-//            iLector = new internalLector(this, iUsuario);
-            iLector = new internalLector();
+            iLector = new internalLector(this, iUsuario);
             panel.add(iLector);
             this.posicion(iLector);
             iLector.show();

@@ -6,8 +6,11 @@
 package Vistas;
 
 import Clases.Lector;
+import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -16,13 +19,33 @@ import javax.swing.JOptionPane;
  */
 public class internalLector extends javax.swing.JInternalFrame {
     private Lector lector;
+    private Principal principal;
+    private internalUsuario usuario;
 
     /**
      * Creates new form internalLector1
      */
-    public internalLector() {
+    public internalLector(Principal principal, internalUsuario usuario) {
         initComponents();
         this.lector = new Lector();
+        this.principal = principal;
+        this.usuario = usuario;
+    }
+    
+    private void nuevoUsuario(){
+        if(principal.estaCerrado(usuario)){
+            usuario = new internalUsuario();
+            principal.panel.add(usuario);
+            usuario.show();
+        }
+        else{
+            usuario.moveToFront();
+            try {
+                usuario.setIcon(false);
+            } catch (PropertyVetoException ex) {
+                Logger.getLogger(internalLector.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     /**
@@ -390,7 +413,7 @@ public class internalLector extends javax.swing.JInternalFrame {
             String msj= "No hay ningún usuario que coincida con los datos suministrados. \nDesea crear un nuevo usuario?";
             int opc= JOptionPane.showConfirmDialog(this, msj, "adBiblioteca", JOptionPane.OK_OPTION);
             if(opc == 0){
-//                this.registrarUsuario();
+                this.nuevoUsuario();
             }
         }
         else{
