@@ -48,9 +48,9 @@ public class Lector extends Conexion{
         HashMap map = new HashMap();
         try{
             String sql = "SELECT l.id_lector, lb.nombre_libro, u.nombre_usu, "
-                    + "u.apellido_usu, u.fecha_nacimiento, u.grado_estudio, u.trabaja, "
-                    + "l.fecha_lectura FROM lector l, libro lb, usuario u "
-                    + "WHERE l.id_libro = lb.id_libro and l.id_usuario = u.id_usuario and u.nombre_usu = ?";
+                       + "u.apellido_usu, u.fecha_nacimiento, u.grado_estudio, u.trabaja, "
+                       + "l.fecha_lectura FROM lector l, libro lb, usuario u "
+                       + "WHERE l.id_libro = lb.id_libro and l.id_usuario = u.id_usuario and u.nombre_usu = ?";
             PreparedStatement pstm = this.getConexion().prepareStatement(sql);
             pstm.setString(1, nombreUsuario);
             ResultSet res = pstm.executeQuery();

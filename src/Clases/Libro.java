@@ -183,6 +183,28 @@ public class Libro extends Conexion{
         }
         return libro;
     }
+    
+    public static ArrayList<HashMap> libros(String q){
+        ArrayList<HashMap> listaLibros = new ArrayList<>();
+        Conexion con = new Conexion();
+        try{
+            PreparedStatement pstm = con.getConexion().prepareStatement(q);
+            ResultSet res = pstm.executeQuery();
+            while(res.next()){
+                HashMap map = new HashMap();
+                ResultSetMetaData meta = res.getMetaData();
+                for (int i = 1, j= meta.getColumnCount(); i <= j; i++) {
+                    map.put(meta.getColumnLabel(i).toLowerCase(), res.getString(i));
+                }
+                listaLibros.add(map);
+            }
+            res.close();
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        
+        return listaLibros;
+    }
      
     public static AbstractTableModel getLibros (){
         AbstractTableModel model = new AbstractTableModel(){
