@@ -69,6 +69,7 @@ public class Principal extends javax.swing.JFrame {
         btnResumen = new javax.swing.JButton();
         panel = new javax.swing.JDesktopPane();
 
+        jmGestionUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/usuarioNuevo.png"))); // NOI18N
         jmGestionUsuario.setText("Registrar usuario");
         jmGestionUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -77,6 +78,7 @@ public class Principal extends javax.swing.JFrame {
         });
         jpmUsuario.add(jmGestionUsuario);
 
+        jmMostrarUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/1432716129_magnifier.png"))); // NOI18N
         jmMostrarUsuarios.setText("Tabla usuarios");
         jmMostrarUsuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
