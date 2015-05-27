@@ -2,6 +2,7 @@ package Vistas;
 
 import Clases.Lector;
 import Clases.Libro;
+import Clases.Usuario;
 import java.beans.PropertyVetoException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,7 +19,6 @@ import javax.swing.table.DefaultTableModel;
  * @author zirex
  */
 public class internalLector extends javax.swing.JInternalFrame {
-    private Lector lector;
     private Principal principal;
     private internalUsuario usuario;
     private ArrayList<HashMap> usuarios;
@@ -31,7 +31,6 @@ public class internalLector extends javax.swing.JInternalFrame {
      */
     public internalLector(Principal principal, internalUsuario usuario) {
         initComponents();
-        this.lector = new Lector();
         this.principal = principal;
         this.usuario = usuario;
     }
@@ -195,7 +194,7 @@ public class internalLector extends javax.swing.JInternalFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         cmbBuscar = new javax.swing.JComboBox();
-        txtBuscar = new javax.swing.JTextField();
+        txtBuscarUsuario = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
         panelLibro = new javax.swing.JPanel();
         JPanel10 = new javax.swing.JPanel();
@@ -209,6 +208,7 @@ public class internalLector extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setIconifiable(true);
+        setTitle("Gestion Lectores");
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
         contenedor.setLayout(new java.awt.CardLayout());
@@ -479,7 +479,7 @@ public class internalLector extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cmbBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtBuscarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 174, Short.MAX_VALUE)))
@@ -499,7 +499,7 @@ public class internalLector extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtBuscarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -530,11 +530,16 @@ public class internalLector extends javax.swing.JInternalFrame {
 
         jLabel11.setText("Buscar por:");
 
-        cmbBuscarLibro.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbBuscarLibro.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar modo busqueda", "Nombre de libros", "Editorial de libros", "Autor de libros", "Area de libros" }));
 
         btnLibro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/buscar1.png"))); // NOI18N
         btnLibro.setBorderPainted(false);
         btnLibro.setContentAreaFilled(false);
+        btnLibro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLibroActionPerformed(evt);
+            }
+        });
 
         tablaLibro.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -628,29 +633,37 @@ public class internalLector extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Por favor digite el nombre y apellido del lector", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
         }
         else{
-            String usuario = txtNombreUsuario.getText().trim().toLowerCase();
-            this.usuarios= lector.getUsuarios(usuario);
-
-            if(this.usuarios.isEmpty()){
-                String msj= "No hay ningún usuario que coincida con los datos suministrados. \nDesea crear un nuevo usuario?";
-                int opc= JOptionPane.showConfirmDialog(this, msj, "adBiblioteca", JOptionPane.OK_OPTION);
-                if(opc == 0){
-                    this.nuevoUsuario();
-                }
-            }
-            else{
-                if(this.usuarios.size() == 1){
-                    HashMap map = this.usuarios.get(0);
-                    this.llenarCamposUsuario(map);
+            String [] usu = this.txtNombreUsuario.getText().trim().toLowerCase().split(" ");
+            if(usu.length==2){
+                String sql= "SELECT id_usuario, nombre_usu, apellido_usu, fecha_nac_usu,"
+                          + " grado_estudio, trabaja, miembro FROM usuario WHERE nombre_usu"
+                          + " LIKE '"+usu[0]+"%' AND apellido_usu LIKE '"+usu[1]+"%'";
+                this.usuarios= Usuario.usuarios(sql);
+                
+                if(this.usuarios.isEmpty()){
+                    String msj= "No hay ningún usuario que coincida con los datos suministrados. \nDesea crear un nuevo usuario?";
+                    int opc= JOptionPane.showConfirmDialog(this, msj, "adBiblioteca", JOptionPane.OK_OPTION);
+                    if(opc == 0){
+                        this.nuevoUsuario();
+                    }
                 }
                 else{
-                    this.cargarTablaUsuario();
-                    contenedor.removeAll();
-                    contenedor.add(panelUsuario);
-                    contenedor.repaint();
-                    contenedor.revalidate();
-                }
-            }            
+                    if(this.usuarios.size() == 1){
+                        HashMap map = this.usuarios.get(0);
+                        this.llenarCamposUsuario(map);
+                    }
+                    else{
+                        this.cargarTablaUsuario();
+                        contenedor.removeAll();
+                        contenedor.add(panelUsuario);
+                        contenedor.repaint();
+                        contenedor.revalidate();
+                    }
+                }            
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Debe digitar el primer nombre y el primer apellido del usuario", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }//GEN-LAST:event_btnBuscarUsuActionPerformed
 
@@ -695,7 +708,7 @@ public class internalLector extends javax.swing.JInternalFrame {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
         if(cmbBuscar.getSelectedIndex() != 0){
-            if(!txtBuscar.getText().trim().toLowerCase().equals("")){
+            if(!txtBuscarUsuario.getText().trim().toLowerCase().equals("")){
 
             }
         }
@@ -736,6 +749,22 @@ public class internalLector extends javax.swing.JInternalFrame {
         this.limpiarCampos();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void btnLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLibroActionPerformed
+        // TODO add your handling code here:
+        String busqueda= this.txtBuscarLibro.getText().trim().toLowerCase();
+        String [] campoBusqueda = {"nom_libro", "nom_editorial", "nom_autor", "area"};
+        String [] ColumName = {"id_libro", "nom_libro", "nom_editorial", "grado", "prestamo", "area"};
+        int seleccion = this.cmbBuscarLibro.getSelectedIndex();
+        if(!busqueda.isEmpty() && seleccion != 0){
+            String q= "SELECT id_libro, nom_libro, nom_editorial, grado, prestamo, area FROM"
+                    + " libro WHERE '"+campoBusqueda[seleccion]+"='"+busqueda+"';";
+            this.cargarTablaLibros(q, ColumName);
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Por favor verifique si seleccionó el modo de busqueda \ny que el campo no este vacio", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnLibroActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JPanel10;
@@ -773,8 +802,8 @@ public class internalLector extends javax.swing.JInternalFrame {
     private javax.swing.JPanel panelUsuario;
     private javax.swing.JTable tablaLibro;
     private javax.swing.JTable tablaUsuario;
-    private javax.swing.JTextField txtBuscar;
     private javax.swing.JTextField txtBuscarLibro;
+    private javax.swing.JTextField txtBuscarUsuario;
     private javax.swing.JTextField txtEdad;
     private javax.swing.JTextField txtEditorial;
     private javax.swing.JTextField txtGradoLibro;

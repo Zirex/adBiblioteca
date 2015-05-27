@@ -4,6 +4,7 @@
   <Properties>
     <Property name="closable" type="boolean" value="true"/>
     <Property name="iconifiable" type="boolean" value="true"/>
+    <Property name="title" type="java.lang.String" value="Gestion Lectores"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -441,7 +442,7 @@
                                           <Component id="cmbBuscar" min="-2" pref="196" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
-                                          <Component id="txtBuscar" min="-2" pref="287" max="-2" attributes="0"/>
+                                          <Component id="txtBuscarUsuario" min="-2" pref="287" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="btnBuscar" min="-2" pref="37" max="-2" attributes="0"/>
                                       </Group>
@@ -469,7 +470,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="btnBuscar" alignment="0" min="-2" pref="33" max="-2" attributes="0"/>
-                              <Component id="txtBuscar" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtBuscarUsuario" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jScrollPane1" min="-2" pref="187" max="-2" attributes="0"/>
@@ -526,7 +527,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtBuscar">
+                <Component class="javax.swing.JTextField" name="txtBuscarUsuario">
                 </Component>
                 <Component class="javax.swing.JButton" name="btnBuscar">
                   <Properties>
@@ -642,11 +643,12 @@
                 <Component class="javax.swing.JComboBox" name="cmbBuscarLibro">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="4">
-                        <StringItem index="0" value="Item 1"/>
-                        <StringItem index="1" value="Item 2"/>
-                        <StringItem index="2" value="Item 3"/>
-                        <StringItem index="3" value="Item 4"/>
+                      <StringArray count="5">
+                        <StringItem index="0" value="Seleccionar modo busqueda"/>
+                        <StringItem index="1" value="Nombre de libros"/>
+                        <StringItem index="2" value="Editorial de libros"/>
+                        <StringItem index="3" value="Autor de libros"/>
+                        <StringItem index="4" value="Area de libros"/>
                       </StringArray>
                     </Property>
                   </Properties>
@@ -661,6 +663,9 @@
                     <Property name="borderPainted" type="boolean" value="false"/>
                     <Property name="contentAreaFilled" type="boolean" value="false"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLibroActionPerformed"/>
+                  </Events>
                 </Component>
                 <Container class="javax.swing.JScrollPane" name="jScrollPane2">
                   <AuxValues>

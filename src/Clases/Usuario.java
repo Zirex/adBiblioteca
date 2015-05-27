@@ -340,10 +340,11 @@ public class Usuario extends Conexion{
         return usuario;
     }
     
-    public ArrayList<HashMap> usuarios(String q){
+    public static ArrayList<HashMap> usuarios(String q){
         ArrayList<HashMap> listaUsuarios = new ArrayList<>();
+        Conexion con = new Conexion();
         try{
-            PreparedStatement pstm = this.getConexion().prepareStatement(q);
+            PreparedStatement pstm = con.getConexion().prepareStatement(q);
             ResultSet res = pstm.executeQuery();
             while(res.next()){
                 HashMap map = new HashMap();
@@ -362,11 +363,10 @@ public class Usuario extends Conexion{
     }
     
     public static AbstractTableModel ultimosUsuarios(){
-        final Usuario usuario = new Usuario();
         AbstractTableModel model = new AbstractTableModel(){
             private String q= "SELECT id_usuario, apellido_usu, nombre_usu, direccion_usu, telf1_usuario, telf2_usuario"
                             + " FROM usuario ORDER BY id_usuario DESC LIMIT 5;";
-            private ArrayList<HashMap> lista = usuario.usuarios(q);
+            private ArrayList<HashMap> lista = Usuario.usuarios(q);
             private Object [][] datos = usuarios();
             
             //Metodo para cargar los usuarios en una matriz objecto

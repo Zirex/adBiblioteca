@@ -66,27 +66,4 @@ public class Lector extends Conexion{
         }
         return map;
     }
-    
-    public ArrayList<HashMap> getUsuarios(String usuario){
-        ArrayList<HashMap> usuarios = new ArrayList<>();
-        String [] usu = usuario.split(" ");
-        String sql= "SELECT id_usuario, nombre_usu, apellido_usu, fecha_nac_usu,"
-                  + " grado_estudio, trabaja, miembro FROM usuario WHERE nombre_usu LIKE '"+usu[0]+"%' AND apellido_usu LIKE '"+usu[1]+"%'";
-        try{
-            PreparedStatement pstm = this.getConexion().prepareStatement(sql);
-            ResultSet res= pstm.executeQuery();
-            while(res.next()){
-                HashMap map = new HashMap();
-                ResultSetMetaData data = res.getMetaData();
-                for(int i= 1, j= data.getColumnCount(); i<= j; i++){
-                    map.put(data.getColumnLabel(i).toLowerCase(), res.getString(i));
-                }
-                usuarios.add(map);
-            }
-            res.close();
-        }catch(SQLException e){
-            System.out.println(e.getMessage());
-        }
-        return usuarios;
-    }
 }
