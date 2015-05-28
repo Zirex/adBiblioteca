@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JViewport;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -91,6 +94,7 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
         jmiActualizar = new javax.swing.JMenuItem();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaUsuarios = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
 
         jmiActualizar.setText("Modificar usuario");
         jmiActualizar.addActionListener(new java.awt.event.ActionListener() {
@@ -103,7 +107,7 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
         setClosable(true);
         setIconifiable(true);
         setTitle("Tabla de Usuarios");
-        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.X_AXIS));
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
         tablaUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -126,6 +130,9 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
 
         getContentPane().add(jScrollPane1);
 
+        jLabel1.setText("Hacer doble clic ó clic derecho sobre la fila del usuario para visualizarlo detalladamente");
+        getContentPane().add(jLabel1);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -145,6 +152,7 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuItem jmiActualizar;
     private javax.swing.JPopupMenu jpmUsuario;

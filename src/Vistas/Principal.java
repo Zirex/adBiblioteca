@@ -251,7 +251,7 @@ public class Principal extends javax.swing.JFrame {
         if(this.estaCerrado(iMUsuario)){
             iMUsuario = new internalMostrarUsuarios(this, this.iUsuario);
             panel.add(iMUsuario);
-            this.posicion(iMUsuario);
+            iMUsuario.setSize(iMUsuario.getDesktopPane().getSize());
             iMUsuario.show();
         }
         else{
