@@ -17,6 +17,7 @@ import javax.swing.JInternalFrame;
  */
 public class Principal extends javax.swing.JFrame {
     private internalLibro iLibro;
+    private internalBuscarLibro iBLibro;
     private internalResumen iResumen;
     private internalUsuario iUsuario;
     private internalMostrarUsuarios iMUsuario;
@@ -61,6 +62,9 @@ public class Principal extends javax.swing.JFrame {
         jpmUsuario = new javax.swing.JPopupMenu();
         jmGestionUsuario = new javax.swing.JMenuItem();
         jmMostrarUsuarios = new javax.swing.JMenuItem();
+        jpmLibro = new javax.swing.JPopupMenu();
+        jpmGestionLibro = new javax.swing.JMenuItem();
+        jmiMostrarLibros = new javax.swing.JMenuItem();
         jToolBar1 = new javax.swing.JToolBar();
         btnLibro = new javax.swing.JButton();
         btnUsuario = new javax.swing.JButton();
@@ -87,6 +91,24 @@ public class Principal extends javax.swing.JFrame {
         });
         jpmUsuario.add(jmMostrarUsuarios);
 
+        jpmGestionLibro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/bookMenu.png"))); // NOI18N
+        jpmGestionLibro.setText("Gestion de libros");
+        jpmGestionLibro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jpmGestionLibroActionPerformed(evt);
+            }
+        });
+        jpmLibro.add(jpmGestionLibro);
+
+        jmiMostrarLibros.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/1432716129_magnifier.png"))); // NOI18N
+        jmiMostrarLibros.setText("Consulta de libros");
+        jmiMostrarLibros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiMostrarLibrosActionPerformed(evt);
+            }
+        });
+        jpmLibro.add(jmiMostrarLibros);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ADBiapp");
         setIconImage(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/library.png")).getImage()
@@ -102,9 +124,9 @@ public class Principal extends javax.swing.JFrame {
         btnLibro.setFocusable(false);
         btnLibro.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnLibro.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnLibro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLibroActionPerformed(evt);
+        btnLibro.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnLibroMouseClicked(evt);
             }
         });
         jToolBar1.add(btnLibro);
@@ -199,24 +221,6 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnResumenActionPerformed
 
-    private void btnLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLibroActionPerformed
-        // TODO add your handling code here:
-        if(this.estaCerrado(iLibro)){
-            iLibro= new internalLibro();
-            panel.add(iLibro);
-            this.posicion(iLibro);
-            iLibro.show();            
-        }
-        else{
-            iLibro.moveToFront();
-            try {
-                iLibro.setIcon(false);
-            } catch (PropertyVetoException ex) {
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }        
-    }//GEN-LAST:event_btnLibroActionPerformed
-
     private void btnUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuarioMouseClicked
         // TODO add your handling code here:
         if(evt.getButton()==1){
@@ -278,6 +282,49 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnLectorActionPerformed
 
+    private void btnLibroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLibroMouseClicked
+        // TODO add your handling code here:
+        if(evt.getButton()==1){
+            this.jpmLibro.show(this.btnLibro, evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_btnLibroMouseClicked
+
+    private void jpmGestionLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jpmGestionLibroActionPerformed
+        // TODO add your handling code here:
+        if(this.estaCerrado(iLibro)){
+            iLibro= new internalLibro();
+            panel.add(iLibro);
+            this.posicion(iLibro);
+            iLibro.show();            
+        }
+        else{
+            iLibro.moveToFront();
+            try {
+                iLibro.setIcon(false);
+            } catch (PropertyVetoException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } 
+    }//GEN-LAST:event_jpmGestionLibroActionPerformed
+
+    private void jmiMostrarLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiMostrarLibrosActionPerformed
+        // TODO add your handling code here:
+        if(this.estaCerrado(iBLibro)){
+            iBLibro= new internalBuscarLibro();
+            panel.add(iBLibro);
+            iBLibro.setSize(iBLibro.getDesktopPane().getSize());
+            iBLibro.show();
+        }
+        else{
+            iBLibro.moveToFront();
+            try {
+                iBLibro.setIcon(false);
+            } catch (PropertyVetoException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jmiMostrarLibrosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -322,6 +369,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JMenuItem jmGestionUsuario;
     private javax.swing.JMenuItem jmMostrarUsuarios;
+    private javax.swing.JMenuItem jmiMostrarLibros;
+    private javax.swing.JMenuItem jpmGestionLibro;
+    private javax.swing.JPopupMenu jpmLibro;
     private javax.swing.JPopupMenu jpmUsuario;
     public javax.swing.JDesktopPane panel;
     // End of variables declaration//GEN-END:variables

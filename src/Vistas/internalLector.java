@@ -754,10 +754,10 @@ public class internalLector extends javax.swing.JInternalFrame {
         String busqueda= this.txtBuscarLibro.getText().trim().toLowerCase();
         String [] campoBusqueda = {"nom_libro", "nom_editorial", "nom_autor", "area"};
         String [] ColumName = {"id_libro", "nom_libro", "nom_editorial", "grado", "prestamo", "area"};
-        int seleccion = this.cmbBuscarLibro.getSelectedIndex();
-        if(!busqueda.isEmpty() && seleccion != 0){
+        int seleccion = this.cmbBuscarLibro.getSelectedIndex()-1;
+        if(!busqueda.isEmpty() && seleccion > -1){
             String q= "SELECT id_libro, nom_libro, nom_editorial, grado, prestamo, area FROM"
-                    + " libro WHERE '"+campoBusqueda[seleccion]+"='"+busqueda+"';";
+                    + " libro WHERE "+campoBusqueda[seleccion]+"='"+busqueda+"';";
             this.cargarTablaLibros(q, ColumName);
         }
         else{

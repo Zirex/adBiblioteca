@@ -194,7 +194,7 @@ public class Libro extends Conexion{
                 HashMap map = new HashMap();
                 ResultSetMetaData meta = res.getMetaData();
                 for (int i = 1, j= meta.getColumnCount(); i <= j; i++) {
-                    map.put(meta.getColumnLabel(i).toLowerCase(), res.getString(i));
+                    map.put(meta.getColumnLabel(i), res.getString(i));
                 }
                 listaLibros.add(map);
             }
