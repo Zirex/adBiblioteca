@@ -5,10 +5,8 @@
  */
 package Vistas;
 
-import Clases.Libro;
-import Clases.Usuario;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumn;
+import Clases.Lector;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -21,24 +19,18 @@ public class internalResumen extends javax.swing.JInternalFrame {
      */
     public internalResumen() {
         initComponents();
-        this.cargarTablaLibro();
-        this.cargarTablaUsuario();
+        this.cargarTablaLector();
     }
     
-    private void cargarTablaLibro(){
-        AbstractTableModel model= Libro.getLibros();
-        this.tablaLibro.setModel(model);
-        this.tablaLibro.getTableHeader().setReorderingAllowed(false);
-        this.tablaLibro.setRowHeight(30);
-        TableColumn column = this.tablaLibro.getColumnModel().getColumn(7);
-        column.setCellRenderer(new MyTableRenderer.BotonLibroRenderer());
-        column.setCellEditor(new MyTableRenderer.BotonLibroEditor(tablaLibro));
-    }
-    
-    private void cargarTablaUsuario(){
-        AbstractTableModel model= Usuario.ultimosUsuarios();
-        this.tablaUsuario.setModel(model);
-        this.tablaUsuario.getTableHeader().setReorderingAllowed(false);
+    private void cargarTablaLector(){
+        DefaultTableModel model= Lector.modeloLector();
+        this.tablaLectores.setModel(model);
+        this.tablaLectores.getTableHeader().setReorderingAllowed(false);
+//        this.tablaLibro.setRowHeight(30);
+//        TableColumn column = this.tablaLibro.getColumnModel().getColumn(7);
+//        column.setCellRenderer(new MyTableRenderer.BotonLibroRenderer());
+//        column.setCellEditor(new MyTableRenderer.BotonLibroEditor(tablaLibro));
+        
     }
 
     /**
@@ -51,12 +43,9 @@ public class internalResumen extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         contenedor = new javax.swing.JPanel();
-        panelLibro = new javax.swing.JPanel();
+        panelLectores = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tablaLibro = new javax.swing.JTable();
-        panelUsuarios = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tablaUsuario = new javax.swing.JTable();
+        tablaLectores = new javax.swing.JTable();
         panelPrestamos = new javax.swing.JPanel();
         panelEstadistico = new javax.swing.JPanel();
 
@@ -64,12 +53,12 @@ public class internalResumen extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setTitle("Resumen de administración");
 
-        contenedor.setLayout(new java.awt.GridLayout(4, 0));
+        contenedor.setLayout(new java.awt.GridLayout(3, 0));
 
-        panelLibro.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Resumen de libros"));
-        panelLibro.setLayout(new javax.swing.BoxLayout(panelLibro, javax.swing.BoxLayout.LINE_AXIS));
+        panelLectores.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Resumen de lectores"));
+        panelLectores.setLayout(new javax.swing.BoxLayout(panelLectores, javax.swing.BoxLayout.LINE_AXIS));
 
-        tablaLibro.setModel(new javax.swing.table.DefaultTableModel(
+        tablaLectores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -80,31 +69,11 @@ public class internalResumen extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tablaLibro);
+        jScrollPane1.setViewportView(tablaLectores);
 
-        panelLibro.add(jScrollPane1);
+        panelLectores.add(jScrollPane1);
 
-        contenedor.add(panelLibro);
-
-        panelUsuarios.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Resumen de usuarios"));
-        panelUsuarios.setLayout(new javax.swing.BoxLayout(panelUsuarios, javax.swing.BoxLayout.LINE_AXIS));
-
-        tablaUsuario.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(tablaUsuario);
-
-        panelUsuarios.add(jScrollPane2);
-
-        contenedor.add(panelUsuarios);
+        contenedor.add(panelLectores);
 
         panelPrestamos.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Resumen de prestamos"));
 
@@ -116,7 +85,7 @@ public class internalResumen extends javax.swing.JInternalFrame {
         );
         panelPrestamosLayout.setVerticalGroup(
             panelPrestamosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 95, Short.MAX_VALUE)
+            .addGap(0, 135, Short.MAX_VALUE)
         );
 
         contenedor.add(panelPrestamos);
@@ -131,7 +100,7 @@ public class internalResumen extends javax.swing.JInternalFrame {
         );
         panelEstadisticoLayout.setVerticalGroup(
             panelEstadisticoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 95, Short.MAX_VALUE)
+            .addGap(0, 135, Short.MAX_VALUE)
         );
 
         contenedor.add(panelEstadistico);
@@ -144,7 +113,7 @@ public class internalResumen extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(contenedor, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+            .addComponent(contenedor, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
         );
 
         pack();
@@ -154,12 +123,9 @@ public class internalResumen extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel contenedor;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel panelEstadistico;
-    private javax.swing.JPanel panelLibro;
+    private javax.swing.JPanel panelLectores;
     private javax.swing.JPanel panelPrestamos;
-    private javax.swing.JPanel panelUsuarios;
-    private javax.swing.JTable tablaLibro;
-    private javax.swing.JTable tablaUsuario;
+    private javax.swing.JTable tablaLectores;
     // End of variables declaration//GEN-END:variables
 }

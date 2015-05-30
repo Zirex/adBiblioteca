@@ -25,6 +25,8 @@ public class internalLector extends javax.swing.JInternalFrame {
     private ArrayList<HashMap> libros;
     private String idLibro="";
     private String idUsuario="";
+    private DefaultTableModel model;
+    private Lector l;
 
     /**
      * Creates new form internalLector1
@@ -33,6 +35,7 @@ public class internalLector extends javax.swing.JInternalFrame {
         initComponents();
         this.principal = principal;
         this.usuario = usuario;
+        this.model = (DefaultTableModel) tablaLibros.getModel();
     }
     
     private void nuevoUsuario(){
@@ -80,7 +83,7 @@ public class internalLector extends javax.swing.JInternalFrame {
             /**Se puede cambiar la mascara por el formato de la fecha
             que se quiera recibir, por ejemplo día mes año "dd-MM-yyyy"
             en este caso es año mes día*/
-            fechaNac = new SimpleDateFormat( "yyyy-MM-dd").parse(fecha);
+            fechaNac = new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
         } catch (Exception ex) {
             System.out.println("Error:"+ex);
         }
@@ -112,10 +115,11 @@ public class internalLector extends javax.swing.JInternalFrame {
     
     private void llenarCamposLibro(HashMap map){
         this.idLibro= map.get("id_libro").toString();
+        this.txtNombreLibro.setText(map.get("nom_libro").toString());
         this.txtEditorial.setText(map.get("nom_editorial").toString());
         this.txtGradoLibro.setText(map.get("grado").toString());
         if(map.get("prestamo").equals("1")){
-            this.lblPrestamo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/gree.png")));
+            lblPrestamo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/green.png")));
         }
     }
     
@@ -151,6 +155,14 @@ public class internalLector extends javax.swing.JInternalFrame {
         this.txtEditorial.setText("");
         this.txtGradoLibro.setText("");
         this.lblPrestamo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/red.png")));
+        tablaLibros.removeAll();
+    }
+    
+    private void consultarLectorToday(){
+        this.l= Lector.buscarLector(idUsuario);
+        if(this.l != null){
+            this.model.setDataVector(this.l.getLibros(), new Object[]{"id_libro", "nom_libro", "nom_editorial", "grado"});
+        }
     }
 
     /**
@@ -162,6 +174,8 @@ public class internalLector extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jpmMenuTabla = new javax.swing.JPopupMenu();
+        menuDelete = new javax.swing.JMenuItem();
         contenedor = new javax.swing.JPanel();
         panelLector = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -185,8 +199,11 @@ public class internalLector extends javax.swing.JInternalFrame {
         txtGradoLibro = new javax.swing.JTextField();
         lblPrestamo = new javax.swing.JLabel();
         btnBuscarLibro = new javax.swing.JButton();
+        btnAgregarLibro = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tablaLibros = new javax.swing.JTable();
         panelUsuario = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -205,6 +222,15 @@ public class internalLector extends javax.swing.JInternalFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaLibro = new javax.swing.JTable();
         jLabel12 = new javax.swing.JLabel();
+
+        menuDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/borrar24x24.png"))); // NOI18N
+        menuDelete.setText("Eliminar libro");
+        menuDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuDeleteActionPerformed(evt);
+            }
+        });
+        jpmMenuTabla.add(menuDelete);
 
         setClosable(true);
         setIconifiable(true);
@@ -315,6 +341,13 @@ public class internalLector extends javax.swing.JInternalFrame {
             }
         });
 
+        btnAgregarLibro.setText("Agregar");
+        btnAgregarLibro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarLibroActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -330,14 +363,18 @@ public class internalLector extends javax.swing.JInternalFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtGradoLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblPrestamo))
-                        .addGap(0, 227, Short.MAX_VALUE))
-                    .addComponent(txtEditorial)
-                    .addComponent(txtNombreLibro, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnBuscarLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15))
+                            .addComponent(txtEditorial)
+                            .addComponent(txtNombreLibro, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBuscarLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblPrestamo)
+                            .addComponent(txtGradoLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAgregarLibro)
+                        .addContainerGap())))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -352,14 +389,19 @@ public class internalLector extends javax.swing.JInternalFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(txtEditorial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(txtGradoLibro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(lblPrestamo))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(txtGradoLibro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(lblPrestamo)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(btnAgregarLibro)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -379,6 +421,31 @@ public class internalLector extends javax.swing.JInternalFrame {
             }
         });
 
+        tablaLibros.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "id del libro", "Nombre del libro", "Editorial", "Grado del libro"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tablaLibros.setComponentPopupMenu(jpmMenuTabla);
+        jScrollPane3.setViewportView(tablaLibros);
+        if (tablaLibros.getColumnModel().getColumnCount() > 0) {
+            tablaLibros.getColumnModel().getColumn(0).setPreferredWidth(20);
+            tablaLibros.getColumnModel().getColumn(1).setPreferredWidth(90);
+            tablaLibros.getColumnModel().getColumn(2).setPreferredWidth(90);
+            tablaLibros.getColumnModel().getColumn(3).setPreferredWidth(20);
+        }
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -387,27 +454,29 @@ public class internalLector extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(105, 105, 105)
                 .addComponent(btnGuardar)
                 .addGap(104, 104, 104)
                 .addComponent(btnCancelar)
-                .addGap(102, 102, 102))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar)
-                    .addComponent(btnCancelar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnCancelar)))
         );
 
         javax.swing.GroupLayout panelLectorLayout = new javax.swing.GroupLayout(panelLector);
@@ -485,7 +554,7 @@ public class internalLector extends javax.swing.JInternalFrame {
                         .addGap(0, 174, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(112, 112, 112)
+                .addGap(99, 99, 99)
                 .addComponent(jLabel9)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -501,10 +570,10 @@ public class internalLector extends javax.swing.JInternalFrame {
                     .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtBuscarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel9)
-                .addContainerGap(120, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout panelUsuarioLayout = new javax.swing.GroupLayout(panelUsuario);
@@ -600,7 +669,7 @@ public class internalLector extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel12)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(192, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout panelLibroLayout = new javax.swing.GroupLayout(panelLibro);
@@ -651,6 +720,7 @@ public class internalLector extends javax.swing.JInternalFrame {
                     if(this.usuarios.size() == 1){
                         HashMap map = this.usuarios.get(0);
                         this.llenarCamposUsuario(map);
+                        this.consultarLectorToday();
                     }
                     else{
                         this.cargarTablaUsuario();
@@ -697,6 +767,7 @@ public class internalLector extends javax.swing.JInternalFrame {
             int fila= tablaUsuario.getSelectedRow();
             HashMap map = this.usuarios.get(fila);
             this.llenarCamposUsuario(map);
+            this.consultarLectorToday();
             contenedor.removeAll();
             contenedor.add(panelLector);
             contenedor.repaint();
@@ -730,13 +801,28 @@ public class internalLector extends javax.swing.JInternalFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        if(!this.idUsuario.isEmpty() && !this.idLibro.isEmpty()){
-            Lector l= new Lector(this.idLibro, this.idUsuario, new Date());
-            if(l.insertarLector()){
-                JOptionPane.showMessageDialog(this, "Exito.. Se registro un nuevo lector", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+        if(!this.idUsuario.isEmpty() && this.model.getRowCount()!= 0){
+            String [][] libros= new String[this.model.getRowCount()][this.model.getColumnCount()];
+            for(int i=0; i< libros.length; i++){
+                for(int j=0; j< libros[i].length; j++){
+                    libros[i][j]= tablaLibros.getValueAt(i, j).toString();
+                }
+            }
+            if(this.l == null){
+                l= new Lector(this.idUsuario, new Date(), libros);
+                if(l.nuevoLector()){
+                    JOptionPane.showMessageDialog(this, "Exito.. Se registro un nuevo lector", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+                    this.limpiarCampos();
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Error.. No se pudo registrar al lector", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
             else{
-                JOptionPane.showMessageDialog(this, "Error.. No se pudo registrar al lector", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+                if(this.l.setLibros(libros)){
+                    JOptionPane.showMessageDialog(this, "Exito.. Se actualizó el lector", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+                    this.limpiarCampos();
+                }
             }
         }
         else{
@@ -765,9 +851,46 @@ public class internalLector extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnLibroActionPerformed
 
+    private void btnAgregarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarLibroActionPerformed
+        // TODO add your handling code here:
+        if(!idLibro.isEmpty()){
+            String id= this.idLibro;
+            String nombreLibro= this.txtNombreLibro.getText().trim();
+            String editorial= this.txtEditorial.getText();
+            String gradoLibro= this.txtGradoLibro.getText();
+            model.addRow(new Object[]{id, nombreLibro, editorial, gradoLibro});
+            
+            this.idLibro= "";
+            this.txtNombreLibro.setText("");
+            this.txtEditorial.setText("");
+            this.txtGradoLibro.setText("");
+            this.lblPrestamo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/red.png")));
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Los campos de información libro deben estar llenos", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnAgregarLibroActionPerformed
+
+    private void menuDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDeleteActionPerformed
+        // TODO add your handling code here:
+        int rows[] = tablaLibros.getSelectedRows();
+        int len = rows.length-1;
+        
+        if(len != -1){
+            for (;len>=0; len--) {
+                int row = rows[len];
+                this.model.removeRow(row);
+            }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(null, "No se ha seleccionado ningún \n item para borrar",
+                                                      "adBiblioteca", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_menuDeleteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JPanel10;
+    private javax.swing.JButton btnAgregarLibro;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarLibro;
     private javax.swing.JButton btnBuscarUsu;
@@ -795,12 +918,16 @@ public class internalLector extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JPopupMenu jpmMenuTabla;
     private javax.swing.JLabel lblPrestamo;
     private javax.swing.JLabel lblTrabaja;
+    private javax.swing.JMenuItem menuDelete;
     private javax.swing.JPanel panelLector;
     private javax.swing.JPanel panelLibro;
     private javax.swing.JPanel panelUsuario;
     private javax.swing.JTable tablaLibro;
+    private javax.swing.JTable tablaLibros;
     private javax.swing.JTable tablaUsuario;
     private javax.swing.JTextField txtBuscarLibro;
     private javax.swing.JTextField txtBuscarUsuario;
