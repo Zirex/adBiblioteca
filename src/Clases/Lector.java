@@ -17,10 +17,10 @@ import javax.swing.table.DefaultTableModel;
  * @author zirex
  */
 public class Lector extends Conexion{
-    private int idLector;
-    private String idUsuario;
-    private Date fechaLecutra;
-    private String [][] libros;
+    protected int idLector;
+    protected String idUsuario;
+    protected Date fechaLecutra;
+    protected String [][] libros;
     
     private Lector(int idLector, String idUsuario, Date fechaLecutra, String [][] libros){
         this.idLector= idLector;
@@ -34,6 +34,18 @@ public class Lector extends Conexion{
         this.idUsuario = idUsuario;
         this.fechaLecutra = fechaLecutra;
         this.libros= libros;
+    }
+
+    public String getIdUsuario() {
+        return idUsuario;
+    }
+
+    public int getIdLector() {
+        return idLector;
+    }
+
+    public Date getFechaLecutra() {
+        return fechaLecutra;
     }
     
     private int setIdLector(){
@@ -73,9 +85,9 @@ public class Lector extends Conexion{
                 }
                 
             }
-            for ( ;i<=libros.length-1;i++) {
+            for ( ; i <= libros.length-1; i++) {
                 String[] libro= libros[i];
-                String sql= "INSERT INTO lector_libro VALUES("+this.idLector+", "+libro[0]+")";
+                String sql= "INSERT INTO lector_libro(id_lector, id_libro) VALUES("+this.idLector+", "+libro[0]+")";
                 st.execute(sql);
             }
             st.close();
@@ -86,7 +98,7 @@ public class Lector extends Conexion{
         return ok;
     }
     
-    private boolean insertarLector(){
+    protected boolean insertarLector(){
         try{
             String sql= "INSERT INTO lector(id_usuario, fecha_lectura) VALUES(?,?)";
             PreparedStatement pstm = this.getConexion().prepareStatement(sql);
@@ -105,7 +117,7 @@ public class Lector extends Conexion{
     
     private void agregarLibrosLector(){
         try{
-            String q= "INSERT INTO lector_libro VALUES(?,?)";
+            String q= "INSERT INTO lector_libro(id_lector, id_libro) VALUES(?,?)";
             PreparedStatement pstm= this.getConexion().prepareStatement(q);
             for (String[] libro : libros) {
                 pstm.setInt(1, idLector);
