@@ -161,33 +161,37 @@ public class Lector extends Conexion{
         return listaLectores;
     }
     
-    public static Lector buscarLector(String idUsuario){
+    public static Lector buscarLector(String idUsuario, String consulta){
         Conexion con= new Conexion();
         Lector lector= null;
         try{
             Date fechaActual= new Date();
-            String q= "SELECT ll.id_lector, l.id_usuario, l.fecha_lectura, ll.id_libro,"
-                    + " lb.nom_libro, lb.nom_editorial, lb.grado"
-                    + " FROM lector_libro ll, lector l, usuario u, libro lb"
-                    + " WHERE ll.id_lector=l.id_lector AND l.id_usuario=u.id_usuario"
-                    + " AND ll.id_libro=lb.id_libro AND l.id_usuario="+idUsuario
-                    + " AND l.fecha_lectura='"+new java.sql.Date(fechaActual.getTime())+"'";
-            PreparedStatement pstm= con.getConexion().prepareStatement(q);
-            ResultSet res= pstm.executeQuery();
-            ArrayList<HashMap> datos = new ArrayList();
+            String q="SELECT * FROM lector WHERE id_usuario="+idUsuario+" AND fecha_lectura='"+(java.sql.Date) fechaActual+"'";
+            Statement st= con.getConexion().createStatement();
+            ResultSet res= st.executeQuery(q);
+            HashMap map= new HashMap();
             while(res.next()){
-                HashMap map= new HashMap();
                 ResultSetMetaData data= res.getMetaData();
                 for (int i = 1; i <= data.getColumnCount(); i++) {
                     map.put(data.getColumnLabel(i), res.getString(i));
                 }
-                datos.add(map);
             }
-            res.close();
-            
-            if(!datos.isEmpty()){
-                String idLector= datos.get(0).get("id_lector").toString();
-                String fecha= datos.get(0).get("fecha_lectura").toString();
+            if(!map.isEmpty()){
+                q= consulta+"ll.id_libro= l.id_libro AND ll.id_lector="+map.get("id_lector").toString();
+                res= st.executeQuery(q);
+                ArrayList<HashMap> datos= new ArrayList();
+                while(res.next()){
+                    HashMap libro= new HashMap();
+                    ResultSetMetaData data= res.getMetaData();
+                    for (int i = 1; i <= data.getColumnCount(); i++) {
+                        libro.put(data.getColumnLabel(i), res.getString(i));
+                    }
+                    datos.add(libro);
+                }
+                res.close();
+                
+                String idLector= map.get("id_lector").toString();
+                String fecha= map.get("fecha_lectura").toString();
                 Date fechaLectura= new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
                 String [][] libros = new String[datos.size()][4];
                 String [] columName= {"id_libro", "nom_libro", "nom_editorial", "grado"};
@@ -200,6 +204,7 @@ public class Lector extends Conexion{
                 }
                 lector= new Lector(Integer.valueOf(idLector), idUsuario, fechaLectura, libros);
             }
+            
         }catch(SQLException | ParseException e){
             System.out.println(e.getMessage());
         }

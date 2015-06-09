@@ -22,6 +22,7 @@ public class Principal extends javax.swing.JFrame {
     private internalUsuario iUsuario;
     private internalMostrarUsuarios iMUsuario;
     private internalLector iLector;
+    private internalPrestamo iPrestamo;
 
     /**
      * Creates new form Principal
@@ -168,6 +169,11 @@ public class Principal extends javax.swing.JFrame {
         jButton1.setFocusable(false);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton1);
 
         btnResumen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/grafica.png"))); // NOI18N
@@ -324,6 +330,24 @@ public class Principal extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jmiMostrarLibrosActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if(this.estaCerrado(iPrestamo)){
+            iPrestamo= new internalPrestamo(this, iUsuario);
+            panel.add(iPrestamo);
+            this.posicion(iPrestamo);
+            iPrestamo.show();
+        }
+        else{
+            iPrestamo.moveToFront();
+            try{
+                iPrestamo.setIcon(false);
+            }catch(PropertyVetoException e){
+                System.err.println(e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

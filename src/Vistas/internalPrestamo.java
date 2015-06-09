@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author zirex
  */
-public class internalLector extends javax.swing.JInternalFrame {
+public class internalPrestamo extends javax.swing.JInternalFrame {
     private Principal principal;
     private internalUsuario usuario;
     private ArrayList<HashMap> usuarios;
@@ -31,7 +31,7 @@ public class internalLector extends javax.swing.JInternalFrame {
     /**
      * Creates new form internalLector1
      */
-    public internalLector(Principal principal, internalUsuario usuario) {
+    public internalPrestamo(Principal principal, internalUsuario usuario) {
         initComponents();
         this.principal = principal;
         this.usuario = usuario;
@@ -49,7 +49,7 @@ public class internalLector extends javax.swing.JInternalFrame {
             try {
                 usuario.setIcon(false);
             } catch (PropertyVetoException ex) {
-                Logger.getLogger(internalLector.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(internalPrestamo.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -163,7 +163,7 @@ public class internalLector extends javax.swing.JInternalFrame {
     }
     
     private void consultarLectorToday(){
-        String q= "SELECT ll.id_libro, l.nom_libro, l.nom_editorial, l.grado FROM lector_libro ll, libro l WHERE ";
+        String q= "SELECT ll.id_libro, l.nom_libro, l.nom_editorial, l.grado FROM lector_libro ll, libro l WHERE ll.prestamo=1 ";
         this.l= Lector.buscarLector(idUsuario, q);
         if(this.l != null){
             this.model.setDataVector(this.l.getLibros(), new Object[]{"id_libro", "nom_libro", "nom_editorial", "grado"});
@@ -241,12 +241,12 @@ public class internalLector extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setIconifiable(true);
-        setTitle("Gestion Lectores");
+        setTitle("Gestion Prestamos");
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
         contenedor.setLayout(new java.awt.CardLayout());
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Nuevo visitante"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Prestamos"));
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Información del usuario"));
 
@@ -768,12 +768,12 @@ public class internalLector extends javax.swing.JInternalFrame {
         String q= "";
         String [] ColumName= {"id_libro", "nom_libro", "nom_editorial", "grado", "prestamo"};
         if(this.txtNombreLibro.getText().isEmpty()){
-            q= "SELECT id_libro, nom_libro, nom_editorial, grado, prestamo FROM libro";
+            q= "SELECT id_libro, nom_libro, nom_editorial, grado, prestamo FROM libro WHERE prestamo=1";
             this.cargarTablaLibros(q, ColumName);
         }
         else{
             String nombreLibro = txtNombreLibro.getText().trim().toLowerCase();
-            q= "SELECT id_libro, nom_libro, nom_editorial, grado, prestamo FROM libro WHERE nom_libro LIKE '"+nombreLibro+"%';";
+            q= "SELECT id_libro, nom_libro, nom_editorial, grado, prestamo FROM libro WHERE nom_libro LIKE '"+nombreLibro+"%' AND prestamo= 1;";
             this.cargarTablaLibros(q, ColumName);
         }
         if(this.tablaLibro.getRowCount() > 0){
@@ -783,7 +783,7 @@ public class internalLector extends javax.swing.JInternalFrame {
             contenedor.revalidate();
         }
         else{
-            JOptionPane.showMessageDialog(this, "No existe ningun libro", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No existe ningun libro de prestamo con ese nombre", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnBuscarLibroActionPerformed
 

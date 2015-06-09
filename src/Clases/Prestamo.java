@@ -91,7 +91,8 @@ public class Prestamo extends Lector{
     
     public boolean nuevoPrestamo(){
         boolean ok= false;
-        Lector l= Lector.buscarLector(this.idUsuario);
+        String q= "SELECT ll.id_libro, l.nom_libro, l.nom_editorial, l.grado FROM lector_libro ll, libro l WHERE ll.prestamo=1 ";
+        Lector l= Lector.buscarLector(this.idUsuario, q);
         if(l==null){
             if(this.insertarLector())
                 if(this.insertarPrestamo()){
