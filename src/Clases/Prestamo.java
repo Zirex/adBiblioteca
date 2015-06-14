@@ -120,7 +120,8 @@ public class Prestamo extends Lector{
     
     public boolean devolucion(){
         try{
-            String q= "UPDATE prestamo SET fecha_dev='"+(java.sql.Date) new Date()+"' WHERE id_prestamo="+this.idPrestamo;
+            String q= "UPDATE prestamo SET fecha_dev='"+new java.sql.Date(new Date().getTime())+"' "
+                    + "WHERE id_prestamo="+this.idPrestamo;
             Statement st= this.getConexion().createStatement();
             st.execute(q);
             st.close();

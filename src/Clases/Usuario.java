@@ -153,8 +153,7 @@ public class Usuario extends Conexion{
                 System.out.println(ex.getMessage());
                 return false;
             }
-        }
-        
+        }        
     }
     
     // Metodos set para actualizar los datos de un usuario registrado

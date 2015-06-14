@@ -107,6 +107,10 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
     
     private void llenarCamposUsuario(HashMap map){
         this.idUsuario = map.get("id_usuario").toString();
+        
+        if(txtNombreUsuario.getText().isEmpty())
+            txtNombreUsuario.setText(map.get("nombre_usu")+" "+map.get("apellido_usu"));
+        
         this.txtEdad.setText(this.calcularEdad(map.get("fecha_nac_usu").toString())+"");
         txtGradoUsuario.setText(map.get("grado_estudio").toString());
         if(map.get("trabaja").toString().equals("1")){
@@ -169,6 +173,7 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
        ArrayList<HashMap> usuP= Usuario.usuarios(q);
        this.llenarCamposUsuario(usuP.get(0));
        this.model.setDataVector(this.p.getLibros(), new Object[]{"id_libro", "nom_libro", "nom_editorial", "grado"});
+       this.btnGuardar.setText("Devolver");
     }
 
     /**
@@ -535,10 +540,7 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
 
         tablaUsuario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
@@ -868,8 +870,10 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
     private void btnBuscarUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarUsuActionPerformed
         // TODO add your handling code here:
         if(txtNombreUsuario.getText().isEmpty()){
-            JOptionPane.showMessageDialog(this, "Por favor digite el nombre y apellido del lector",
-                                          "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+            contenedor.removeAll();
+            contenedor.add(panelUsuario);
+            contenedor.repaint();
+            contenedor.revalidate();
         }
         else{
             String [] usu = this.txtNombreUsuario.getText().trim().toLowerCase().split(" ");
@@ -947,9 +951,35 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
         if(cmbBuscar.getSelectedIndex() != 0){
-            if(!txtBuscarUsuario.getText().trim().toLowerCase().equals("")){
-
+            String consultar= txtBuscarUsuario.getText().trim().toLowerCase();
+            String sql= "SELECT id_usuario, nombre_usu, apellido_usu, fecha_nac_usu,"
+                      + " grado_estudio, trabaja, miembro FROM usuario WHERE miembro= 1 ";
+            if(!consultar.isEmpty()){
+                if(cmbBuscar.getSelectedItem().equals("Cedula")){
+                    sql+="AND ced_usuario='"+consultar+"'";
+                }
+                else{
+                    String [] usu = consultar.split(" ");
+                    if(usu.length==2){
+                        sql+="AND nombre_usu LIKE '"+usu[0]+"%' AND apellido_usu LIKE '"+usu[1]+"%'";                        
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(this, "Debe digitar el primer nombre y el primer apellido del usuario",
+                                                      "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+                        return;
+                    }
+                }
+                this.usuarios= Usuario.usuarios(sql);
+                this.cargarTablaUsuario();
             }
+            else{
+                JOptionPane.showMessageDialog(this, "Debe llenar el campo para realizar la busqueda",
+                                              "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Debe seleccionar la forma de busqueda en la lista desplegable",
+                                          "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -1106,11 +1136,11 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
     private void btnMostrarPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarPrestamosActionPerformed
         // TODO add your handling code here:
         String [] devuleto= {"ORDER BY p.fecha_prestamo DESC",
-                             "AND p.fecha_dev IS NOT NULL ORDER BY p.fecha_dev",
-                             "AND p.fecha_dev IS NULL ORDER BY p.fecha_prestamo"};
+                             "AND p.fecha_dev IS NULL ORDER BY p.fecha_prestamo DESC",
+                             "AND p.fecha_dev IS NOT NULL ORDER BY p.fecha_dev DESC"};
         String q= "SELECT p.id_prestamo AS 'Numero prestamo', p.id_lector AS 'Id del lector',"
                 + " CONCAT(u.nombre_usu, ' ', u.apellido_usu) AS 'Nombre del lector',"
-                + " p.fecha_dev AS 'Devolucion'  FROM prestamo p, lector l, usuario u"
+                + " p.fecha_dev AS 'Devuelto' FROM prestamo p, lector l, usuario u"
                 + " WHERE p.id_lector=l.id_lector AND l.id_usuario= u.id_usuario ";
         
         if(cmbBuscarPrestamo.getSelectedIndex() != 0){
