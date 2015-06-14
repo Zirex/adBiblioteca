@@ -161,12 +161,13 @@ public class Lector extends Conexion{
         return listaLectores;
     }
     
-    public static Lector buscarLector(String idUsuario, String consulta){
+    public static Lector buscarLector(String idUsuario){
         Conexion con= new Conexion();
         Lector lector= null;
         try{
             Date fechaActual= new Date();
-            String q="SELECT * FROM lector WHERE id_usuario="+idUsuario+" AND fecha_lectura='"+(java.sql.Date) fechaActual+"'";
+            String q="SELECT * FROM lector WHERE id_usuario="+idUsuario
+                    +" AND fecha_lectura='"+new java.sql.Date(fechaActual.getTime())+"'";
             Statement st= con.getConexion().createStatement();
             ResultSet res= st.executeQuery(q);
             HashMap map= new HashMap();
@@ -177,7 +178,9 @@ public class Lector extends Conexion{
                 }
             }
             if(!map.isEmpty()){
-                q= consulta+"ll.id_libro= l.id_libro AND ll.id_lector="+map.get("id_lector").toString();
+                q= "SELECT ll.id_libro, l.nom_libro, l.nom_editorial, l.grado "
+                 + "FROM lector_libro ll, libro l WHERE ll.id_libro= l.id_libro"
+                 + " AND ll.id_lector="+map.get("id_lector").toString();
                 res= st.executeQuery(q);
                 ArrayList<HashMap> datos= new ArrayList();
                 while(res.next()){

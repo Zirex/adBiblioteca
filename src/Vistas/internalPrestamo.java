@@ -1,7 +1,7 @@
 package Vistas;
 
-import Clases.Lector;
 import Clases.Libro;
+import Clases.Prestamo;
 import Clases.Usuario;
 import java.beans.PropertyVetoException;
 import java.text.SimpleDateFormat;
@@ -26,7 +26,7 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
     private String idLibro="";
     private String idUsuario="";
     private DefaultTableModel model;
-    private Lector l;
+    private Prestamo p;
 
     /**
      * Creates new form internalLector1
@@ -36,6 +36,7 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
         this.principal = principal;
         this.usuario = usuario;
         this.model = (DefaultTableModel) tablaLibros.getModel();
+        this.p= null;
     }
     
     private void nuevoUsuario(){
@@ -162,12 +163,12 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
         }
     }
     
-    private void consultarLectorToday(){
-        String q= "SELECT ll.id_libro, l.nom_libro, l.nom_editorial, l.grado FROM lector_libro ll, libro l WHERE ll.prestamo=1 ";
-        this.l= Lector.buscarLector(idUsuario, q);
-        if(this.l != null){
-            this.model.setDataVector(this.l.getLibros(), new Object[]{"id_libro", "nom_libro", "nom_editorial", "grado"});
-        }
+    private void llenarCamposPrestamo(){
+       String q="SELECT id_usuario, fecha_nac_usu, grado_estudio, trabaja "
+               +"FROM usuario WHERE id_usuario="+this.p.getIdUsuario();
+       ArrayList<HashMap> usuP= Usuario.usuarios(q);
+       this.llenarCamposUsuario(usuP.get(0));
+       this.model.setDataVector(this.p.getLibros(), new Object[]{"id_libro", "nom_libro", "nom_editorial", "grado"});
     }
 
     /**
@@ -182,7 +183,7 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
         jpmMenuTabla = new javax.swing.JPopupMenu();
         menuDelete = new javax.swing.JMenuItem();
         contenedor = new javax.swing.JPanel();
-        panelLector = new javax.swing.JPanel();
+        panelPrestamo = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -209,6 +210,7 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
         btnCancelar = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaLibros = new javax.swing.JTable();
+        btnBuscarPrestamo = new javax.swing.JButton();
         panelUsuario = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -229,6 +231,17 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
         tablaLibro = new javax.swing.JTable();
         jLabel12 = new javax.swing.JLabel();
         btnAtrasLibro = new javax.swing.JButton();
+        panelSeleccionPrestamo = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tablaPrestamos = new javax.swing.JTable();
+        btnAtrasPrestamo = new javax.swing.JButton();
+        txtBuscarPrestamos = new javax.swing.JTextField();
+        btnMostrarPrestamos = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        cmbBuscarPrestamo = new javax.swing.JComboBox();
 
         menuDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/borrar24x24.png"))); // NOI18N
         menuDelete.setText("Eliminar libro");
@@ -451,6 +464,15 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
             tablaLibros.getColumnModel().getColumn(3).setPreferredWidth(20);
         }
 
+        btnBuscarPrestamo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/buscar.png"))); // NOI18N
+        btnBuscarPrestamo.setText("Buscar");
+        btnBuscarPrestamo.setToolTipText("Consultar prestamo de un usuario");
+        btnBuscarPrestamo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarPrestamoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -460,48 +482,54 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnBuscarPrestamo)
+                        .addGap(103, 103, 103)
+                        .addComponent(btnGuardar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCancelar)))
                 .addContainerGap())
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(105, 105, 105)
-                .addComponent(btnGuardar)
-                .addGap(104, 104, 104)
-                .addComponent(btnCancelar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGuardar)
-                    .addComponent(btnCancelar)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnCancelar)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnBuscarPrestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
-        javax.swing.GroupLayout panelLectorLayout = new javax.swing.GroupLayout(panelLector);
-        panelLector.setLayout(panelLectorLayout);
-        panelLectorLayout.setHorizontalGroup(
-            panelLectorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelLectorLayout.createSequentialGroup()
+        javax.swing.GroupLayout panelPrestamoLayout = new javax.swing.GroupLayout(panelPrestamo);
+        panelPrestamo.setLayout(panelPrestamoLayout);
+        panelPrestamoLayout.setHorizontalGroup(
+            panelPrestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPrestamoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        panelLectorLayout.setVerticalGroup(
-            panelLectorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelLectorLayout.createSequentialGroup()
+        panelPrestamoLayout.setVerticalGroup(
+            panelPrestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPrestamoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        contenedor.add(panelLector, "card2");
+        contenedor.add(panelPrestamo, "card2");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Usuarios de la biblioteca"));
 
@@ -583,7 +611,7 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
                     .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtBuscarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel9)
                 .addContainerGap())
@@ -692,7 +720,7 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
                     .addComponent(txtBuscarLibro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel12)
                 .addContainerGap())
@@ -717,6 +745,121 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
 
         contenedor.add(panelLibro, "card4");
 
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Prestamos de la biblioteca"));
+
+        tablaPrestamos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tablaPrestamos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaPrestamosMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(tablaPrestamos);
+
+        btnAtrasPrestamo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/atras.png"))); // NOI18N
+        btnAtrasPrestamo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtrasPrestamoActionPerformed(evt);
+            }
+        });
+
+        btnMostrarPrestamos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/buscar1.png"))); // NOI18N
+        btnMostrarPrestamos.setBorderPainted(false);
+        btnMostrarPrestamos.setContentAreaFilled(false);
+        btnMostrarPrestamos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMostrarPrestamosActionPerformed(evt);
+            }
+        });
+
+        jLabel13.setText("Nombre usuario:");
+
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("Hacer doble clic para seleccionar el prestamo.");
+        jLabel14.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        jLabel15.setText("Buscar por:");
+
+        cmbBuscarPrestamo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar busqueda", "Todos los prestamos", "Prestamos sin devolver", "Prestamos devueltos" }));
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(jLabel15)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbBuscarPrestamo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAtrasPrestamo))
+                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addGap(206, 206, 206))
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(txtBuscarPrestamos, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnMostrarPrestamos, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnAtrasPrestamo))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel15)
+                            .addComponent(cmbBuscarPrestamo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtBuscarPrestamos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMostrarPrestamos, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel14)
+                .addGap(20, 20, 20))
+        );
+
+        javax.swing.GroupLayout panelSeleccionPrestamoLayout = new javax.swing.GroupLayout(panelSeleccionPrestamo);
+        panelSeleccionPrestamo.setLayout(panelSeleccionPrestamoLayout);
+        panelSeleccionPrestamoLayout.setHorizontalGroup(
+            panelSeleccionPrestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSeleccionPrestamoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        panelSeleccionPrestamoLayout.setVerticalGroup(
+            panelSeleccionPrestamoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSeleccionPrestamoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        contenedor.add(panelSeleccionPrestamo, "card5");
+
         getContentPane().add(contenedor);
 
         pack();
@@ -725,13 +868,14 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
     private void btnBuscarUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarUsuActionPerformed
         // TODO add your handling code here:
         if(txtNombreUsuario.getText().isEmpty()){
-            JOptionPane.showMessageDialog(this, "Por favor digite el nombre y apellido del lector", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Por favor digite el nombre y apellido del lector",
+                                          "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
         }
         else{
             String [] usu = this.txtNombreUsuario.getText().trim().toLowerCase().split(" ");
             if(usu.length==2){
                 String sql= "SELECT id_usuario, nombre_usu, apellido_usu, fecha_nac_usu,"
-                          + " grado_estudio, trabaja, miembro FROM usuario WHERE nombre_usu"
+                          + " grado_estudio, trabaja, miembro FROM usuario WHERE miembro= 1 AND nombre_usu"
                           + " LIKE '"+usu[0]+"%' AND apellido_usu LIKE '"+usu[1]+"%'";
                 this.usuarios= Usuario.usuarios(sql);
                 
@@ -746,7 +890,6 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
                     if(this.usuarios.size() == 1){
                         HashMap map = this.usuarios.get(0);
                         this.llenarCamposUsuario(map);
-                        this.consultarLectorToday();
                     }
                     else{
                         this.cargarTablaUsuario();
@@ -793,9 +936,8 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
             int fila= tablaUsuario.getSelectedRow();
             HashMap map = this.usuarios.get(fila);
             this.llenarCamposUsuario(map);
-            this.consultarLectorToday();
             contenedor.removeAll();
-            contenedor.add(panelLector);
+            contenedor.add(panelPrestamo);
             contenedor.repaint();
             contenedor.revalidate();
             
@@ -818,7 +960,7 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
             HashMap map = this.libros.get(fila);
             this.llenarCamposLibro(map);
             contenedor.removeAll();
-            contenedor.add(panelLector);
+            contenedor.add(panelPrestamo);
             contenedor.repaint();
             contenedor.revalidate();
             
@@ -834,20 +976,20 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
                     libros[i][j]= tablaLibros.getValueAt(i, j).toString();
                 }
             }
-            if(this.l == null){
-                l= new Lector(this.idUsuario, new Date(), libros);
-                if(l.nuevoLector()){
-                    JOptionPane.showMessageDialog(this, "Exito.. Se registro un nuevo lector", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+            if(this.p == null){
+                Prestamo np= new Prestamo(this.idUsuario, new Date(), libros);
+                if(np.nuevoPrestamo()){
+                    JOptionPane.showMessageDialog(this, "Exito.. Se registro un nuevo prestamo", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
                     this.limpiarCampos();
                 }
                 else{
-                    JOptionPane.showMessageDialog(this, "Error.. No se pudo registrar al lector", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Error.. No se pudo registrar el prestamo", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
             else{
-                if(this.l.setLibros(libros)){
-                    JOptionPane.showMessageDialog(this, "Exito.. Se actualizó el lector", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
-                    this.limpiarCampos();
+                if(this.p.devolucion()){
+                    JOptionPane.showMessageDialog(this, "Exito.. Se han devuelto los libros del prestamo", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+                    this.limpiarCampos();                    
                 }
             }
         }
@@ -932,7 +1074,7 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
     private void btnAtrasLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasLibroActionPerformed
         // TODO add your handling code here:
         contenedor.removeAll();
-        contenedor.add(panelLector);
+        contenedor.add(panelPrestamo);
         contenedor.repaint();
         contenedor.revalidate();
     }//GEN-LAST:event_btnAtrasLibroActionPerformed
@@ -940,30 +1082,96 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
     private void btnAtrasUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasUsuarioActionPerformed
         // TODO add your handling code here:
         contenedor.removeAll();
-        contenedor.add(panelLector);
+        contenedor.add(panelPrestamo);
         contenedor.repaint();
         contenedor.revalidate();
     }//GEN-LAST:event_btnAtrasUsuarioActionPerformed
 
+    private void btnBuscarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPrestamoActionPerformed
+        // TODO add your handling code here:
+        contenedor.removeAll();
+        contenedor.add(panelSeleccionPrestamo);
+        contenedor.repaint();
+        contenedor.revalidate();        
+    }//GEN-LAST:event_btnBuscarPrestamoActionPerformed
+
+    private void btnAtrasPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasPrestamoActionPerformed
+        // TODO add your handling code here:
+        contenedor.removeAll();
+        contenedor.add(panelPrestamo);
+        contenedor.repaint();
+        contenedor.revalidate();
+    }//GEN-LAST:event_btnAtrasPrestamoActionPerformed
+
+    private void btnMostrarPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarPrestamosActionPerformed
+        // TODO add your handling code here:
+        String [] devuleto= {"ORDER BY p.fecha_prestamo DESC",
+                             "AND p.fecha_dev IS NOT NULL ORDER BY p.fecha_dev",
+                             "AND p.fecha_dev IS NULL ORDER BY p.fecha_prestamo"};
+        String q= "SELECT p.id_prestamo AS 'Numero prestamo', p.id_lector AS 'Id del lector',"
+                + " CONCAT(u.nombre_usu, ' ', u.apellido_usu) AS 'Nombre del lector',"
+                + " p.fecha_dev AS 'Devolucion'  FROM prestamo p, lector l, usuario u"
+                + " WHERE p.id_lector=l.id_lector AND l.id_usuario= u.id_usuario ";
+        
+        if(cmbBuscarPrestamo.getSelectedIndex() != 0){
+            int seleccion= cmbBuscarPrestamo.getSelectedIndex()-1;
+            if(txtBuscarPrestamos.getText().trim().isEmpty()){
+                q+= devuleto[seleccion];
+            }
+            else{
+                String [] usu = this.txtBuscarPrestamos.getText().trim().toLowerCase().split(" ");
+                if(usu.length==2){
+                    q+="AND u.nombre_usu LIKE '"+usu[0]+"%' AND u.apellido_usu LIKE '"+usu[1]+"%' "
+                     +devuleto[seleccion];                    
+                }else{
+                    JOptionPane.showMessageDialog(this, "Debe digitar el primer nombre y el primer apellido del usuario",
+                                                  "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }                
+            }
+            tablaPrestamos.setModel(Prestamo.modeloTabla(q));
+            tablaPrestamos.setDefaultRenderer(Date.class, new MyTableRenderer.ImageRenderer());
+        }
+    }//GEN-LAST:event_btnMostrarPrestamosActionPerformed
+
+    private void tablaPrestamosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPrestamosMouseClicked
+        // TODO add your handling code here:
+        if(evt.getClickCount()==2){
+            int fila = tablaPrestamos.getSelectedRow();
+            this.p = Prestamo.buscarPrestamo(tablaPrestamos.getValueAt(fila, 0).toString());
+            this.llenarCamposPrestamo();
+            contenedor.removeAll();
+            contenedor.add(panelPrestamo);
+            contenedor.repaint();
+            contenedor.revalidate();            
+        }
+    }//GEN-LAST:event_tablaPrestamosMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JPanel10;
     private javax.swing.JButton btnAgregarLibro;
     private javax.swing.JButton btnAtrasLibro;
+    private javax.swing.JButton btnAtrasPrestamo;
     private javax.swing.JButton btnAtrasUsuario;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarLibro;
+    private javax.swing.JButton btnBuscarPrestamo;
     private javax.swing.JButton btnBuscarUsu;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLibro;
+    private javax.swing.JButton btnMostrarPrestamos;
     private javax.swing.JComboBox cmbBuscar;
     private javax.swing.JComboBox cmbBuscarLibro;
+    private javax.swing.JComboBox cmbBuscarPrestamo;
     private javax.swing.JPanel contenedor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -976,20 +1184,25 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPopupMenu jpmMenuTabla;
     private javax.swing.JLabel lblPrestamo;
     private javax.swing.JLabel lblTrabaja;
     private javax.swing.JMenuItem menuDelete;
-    private javax.swing.JPanel panelLector;
     private javax.swing.JPanel panelLibro;
+    private javax.swing.JPanel panelPrestamo;
+    private javax.swing.JPanel panelSeleccionPrestamo;
     private javax.swing.JPanel panelUsuario;
     private javax.swing.JTable tablaLibro;
     private javax.swing.JTable tablaLibros;
+    private javax.swing.JTable tablaPrestamos;
     private javax.swing.JTable tablaUsuario;
     private javax.swing.JTextField txtBuscarLibro;
+    private javax.swing.JTextField txtBuscarPrestamos;
     private javax.swing.JTextField txtBuscarUsuario;
     private javax.swing.JTextField txtEdad;
     private javax.swing.JTextField txtEditorial;

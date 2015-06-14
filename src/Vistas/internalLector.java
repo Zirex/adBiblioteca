@@ -163,8 +163,7 @@ public class internalLector extends javax.swing.JInternalFrame {
     }
     
     private void consultarLectorToday(){
-        String q= "SELECT ll.id_libro, l.nom_libro, l.nom_editorial, l.grado FROM lector_libro ll, libro l WHERE ";
-        this.l= Lector.buscarLector(idUsuario, q);
+        this.l= Lector.buscarLector(idUsuario);
         if(this.l != null){
             this.model.setDataVector(this.l.getLibros(), new Object[]{"id_libro", "nom_libro", "nom_editorial", "grado"});
         }

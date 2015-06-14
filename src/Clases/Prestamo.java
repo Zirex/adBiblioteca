@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -38,7 +39,7 @@ public class Prestamo extends Lector{
         try{
             String q="INSERT INTO prestamo(fecha_prestamo, id_lector) VALUES(?,?)";
             PreparedStatement pstm= this.getConexion().prepareStatement(q);
-            pstm.setDate(1, (java.sql.Date) this.fechaLecutra);
+            pstm.setDate(1, new java.sql.Date(this.fechaLecutra.getTime()));
             pstm.setInt(2, this.idLector);
             pstm.execute();
             pstm.close();
@@ -65,22 +66,30 @@ public class Prestamo extends Lector{
         }
     }
     
-    private void setLibrosPrestamo(String [][] librosLector){
+    public void setLibrosPrestamo(String [][] librosLector){
         try{
+            ArrayList<String> librosP= new ArrayList();
+            for (String [] libro : this.libros) {
+                librosP.add(libro[0]);
+            }
             Statement st= this.getConexion().createStatement();
-            int i= 0;
             for (String[] libro : librosLector) {
-                String[] libroP = this.libros[i];
-                if(libro[0].equals(libroP[0])){
-                    String q= "UPDATE lector_libro SET prestamo="+1+" WHERE id_lector="+this.idLector+
-                              " AND id_libro="+libro[0];
-                    st.execute(q);
-                    i++;
+                boolean ok= false;
+                for (String libroP : librosP) {
+                    if(libro[0].equals(libroP)){
+                        String q= "UPDATE lector_libro SET prestamo="+1+" WHERE id_lector="+this.idLector+
+                                  " AND id_libro="+libro[0];
+                        st.execute(q);
+                        librosP.remove(libroP);
+                        break;
+                    }
+                }
+                if(librosP.isEmpty()){
+                    break;
                 }
             }
-            for (;  i< this.libros.length; i++) {
-                String [] libro= this.libros[i];
-                String q= "INSERT lector_libro VALUES("+this.idLector+", "+libro[0]+", 1);";
+            for (int i= 0;  i< librosP.size(); i++) {
+                String q= "INSERT lector_libro VALUES("+this.idLector+", "+librosP.get(i)+", 1);";
                 st.execute(q);                
             }
             st.close();
@@ -91,8 +100,7 @@ public class Prestamo extends Lector{
     
     public boolean nuevoPrestamo(){
         boolean ok= false;
-        String q= "SELECT ll.id_libro, l.nom_libro, l.nom_editorial, l.grado FROM lector_libro ll, libro l WHERE ll.prestamo=1 ";
-        Lector l= Lector.buscarLector(this.idUsuario, q);
+        Lector l= Lector.buscarLector(this.idUsuario);
         if(l==null){
             if(this.insertarLector())
                 if(this.insertarPrestamo()){
@@ -101,6 +109,7 @@ public class Prestamo extends Lector{
                 }
         }
         else{
+            this.idLector= l.getIdLector();
             if(this.insertarPrestamo()){
                 this.setLibrosPrestamo(l.getLibros());
                 ok=true;
@@ -140,7 +149,8 @@ public class Prestamo extends Lector{
             }
             if(!map.isEmpty()){
                 q="SELECT ll.id_libro, lb.nom_libro, lb.nom_editorial, lb.grado "
-                + "FROM lector_libro ll, libro lb WHERE id_lector="+map.get("id_lector");
+                + "FROM lector_libro ll, libro lb WHERE ll.prestamo= 1 AND ll.id_libro=lb.id_libro "
+                + "AND ll.id_lector="+map.get("id_lector");
                 res= st.executeQuery(q);
                 ArrayList<HashMap> datos= new ArrayList();
                 while(res.next()){
@@ -163,9 +173,9 @@ public class Prestamo extends Lector{
                 
                 String idUsu= map.get("id_usuario")+"";
                 Date fechaPre= new SimpleDateFormat("yyyy-MM-dd").parse(map.get("fecha_prestamo").toString());
-                String fecha= map.get("fecha_dev").toString();
+                String fecha= map.get("fecha_dev")+"";
                 Date fechaDevo= null;
-                if(fecha != null){
+                if(!fecha.equals("null")){
                     fechaDevo= new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
                 }
                 prestamo= new Prestamo(idPrestamo, idUsu, fechaPre, fechaDevo, libros);
@@ -175,5 +185,55 @@ public class Prestamo extends Lector{
             System.err.println(e.getMessage());
         }
         return prestamo;
+    }
+    
+    private static ArrayList<HashMap> getPrestamos(String q){
+        ArrayList<HashMap> prestamos= new ArrayList();
+        Conexion con= new Conexion();
+        try{
+            Statement st= con.getConexion().createStatement();
+            ResultSet res= st.executeQuery(q);
+            while(res.next()){
+                HashMap map= new HashMap();
+                ResultSetMetaData data= res.getMetaData();
+                for (int i = 1; i <= data.getColumnCount(); i++) {
+                    map.put(data.getColumnLabel(i), res.getString(i));
+                }
+                prestamos.add(map);
+            }
+            res.close();
+        }catch(SQLException e){
+            System.err.println(e.getMessage());
+        }
+        return prestamos;
+    }
+    
+    public static DefaultTableModel modeloTabla(String q){
+        ArrayList<HashMap> prestamos= Prestamo.getPrestamos(q);
+        String [] ColumName = {"Numero prestamo","Id del lector","Nombre del lector","Devuelto"};
+        Object[][] datos= new Object[prestamos.size()][ColumName.length];
+        int i= 0;
+        for (HashMap prestamo : prestamos) {
+            for (int j = 0; j < datos[i].length; j++) {
+                datos[i][j]= prestamo.get(ColumName[j]);
+            }
+            i++;
+        }
+        DefaultTableModel modelo;
+        modelo = new DefaultTableModel(datos, ColumName){
+            @Override
+            public boolean isCellEditable(int i, int il){
+                return false;
+            }
+            
+            public Class<?> getColumnClass(int c){
+                if(c == 3){
+                    return Date.class;
+                }else{
+                    return String.class;
+                }
+            }
+        };
+        return modelo;
     }
 }
