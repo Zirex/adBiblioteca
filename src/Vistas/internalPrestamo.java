@@ -168,7 +168,7 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
     }
     
     private void llenarCamposPrestamo(){
-       String q="SELECT id_usuario, fecha_nac_usu, grado_estudio, trabaja "
+       String q="SELECT id_usuario, nombre_usu, apellido_usu, fecha_nac_usu, grado_estudio, trabaja "
                +"FROM usuario WHERE id_usuario="+this.p.getIdUsuario();
        ArrayList<HashMap> usuP= Usuario.usuarios(q);
        this.llenarCamposUsuario(usuP.get(0));
@@ -879,7 +879,7 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
             String [] usu = this.txtNombreUsuario.getText().trim().toLowerCase().split(" ");
             if(usu.length==2){
                 String sql= "SELECT id_usuario, nombre_usu, apellido_usu, fecha_nac_usu,"
-                          + " grado_estudio, trabaja, miembro FROM usuario WHERE miembro= 1 AND nombre_usu"
+                          + " grado_estudio, trabaja, miembro FROM usuario WHERE nombre_usu"
                           + " LIKE '"+usu[0]+"%' AND apellido_usu LIKE '"+usu[1]+"%'";
                 this.usuarios= Usuario.usuarios(sql);
                 
@@ -893,7 +893,13 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
                 else{
                     if(this.usuarios.size() == 1){
                         HashMap map = this.usuarios.get(0);
-                        this.llenarCamposUsuario(map);
+                        if(map.get("miembro").equals("1")){
+                            this.llenarCamposUsuario(map);                            
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(this, "El usuario no es miembro de la biblioteca.\nPara realizar la operación debe ser miembro.",
+                                                          "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+                        }
                     }
                     else{
                         this.cargarTablaUsuario();
@@ -1017,7 +1023,7 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
                 }
             }
             else{
-                if(this.p.devolucion()){
+                if(this.p.devolucionPrestamo()){
                     JOptionPane.showMessageDialog(this, "Exito.. Se han devuelto los libros del prestamo", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
                     this.limpiarCampos();                    
                 }

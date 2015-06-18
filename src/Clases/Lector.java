@@ -19,14 +19,16 @@ import javax.swing.table.DefaultTableModel;
 public class Lector extends Conexion{
     protected int idLector;
     protected String idUsuario;
+    protected String devuelto;
     protected Date fechaLecutra;
     protected String [][] libros;
     
-    private Lector(int idLector, String idUsuario, Date fechaLecutra, String [][] libros){
+    private Lector(int idLector, String idUsuario, Date fechaLecutra, String [][] libros, String devuelto){
         this.idLector= idLector;
         this.idUsuario= idUsuario;
         this.fechaLecutra= fechaLecutra;
         this.libros= libros;
+        this.devuelto=devuelto;
     }
     
     public Lector(String idUsuario, Date fechaLecutra, String [][] libros) {
@@ -46,6 +48,10 @@ public class Lector extends Conexion{
 
     public Date getFechaLecutra() {
         return fechaLecutra;
+    }
+
+    public String getDevuelto() {
+        return devuelto;
     }
     
     private int setIdLector(){
@@ -77,7 +83,7 @@ public class Lector extends Conexion{
             for(String[] libro : this.libros) {
                 String[] libroN= libros[i-1];
                 if(!libro[0].equals(libroN[0])){
-                    String sql="DELETE FROM lector_libro WHERE id_lector="+this.idLector+" AND id_libro="+libro[0];
+                    String sql="UPDATE libro SET en_servicio= en_servicio-1 WHERE id_libro="+libro[0];
                     st.execute(sql);
                 }
                 else if( (i+1) < libros.length ){
@@ -88,6 +94,8 @@ public class Lector extends Conexion{
             for ( ; i <= libros.length-1; i++) {
                 String[] libro= libros[i];
                 String sql= "INSERT INTO lector_libro(id_lector, id_libro) VALUES("+this.idLector+", "+libro[0]+")";
+                st.execute(sql);
+                sql= "UPDATE libro SET en_servicio= en_servicio+1 WHERE id_libro="+libro[0];
                 st.execute(sql);
             }
             st.close();
@@ -118,16 +126,42 @@ public class Lector extends Conexion{
     private void agregarLibrosLector(){
         try{
             String q= "INSERT INTO lector_libro(id_lector, id_libro) VALUES(?,?)";
-            PreparedStatement pstm= this.getConexion().prepareStatement(q);
+            String q1= "UPDATE libro SET en_servicio= en_servicio+1 WHERE id_libro=?";
+            PreparedStatement pstm= this.getConexion().prepareStatement(q),
+                              pstm1= this.getConexion().prepareStatement(q1);
             for (String[] libro : libros) {
                 pstm.setInt(1, idLector);
                 pstm.setString(2, libro[0]);
                 pstm.execute();
+                
+                pstm1.setString(1, libro[0]);
+                pstm1.execute();
             }
             pstm.close();
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
+    }
+    
+    public boolean devolverLector(){
+        boolean ok= false;
+        try{
+            String q= "UPDATE libro SET en_servicio= en_servicio-1 WHERE id_libro=?";
+            String q1= "UPDATE lector SET devuelto=1 WHERE id_lector="+this.idLector;
+            PreparedStatement pstm= this.getConexion().prepareStatement(q),
+                              pstm1= this.getConexion().prepareStatement(q1);
+            for (String[] libro : libros) {
+                pstm.setString(1, libro[0]);
+                pstm.execute();
+            }
+            pstm.close();
+            pstm1.execute();
+            pstm1.close();
+            ok= true;
+        }catch(SQLException e){
+            System.err.println(e.getMessage());
+        }
+        return ok;
     }
     
     public boolean nuevoLector(){
@@ -195,6 +229,7 @@ public class Lector extends Conexion{
                 
                 String idLector= map.get("id_lector").toString();
                 String fecha= map.get("fecha_lectura").toString();
+                String activo= map.get("devuelto").toString();
                 Date fechaLectura= new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
                 String [][] libros = new String[datos.size()][4];
                 String [] columName= {"id_libro", "nom_libro", "nom_editorial", "grado"};
@@ -205,7 +240,7 @@ public class Lector extends Conexion{
                     }
                     i++;
                 }
-                lector= new Lector(Integer.valueOf(idLector), idUsuario, fechaLectura, libros);
+                lector= new Lector(Integer.valueOf(idLector), idUsuario, fechaLectura, libros, activo);
             }
             
         }catch(SQLException | ParseException e){
@@ -242,5 +277,26 @@ public class Lector extends Conexion{
                 return false;
             }  
         };
+    }
+    
+    public static String libroEnServicio(String idLibro){
+        Conexion con= new Conexion();
+        String msj= null;
+        try{
+            Statement st= con.getConexion().createStatement();
+            String q= "SELECT ejemplares-en_servicio AS 'disponibilidad' FROM libro WHERE id_libro="+idLibro;
+            ResultSet res= st.executeQuery(q);
+            int resultado=0;
+            while(res.next()){
+                resultado= res.getInt(1);
+            }
+            res.close();
+            if(resultado==0){
+                msj="El libro no cuenta con ejemplares disponibles para usar";
+            }
+        }catch(SQLException e){
+            System.err.println(e.getMessage());
+        }
+        return msj;
     }
 }

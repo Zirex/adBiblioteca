@@ -118,13 +118,14 @@ public class Prestamo extends Lector{
         return ok;
     }
     
-    public boolean devolucion(){
+    public boolean devolucionPrestamo(){
         try{
             String q= "UPDATE prestamo SET fecha_dev='"+new java.sql.Date(new Date().getTime())+"' "
                     + "WHERE id_prestamo="+this.idPrestamo;
             Statement st= this.getConexion().createStatement();
             st.execute(q);
             st.close();
+            this.devolverLector();
             return true;
         }catch(SQLException e){
             System.out.println(e.getMessage());
