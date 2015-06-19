@@ -1,11 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Vistas;
 
+import Clases.Grafico;
 import Clases.Lector;
+import java.awt.Dimension;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -19,7 +16,7 @@ public class internalResumen extends javax.swing.JInternalFrame {
      */
     public internalResumen() {
         initComponents();
-        this.cargarTablaLector();
+        this.cargarTablaLector();        
     }
     
     private void cargarTablaLector(){
@@ -31,6 +28,23 @@ public class internalResumen extends javax.swing.JInternalFrame {
 //        column.setCellRenderer(new MyTableRenderer.BotonLibroRenderer());
 //        column.setCellEditor(new MyTableRenderer.BotonLibroEditor(tablaLibro));
         
+    }
+    
+    private void cargarGrafico(){
+        Grafico miGrafico= new Grafico();
+        Dimension d= this.contenedorEstadistico.getSize();
+        int [] valor={30, 15, 50, 10, 25, 20, 3, 16, 13, 40, 35, 5};
+        String [] grupoDato= {"Visitantes"};
+        String [] ColumName= {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                              "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre",
+                              "Diciembre"};
+        String [] etiquetaGrafico= {"Lectores al mes", "Meses", "Lectores"};
+        
+        miGrafico.crearGrafico(d, valor, grupoDato, ColumName, etiquetaGrafico);
+        
+        this.lbGrafico.setBounds(0, 0, d.width, d.height);
+        miGrafico.mostrarGrafico(lbGrafico);
+        this.repaint();
     }
 
     /**
@@ -48,10 +62,17 @@ public class internalResumen extends javax.swing.JInternalFrame {
         tablaLectores = new javax.swing.JTable();
         panelPrestamos = new javax.swing.JPanel();
         panelEstadistico = new javax.swing.JPanel();
+        contenedorEstadistico = new javax.swing.JPanel();
+        lbGrafico = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
         setTitle("Resumen de administración");
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
 
         contenedor.setLayout(new java.awt.GridLayout(3, 0));
 
@@ -91,17 +112,24 @@ public class internalResumen extends javax.swing.JInternalFrame {
         contenedor.add(panelPrestamos);
 
         panelEstadistico.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Cuadro estadistico"));
+        panelEstadistico.setLayout(new javax.swing.BoxLayout(panelEstadistico, javax.swing.BoxLayout.LINE_AXIS));
 
-        javax.swing.GroupLayout panelEstadisticoLayout = new javax.swing.GroupLayout(panelEstadistico);
-        panelEstadistico.setLayout(panelEstadisticoLayout);
-        panelEstadisticoLayout.setHorizontalGroup(
-            panelEstadisticoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout contenedorEstadisticoLayout = new javax.swing.GroupLayout(contenedorEstadistico);
+        contenedorEstadistico.setLayout(contenedorEstadisticoLayout);
+        contenedorEstadisticoLayout.setHorizontalGroup(
+            contenedorEstadisticoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 687, Short.MAX_VALUE)
+            .addGroup(contenedorEstadisticoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(lbGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 687, Short.MAX_VALUE))
         );
-        panelEstadisticoLayout.setVerticalGroup(
-            panelEstadisticoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 135, Short.MAX_VALUE)
+        contenedorEstadisticoLayout.setVerticalGroup(
+            contenedorEstadisticoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 136, Short.MAX_VALUE)
+            .addGroup(contenedorEstadisticoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(lbGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
         );
+
+        panelEstadistico.add(contenedorEstadistico);
 
         contenedor.add(panelEstadistico);
 
@@ -119,10 +147,17 @@ public class internalResumen extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        // TODO add your handling code here:
+        this.cargarGrafico();
+    }//GEN-LAST:event_formComponentShown
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel contenedor;
+    private javax.swing.JPanel contenedorEstadistico;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbGrafico;
     private javax.swing.JPanel panelEstadistico;
     private javax.swing.JPanel panelLectores;
     private javax.swing.JPanel panelPrestamos;
