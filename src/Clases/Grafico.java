@@ -3,6 +3,7 @@ package Clases;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.util.Calendar;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import org.jfree.chart.ChartFactory;
@@ -28,8 +29,17 @@ public class Grafico {
         // Se guardan los datos
         DefaultCategoryDataset dataSet= new DefaultCategoryDataset();
         // Se llenan los datos
-        for (int i = 0; i < valor.length; i++) {
-            dataSet.setValue(valor[i], grupoDato[0], ColumnName[i]);
+        int mes= Calendar.getInstance().get(Calendar.MONTH)+1;
+        int i= 0;
+        while(mes < 12){
+            dataSet.setValue(valor[i], grupoDato[0], ColumnName[mes]);
+            i++;
+            mes++;
+        }
+        int aux= 0;
+        for (; i < valor.length; i++) {
+            dataSet.setValue(valor[i], grupoDato[0], ColumnName[aux]);
+            aux++;
         }
         // Se crea el grafico
         this.grafico= ChartFactory.createBarChart(etiquetaGrafico[0], etiquetaGrafico[1],

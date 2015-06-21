@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import javax.swing.table.DefaultTableModel;
@@ -298,5 +299,43 @@ public class Lector extends Conexion{
             System.err.println(e.getMessage());
         }
         return msj;
+    }
+    
+    public static int[] visitantes(){
+        Conexion con= new Conexion();
+        int[] valor= new int[12];
+        Calendar fecha= Calendar.getInstance();
+        try{
+            String q= "SELECT COUNT(*) AS visitantes FROM lector WHERE YEAR(fecha_lectura) =? "
+                    + "AND MONTH(fecha_lectura) =?;";
+            PreparedStatement pstm= con.getConexion().prepareStatement(q);
+            ResultSet res = null;
+            int mes= fecha.get(Calendar.MONTH)+2;
+            int año= fecha.get(Calendar.YEAR)-1;
+            int i= 0;
+            while(mes <= 12){
+                pstm.setInt(1, año);
+                pstm.setInt(2, mes);
+                res= pstm.executeQuery();
+                while(res.next()){
+                    valor[i]= res.getInt("visitantes");
+                }
+                mes++;
+                i++;
+            }
+            for (int j = 1; j <= fecha.get(Calendar.MONTH)+1; j++) {
+                pstm.setInt(1, fecha.get(Calendar.YEAR));
+                pstm.setInt(2, j);
+                res= pstm.executeQuery();
+                while(res.next()){
+                    valor[i]=res.getInt("visitantes");
+                }
+                i++;
+            }
+            res.close();
+        }catch(SQLException e){
+            System.err.println(e.getMessage());
+        }
+        return valor;
     }
 }

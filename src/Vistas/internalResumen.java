@@ -3,6 +3,7 @@ package Vistas;
 import Clases.Grafico;
 import Clases.Lector;
 import java.awt.Dimension;
+import java.util.Calendar;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -33,11 +34,13 @@ public class internalResumen extends javax.swing.JInternalFrame {
     private void cargarGrafico(){
         Grafico miGrafico= new Grafico();
         Dimension d= this.contenedorEstadistico.getSize();
-        int [] valor={30, 15, 50, 10, 25, 20, 3, 16, 13, 40, 35, 5};
-        String [] grupoDato= {"Visitantes"};
+        int [] valor=Lector.visitantes();
+        int mes= Calendar.getInstance().get(Calendar.MONTH);
+        int año= Calendar.getInstance().get(Calendar.YEAR);
         String [] ColumName= {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
                               "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre",
                               "Diciembre"};
+        String [] grupoDato= {"Visitantes desde "+ ColumName[mes+1]+" del "+(año-1)+" Hasta "+ColumName[mes]+" "+año};
         String [] etiquetaGrafico= {"Lectores al mes", "Meses", "Lectores"};
         
         miGrafico.crearGrafico(d, valor, grupoDato, ColumName, etiquetaGrafico);
@@ -68,9 +71,21 @@ public class internalResumen extends javax.swing.JInternalFrame {
         setClosable(true);
         setIconifiable(true);
         setTitle("Resumen de administración");
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                formComponentShown(evt);
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameOpened(evt);
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
             }
         });
 
@@ -147,10 +162,10 @@ public class internalResumen extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+    private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
         // TODO add your handling code here:
         this.cargarGrafico();
-    }//GEN-LAST:event_formComponentShown
+    }//GEN-LAST:event_formInternalFrameOpened
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
