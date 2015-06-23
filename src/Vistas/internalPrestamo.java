@@ -3,6 +3,7 @@ package Vistas;
 import Clases.Libro;
 import Clases.Prestamo;
 import Clases.Usuario;
+import Reportes.IDetallePrestamo;
 import java.beans.PropertyVetoException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1174,12 +1175,21 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         if(evt.getClickCount()==2){
             int fila = tablaPrestamos.getSelectedRow();
-            this.p = Prestamo.buscarPrestamo(tablaPrestamos.getValueAt(fila, 0).toString());
-            this.llenarCamposPrestamo();
-            contenedor.removeAll();
-            contenedor.add(panelPrestamo);
-            contenedor.repaint();
-            contenedor.revalidate();            
+            String fecha= tablaPrestamos.getValueAt(fila, 3).toString();
+            int idPrestamo= Integer.parseInt(tablaPrestamos.getValueAt(fila, 0).toString());
+            int idLector= Integer.parseInt(tablaPrestamos.getValueAt(fila, 1).toString());
+            if(fecha.equals("null")){
+                this.p = Prestamo.buscarPrestamo(String.valueOf(idPrestamo));
+                this.llenarCamposPrestamo();
+                contenedor.removeAll();
+                contenedor.add(panelPrestamo);
+                contenedor.repaint();
+                contenedor.revalidate();                
+            }
+            else{
+                
+                new IDetallePrestamo().cargarDetallePrestamo(idPrestamo, idLector);
+            }
         }
     }//GEN-LAST:event_tablaPrestamosMouseClicked
 
