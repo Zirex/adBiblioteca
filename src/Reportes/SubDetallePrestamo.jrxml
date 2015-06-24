@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a652bffe-249d-4d8a-a3b3-8e879542d82a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idLector" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT ll.id_libro, lb.nom_libro, lb.nom_editorial, lb.nom_autor FROM lector_libro ll, libro lb, lector l WHERE ll.id_lector= l.id_lector AND ll.id_libro= lb.id_libro AND ll.id_lector=$P{idLector};]]>
+	</queryString>
+	<field name="id_libro" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nom_libro" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nom_editorial" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nom_autor" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="80" splitType="Stretch">
+			<textField>
+				<reportElement x="158" y="0" width="164" height="20" uuid="2d206414-363a-4fc4-b55a-f2d2740f0997"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id_libro}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="158" height="20" uuid="a87e9799-0027-428a-9d06-620ee874ff24"/>
+				<textElement textAlignment="Justified">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Código del libro:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="158" height="20" uuid="b4bef094-5bc5-4823-a1d1-4adf027af394"/>
+				<textElement textAlignment="Justified">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Nombre del libro:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="158" height="20" uuid="cd72c678-3b94-4b53-aba7-2c251713c086"/>
+				<textElement textAlignment="Justified">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Nombre de la editorial:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="60" width="158" height="20" uuid="ead18a91-14c2-4742-b845-27c4ee22ce7c"/>
+				<textElement textAlignment="Justified">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Nombre del autor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="158" y="20" width="164" height="20" uuid="5c9ef44e-9465-47ab-83a9-19572169b9bd"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_libro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="158" y="40" width="164" height="20" uuid="146bd92e-ee07-4a94-befa-aa9cb8f2d3b2"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_editorial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="158" y="60" width="164" height="20" uuid="530ac012-5147-46e7-b6cb-5b82fc60b440"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_autor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

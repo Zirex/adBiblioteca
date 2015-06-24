@@ -196,7 +196,7 @@ public class internalBuscarLibro extends javax.swing.JInternalFrame {
         if(!busqueda.isEmpty() && seleccion > -1){
             String q= "SELECT nom_libro AS Libro, nom_editorial AS Editorial, nom_autor AS Autor,"
                     + " grado AS Grado, prestamo AS Prestamo, area As Area, ubicacion AS Ubicación FROM"
-                    + " libro WHERE "+campoBusqueda[seleccion]+"='"+busqueda+"';";
+                    + " libro WHERE "+campoBusqueda[seleccion]+" LIKE'"+busqueda+"%';";
             this.cargarTablaLibros(q, ColumName);
         }
         else{

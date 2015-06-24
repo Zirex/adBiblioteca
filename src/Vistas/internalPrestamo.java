@@ -74,9 +74,18 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
           @Override
           public boolean isCellEditable(int i, int il){
                 return false;
-            }  
+            }
+          @Override
+          public Class<?> getColumnClass(int c){
+                if(c == 3){
+                    return Integer.class;
+                }else{
+                    return String.class;
+                }
+            }
         };
         this.tablaUsuario.setModel(model);
+        this.tablaUsuario.setDefaultRenderer(Integer.class, new MyTableRenderer.ImagenTablasPrestamo());
     }
     
     private Integer calcularEdad(String fecha){
@@ -144,9 +153,18 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
           @Override
           public boolean isCellEditable(int i, int il){
                 return false;
-            }  
+            }
+          @Override
+          public Class<?> getColumnClass(int c){
+                if(c == 4){
+                    return Integer.class;
+                }else{
+                    return String.class;
+                }
+            }
         };
         this.tablaLibro.setModel(model);
+        this.tablaLibro.setDefaultRenderer(Integer.class, new MyTableRenderer.ImagenTablasPrestamo());
     }
     
     private void limpiarCampos(){
@@ -962,7 +980,7 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
             String sql= "SELECT id_usuario, nombre_usu, apellido_usu, fecha_nac_usu,"
                       + " grado_estudio, trabaja, miembro FROM usuario WHERE miembro= 1 ";
             if(!consultar.isEmpty()){
-                if(cmbBuscar.getSelectedItem().equals("Cedula")){
+                if(cmbBuscar.getSelectedItem().equals("cedula")){
                     sql+="AND ced_usuario='"+consultar+"'";
                 }
                 else{
@@ -1175,10 +1193,10 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         if(evt.getClickCount()==2){
             int fila = tablaPrestamos.getSelectedRow();
-            String fecha= tablaPrestamos.getValueAt(fila, 3).toString();
+            Object fecha= tablaPrestamos.getValueAt(fila, 3);
             int idPrestamo= Integer.parseInt(tablaPrestamos.getValueAt(fila, 0).toString());
             int idLector= Integer.parseInt(tablaPrestamos.getValueAt(fila, 1).toString());
-            if(fecha.equals("null")){
+            if(fecha==null){
                 this.p = Prestamo.buscarPrestamo(String.valueOf(idPrestamo));
                 this.llenarCamposPrestamo();
                 contenedor.removeAll();
@@ -1187,7 +1205,6 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
                 contenedor.revalidate();                
             }
             else{
-                
                 new IDetallePrestamo().cargarDetallePrestamo(idPrestamo, idLector);
             }
         }

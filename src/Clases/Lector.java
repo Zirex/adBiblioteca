@@ -263,7 +263,7 @@ public class Lector extends Conexion{
         for (HashMap lector : lectoresDelDia) {
             for (int j = 0; j <= 4 ; j++) {
                 if(j==3)
-                    lectores[i][j]= lector.get(ColumnName[j])+"/"+lector.get(ColumnName[j+1]);                
+                    lectores[i][j]= lector.get(ColumnName[j])+" / "+lector.get(ColumnName[j+1]);                
                 else if(j==4)
                     lectores[i][j]= lector.get(ColumnName[j+1]);
                 else

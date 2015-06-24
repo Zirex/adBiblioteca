@@ -228,6 +228,7 @@ public class Prestamo extends Lector{
                 return false;
             }
             
+            @Override
             public Class<?> getColumnClass(int c){
                 if(c == 3){
                     return Date.class;

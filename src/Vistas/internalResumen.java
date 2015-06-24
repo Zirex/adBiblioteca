@@ -2,8 +2,10 @@ package Vistas;
 
 import Clases.Grafico;
 import Clases.Lector;
+import Clases.Prestamo;
 import java.awt.Dimension;
 import java.util.Calendar;
+import java.util.Date;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -17,7 +19,7 @@ public class internalResumen extends javax.swing.JInternalFrame {
      */
     public internalResumen() {
         initComponents();
-        this.cargarTablaLector();        
+        this.cargarTablaLector();
     }
     
     private void cargarTablaLector(){
@@ -28,6 +30,16 @@ public class internalResumen extends javax.swing.JInternalFrame {
 //        TableColumn column = this.tablaLibro.getColumnModel().getColumn(7);
 //        column.setCellRenderer(new MyTableRenderer.BotonLibroRenderer());
 //        column.setCellEditor(new MyTableRenderer.BotonLibroEditor(tablaLibro));
+        
+    }
+    
+    private void cargarTablaPrestamo(){
+        String q= "SELECT p.id_prestamo AS 'Numero prestamo', p.id_lector AS 'Id del lector', "
+                + "CONCAT(u.nombre_usu, ' ', u.apellido_usu) AS 'Nombre del lector', p.fecha_dev AS 'Devuelto' "
+                + "FROM prestamo p, lector l, usuario u "
+                + "WHERE p.id_lector=l.id_lector AND l.id_usuario= u.id_usuario ORDER BY l.fecha_lectura DESC LIMIT 15;";
+        this.tablaPrestamo.setModel(Prestamo.modeloTabla(q));
+        this.tablaPrestamo.setDefaultRenderer(Date.class, new MyTableRenderer.ImageRenderer());
         
     }
     
@@ -64,6 +76,8 @@ public class internalResumen extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaLectores = new javax.swing.JTable();
         panelPrestamos = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tablaPrestamo = new javax.swing.JTable();
         panelEstadistico = new javax.swing.JPanel();
         contenedorEstadistico = new javax.swing.JPanel();
         lbGrafico = new javax.swing.JLabel();
@@ -112,17 +126,22 @@ public class internalResumen extends javax.swing.JInternalFrame {
         contenedor.add(panelLectores);
 
         panelPrestamos.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Resumen de prestamos"));
+        panelPrestamos.setLayout(new javax.swing.BoxLayout(panelPrestamos, javax.swing.BoxLayout.LINE_AXIS));
 
-        javax.swing.GroupLayout panelPrestamosLayout = new javax.swing.GroupLayout(panelPrestamos);
-        panelPrestamos.setLayout(panelPrestamosLayout);
-        panelPrestamosLayout.setHorizontalGroup(
-            panelPrestamosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 687, Short.MAX_VALUE)
-        );
-        panelPrestamosLayout.setVerticalGroup(
-            panelPrestamosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 135, Short.MAX_VALUE)
-        );
+        tablaPrestamo.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tablaPrestamo);
+
+        panelPrestamos.add(jScrollPane2);
 
         contenedor.add(panelPrestamos);
 
@@ -164,6 +183,7 @@ public class internalResumen extends javax.swing.JInternalFrame {
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
         // TODO add your handling code here:
+        this.cargarTablaPrestamo();
         this.cargarGrafico();
     }//GEN-LAST:event_formInternalFrameOpened
 
@@ -172,10 +192,12 @@ public class internalResumen extends javax.swing.JInternalFrame {
     private javax.swing.JPanel contenedor;
     private javax.swing.JPanel contenedorEstadistico;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lbGrafico;
     private javax.swing.JPanel panelEstadistico;
     private javax.swing.JPanel panelLectores;
     private javax.swing.JPanel panelPrestamos;
     private javax.swing.JTable tablaLectores;
+    private javax.swing.JTable tablaPrestamo;
     // End of variables declaration//GEN-END:variables
 }

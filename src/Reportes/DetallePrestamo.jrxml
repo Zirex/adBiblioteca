@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b70abb77-2faf-4337-8ea2-bb5fedcda243">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b70abb77-2faf-4337-8ea2-bb5fedcda243">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -10,13 +10,17 @@
 	<parameter name="idLector" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="SubDetallePrestamo" class="java.io.InputStream"/>
 	<queryString>
-		<![CDATA[SELECT p.fecha_prestamo, p.fecha_dev, u.nombre_usu, u.apellido_usu, u.telf1_usuario, u.telf2_usuario, u.miembro FROM prestamo p, usuario u, lector l WHERE p.id_prestamo=$P{idPrestamo} AND p.id_lector=$P{idLector} AND p.id_lector=l.id_lector AND l.id_usuario=u.id_usuario;]]>
+		<![CDATA[SELECT p.fecha_prestamo, p.fecha_dev, u.id_usuario, u.nombre_usu, u.apellido_usu, u.telf1_usuario, u.telf2_usuario, u.miembro FROM prestamo p, usuario u, lector l WHERE p.id_prestamo=$P{idPrestamo} AND p.id_lector=$P{idLector} AND p.id_lector=l.id_lector AND l.id_usuario=u.id_usuario;]]>
 	</queryString>
 	<field name="fecha_prestamo" class="java.sql.Date">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="fecha_dev" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_usuario" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="nombre_usu" class="java.lang.String">
@@ -40,23 +44,33 @@
 	<title>
 		<band height="79" splitType="Stretch">
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="0" y="0" width="555" height="79" uuid="61e96eb3-4fce-4832-a773-3d7865dee491"/>
+				<reportElement x="0" y="0" width="572" height="79" uuid="61e96eb3-4fce-4832-a773-3d7865dee491"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch"/>
+		<band height="14" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="61" splitType="Stretch">
+		<band height="221" splitType="Stretch">
 			<textField>
-				<reportElement x="123" y="22" width="100" height="20" uuid="121d4916-c656-47c9-97f8-67bf404e2140"/>
-				<textFieldExpression><![CDATA[$F{nombre_usu}]]></textFieldExpression>
+				<reportElement x="0" y="0" width="572" height="39" uuid="cac3fcca-1a37-4f7b-8b16-ddb1173e87bf"/>
+				<textFieldExpression><![CDATA["Por medio de la presente, hace constar que el usuario "+ $F{nombre_usu}+" "+$F{apellido_usu}+" registrado bajo el codigo "+ $F{id_usuario}+" de la Biblioteca Pública del Municipio Pedro Maria Ureña. Realizo un prestamo de fecha "+ new SimpleDateFormat("dd-MM-yyyy").format($F{fecha_prestamo}) + " solicitando los siguientes libros."]]></textFieldExpression>
 			</textField>
+			<subreport>
+				<reportElement x="0" y="39" width="572" height="100" uuid="1936e2a6-5a58-4759-9b39-6baa8a825ca9"/>
+				<subreportParameter name="idLector">
+					<subreportParameterExpression><![CDATA[$P{idLector}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SubDetallePrestamo}]]></subreportExpression>
+			</subreport>
 			<textField>
-				<reportElement x="212" y="22" width="100" height="20" uuid="ae96a3c4-91db-4e58-aaf3-fac35ae45219"/>
-				<textFieldExpression><![CDATA[$F{apellido_usu}]]></textFieldExpression>
+				<reportElement x="0" y="151" width="572" height="70" uuid="cdb15cf5-4f71-4ceb-8beb-30e6a489190f"/>
+				<textFieldExpression><![CDATA["Haciendo un buen uso de los mismos y "+
+"recibiendolos por parte de la biblioteca el día "+new SimpleDateFormat("dd-MM-yyyy").format($F{fecha_dev})+
+" en perfectas condiciones."]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>

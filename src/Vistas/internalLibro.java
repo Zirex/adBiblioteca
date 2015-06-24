@@ -274,6 +274,7 @@ public class internalLibro extends javax.swing.JInternalFrame {
         this.tablaLibros.setModel(model);
         this.tablaLibros.getTableHeader().setReorderingAllowed(false);
         this.tablaLibros.setRowHeight(30);
+        this.tablaLibros.setDefaultRenderer(Boolean.class, new MyTableRenderer.ImageGestionLibro());
         TableColumn column = this.tablaLibros.getColumnModel().getColumn(7);
         column.setCellRenderer(new MyTableRenderer.BotonLibroRenderer());
         column.setCellEditor(new MyTableRenderer.BotonLibroEditor(tablaLibros));

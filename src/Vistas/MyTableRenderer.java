@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Vistas;
 
 import Clases.Libro;
@@ -111,4 +106,44 @@ public class MyTableRenderer {
             }        
      }
     
+    /* --------- DIBUJA UNA IMAGEN EN LA TABLA PRESTAMOS PARA SABER SI FUE DEVUELTO O NO ---------*/
+    public static class ImagenTablasPrestamo extends DefaultTableCellRenderer {
+         @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Image img = null;
+            int prestar= Integer.parseInt(value.toString());
+            if(prestar == 1) {
+                img = getToolkit().getImage(getClass().getResource("/Imagenes/green.png"));
+            } else {
+                img = getToolkit().getImage(getClass().getResource("/Imagenes/red.png"));
+            }
+            setSize(16, 16);
+            setHorizontalAlignment(SwingConstants.CENTER);
+            setIcon(new ImageIcon(img));
+            super.getTableCellRendererComponent(table, "", isSelected,
+                    hasFocus, row, column);
+            return this;
+            }        
+     }
+    
+    /* --------- DIBUJA UNA IMAGEN EN LA TABLA LIBROS PARA SABER SI FUE DEVUELTO O NO ---------*/
+    
+    public static class ImageGestionLibro extends DefaultTableCellRenderer {
+         @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Image img = null;
+            boolean valor= Boolean.parseBoolean(value.toString());
+            if(valor == true) {
+                img = getToolkit().getImage(getClass().getResource("/Imagenes/green.png"));
+            } else {
+                img = getToolkit().getImage(getClass().getResource("/Imagenes/red.png"));
+            }
+            setSize(16, 16);
+            setHorizontalAlignment(SwingConstants.CENTER);
+            setIcon(new ImageIcon(img));
+            super.getTableCellRendererComponent(table, "", isSelected,
+                    hasFocus, row, column);
+            return this;
+            }        
+     }
 }
