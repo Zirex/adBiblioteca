@@ -6,15 +6,14 @@
 package Vistas;
 
 import Clases.Usuario;
+import Reportes.IReporte;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JViewport;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -24,6 +23,8 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
     private Usuario usuario;
     private Principal principal;
     private internalUsuario usuTabla;
+    private ArrayList<HashMap> listaUsuarios;
+    private IReporte reporte;
 
     /**
      * Creates new form internalMostrarUsuarios
@@ -53,17 +54,18 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
         this.principal= principal;
         this.usuTabla= usuTabla;
         this.usuario= new Usuario();
+        this.reporte= new IReporte();
         this.cargarTabla();
     }
     
     private void cargarTabla(){
         String [] ColumnName = {"id Usuario", "Apellidos", "Nombres", "Direccion", "Telefonos"};
-        String q= "SELECT id_usuario, apellido_usu, nombre_usu, direccion_usu, telf1_usuario, telf2_usuario"
+        String q= "SELECT id_usuario, apellido_usu, nombre_usu, direccion_usu, telf1_usuario, telf2_usuario, miembro"
                 + " FROM usuario ORDER BY id_usuario DESC;";
-        ArrayList<HashMap> usuarios= this.usuario.usuarios(q);
-        Object [][] datos = new Object [usuarios.size()][ColumnName.length];
+        this.listaUsuarios= this.usuario.usuarios(q);
+        Object [][] datos = new Object [listaUsuarios.size()][ColumnName.length];
         int i = 0;
-        for (HashMap usu : usuarios) {
+        for (HashMap usu : listaUsuarios) {
             String linea [] = {usu.get("id_usuario").toString(), usu.get("apellido_usu").toString(),
                                usu.get("nombre_usu").toString(), usu.get("direccion_usu").toString(),
                                usu.get("telf1_usuario").toString()+" / "+ usu.get("telf2_usuario").toString()};
@@ -92,10 +94,12 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
 
         jpmUsuario = new javax.swing.JPopupMenu();
         jmiActualizar = new javax.swing.JMenuItem();
+        jmiPrint = new javax.swing.JMenuItem();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaUsuarios = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
 
+        jmiActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/editar20px.png"))); // NOI18N
         jmiActualizar.setText("Modificar usuario");
         jmiActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -104,10 +108,18 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
         });
         jpmUsuario.add(jmiActualizar);
 
+        jmiPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/print.png"))); // NOI18N
+        jmiPrint.setText("Imprimir lector");
+        jmiPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiPrintActionPerformed(evt);
+            }
+        });
+        jpmUsuario.add(jmiPrint);
+
         setClosable(true);
         setIconifiable(true);
         setTitle("Tabla de Usuarios");
-        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
         tablaUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -128,10 +140,11 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tablaUsuarios);
 
-        getContentPane().add(jScrollPane1);
+        getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Hacer doble clic ó clic derecho sobre la fila del usuario para visualizarlo detalladamente");
-        getContentPane().add(jLabel1);
+        getContentPane().add(jLabel1, java.awt.BorderLayout.PAGE_END);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -139,7 +152,11 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
     private void jmiActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiActualizarActionPerformed
         // TODO add your handling code here:
         int fila =  this.tablaUsuarios.getSelectedRow();
-        this.seleccionarUsuario(fila);
+        if(fila != -1)
+            this.seleccionarUsuario(fila);
+        else
+            JOptionPane.showMessageDialog(this, "No ha seleccionado ninguna usuario", "adBiblioteca", JOptionPane.ERROR_MESSAGE);
+        
     }//GEN-LAST:event_jmiActualizarActionPerformed
 
     private void tablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaUsuariosMouseClicked
@@ -150,11 +167,27 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_tablaUsuariosMouseClicked
 
+    private void jmiPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiPrintActionPerformed
+        // TODO add your handling code here:
+        int fila= this.tablaUsuarios.getSelectedRow();
+        if(fila != -1){
+            HashMap map= this.listaUsuarios.get(fila);
+            if(map.get("miembro").equals("1")){            
+                int idUsuario= Integer.parseInt(map.get("id_usuario").toString());
+                this.reporte.cargarDetalleUsuario(idUsuario);
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "No ha seleccionado ninguna usuario", "adBiblioteca", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jmiPrintActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuItem jmiActualizar;
+    private javax.swing.JMenuItem jmiPrint;
     private javax.swing.JPopupMenu jpmUsuario;
     private javax.swing.JTable tablaUsuarios;
     // End of variables declaration//GEN-END:variables

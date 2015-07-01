@@ -24,7 +24,7 @@ public class Lector extends Conexion{
     protected Date fechaLecutra;
     protected String [][] libros;
     
-    private Lector(int idLector, String idUsuario, Date fechaLecutra, String [][] libros, String devuelto){
+    protected Lector(int idLector, String idUsuario, Date fechaLecutra, String [][] libros, String devuelto){
         this.idLector= idLector;
         this.idUsuario= idUsuario;
         this.fechaLecutra= fechaLecutra;
@@ -139,6 +139,7 @@ public class Lector extends Conexion{
                 pstm1.execute();
             }
             pstm.close();
+            pstm1.close();
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }

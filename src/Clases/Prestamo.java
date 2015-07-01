@@ -25,8 +25,8 @@ public class Prestamo extends Lector{
     private String idPrestamo;
     private Date fechaDev;
 
-    private Prestamo(String idPrestamo, String idUsuario, Date fechaLecutra, Date fechaDev, String[][] libros) {
-        super(idUsuario, fechaLecutra, libros);
+    private Prestamo(String idPrestamo, int idLector, String idUsuario, String devuelto, Date fechaLecutra, Date fechaDev, String[][] libros) {
+        super(idLector, idUsuario,fechaLecutra, libros, devuelto);
         this.idPrestamo = idPrestamo;
         this.fechaDev= fechaDev;
     }    
@@ -53,13 +53,19 @@ public class Prestamo extends Lector{
     private void insertarLibroPrestamo(){
         try{
             String q = "INSERT INTO lector_libro VALUES(?,?,?)";
-            PreparedStatement pstm= this.getConexion().prepareStatement(q);
+            String q1= "UPDATE libro SET en_servicio= en_servicio+1 WHERE id_libro=?";
+            PreparedStatement pstm= this.getConexion().prepareStatement(q),
+                              pstm1= this.getConexion().prepareStatement(q1);
             for (String[] libro : libros) {
                 pstm.setInt(1, this.idLector);
                 pstm.setString(2, libro[0]);
                 pstm.setInt(3, 1);
                 pstm.execute();
+                
+                pstm1.setString(1, libro[0]);
+                pstm1.execute();
             }
+            pstm.close();
             pstm.close();
         }catch(SQLException e){
             System.out.println(e.getMessage());
@@ -138,7 +144,7 @@ public class Prestamo extends Lector{
         Conexion con= new Conexion();
         try{
             String q= "SELECT p.id_prestamo, p.fecha_prestamo, p.fecha_dev, p.id_lector,"
-                    + " l.id_usuario FROM prestamo p, lector l WHERE p.id_lector=l.id_lector"
+                    + " l.id_usuario, l.devuelto FROM prestamo p, lector l WHERE p.id_lector=l.id_lector"
                     + " AND id_prestamo="+idPrestamo;
             Statement st= con.getConexion().createStatement();
             ResultSet res= st.executeQuery(q);
@@ -174,13 +180,15 @@ public class Prestamo extends Lector{
                 }
                 
                 String idUsu= map.get("id_usuario")+"";
+                int idLec= Integer.parseInt(map.get("id_lector").toString());
                 Date fechaPre= new SimpleDateFormat("yyyy-MM-dd").parse(map.get("fecha_prestamo").toString());
                 String fecha= map.get("fecha_dev")+"";
+                String devuelto= map.get("devuelto").toString();
                 Date fechaDevo= null;
                 if(!fecha.equals("null")){
                     fechaDevo= new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
                 }
-                prestamo= new Prestamo(idPrestamo, idUsu, fechaPre, fechaDevo, libros);
+                prestamo= new Prestamo(idPrestamo, idLec, idUsu, devuelto,fechaPre, fechaDevo, libros);
             }
             
         }catch(SQLException | ParseException e){

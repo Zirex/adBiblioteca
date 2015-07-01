@@ -3,7 +3,7 @@ package Vistas;
 import Clases.Libro;
 import Clases.Prestamo;
 import Clases.Usuario;
-import Reportes.IDetallePrestamo;
+import Reportes.IReporte;
 import java.beans.PropertyVetoException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -184,6 +184,7 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
         for (int i = filas; i >= 0; i--) {
             this.model.removeRow(i);
         }
+        this.btnGuardar.setText("Guardar");
     }
     
     private void llenarCamposPrestamo(){
@@ -1205,7 +1206,7 @@ public class internalPrestamo extends javax.swing.JInternalFrame {
                 contenedor.revalidate();                
             }
             else{
-                new IDetallePrestamo().cargarDetallePrestamo(idPrestamo, idLector);
+                new IReporte().cargarDetallePrestamo(idPrestamo, idLector);
             }
         }
     }//GEN-LAST:event_tablaPrestamosMouseClicked

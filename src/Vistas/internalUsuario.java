@@ -121,6 +121,9 @@ public class internalUsuario extends Interfaz {
             showError(txtFechaMiembro, "Por favor seleccione ser miembro");
             error = true;
         }
+        if(this.jcfFoto.getPathFoto() == null && !this.txtFechaMiembro.getText().isEmpty()){
+            error = true;
+        }
         return error;
     }
     
