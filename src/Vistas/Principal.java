@@ -5,6 +5,7 @@
  */
 package Vistas;
 
+import Reportes.IReporte;
 import java.awt.Dimension;
 import java.beans.PropertyVetoException;
 import java.util.logging.Level;
@@ -23,6 +24,7 @@ public class Principal extends javax.swing.JFrame {
     private internalMostrarUsuarios iMUsuario;
     private internalLector iLector;
     private internalPrestamo iPrestamo;
+    private IReporte reporte;
 
     /**
      * Creates new form Principal
@@ -30,6 +32,7 @@ public class Principal extends javax.swing.JFrame {
     public Principal() {
         initComponents();
         this.setLocationRelativeTo(null);
+        this.reporte= new IReporte();
     }
     
     public boolean estaCerrado(Object obj){
@@ -66,11 +69,16 @@ public class Principal extends javax.swing.JFrame {
         jpmLibro = new javax.swing.JPopupMenu();
         jpmGestionLibro = new javax.swing.JMenuItem();
         jmiMostrarLibros = new javax.swing.JMenuItem();
+        jpmReporte = new javax.swing.JPopupMenu();
+        btnReporteLibros = new javax.swing.JMenuItem();
+        btnReporteUsuarios = new javax.swing.JMenuItem();
+        btnReportePrestamos = new javax.swing.JMenuItem();
         jToolBar1 = new javax.swing.JToolBar();
         btnLibro = new javax.swing.JButton();
         btnUsuario = new javax.swing.JButton();
         btnLector = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        btnReporte = new javax.swing.JButton();
         btnResumen = new javax.swing.JButton();
         panel = new javax.swing.JDesktopPane();
 
@@ -109,6 +117,33 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jpmLibro.add(jmiMostrarLibros);
+
+        btnReporteLibros.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/pdf.png"))); // NOI18N
+        btnReporteLibros.setText("Reporte libros");
+        btnReporteLibros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteLibrosActionPerformed(evt);
+            }
+        });
+        jpmReporte.add(btnReporteLibros);
+
+        btnReporteUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/pdf.png"))); // NOI18N
+        btnReporteUsuarios.setText("Reporte de usuarios");
+        btnReporteUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteUsuariosActionPerformed(evt);
+            }
+        });
+        jpmReporte.add(btnReporteUsuarios);
+
+        btnReportePrestamos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/pdf.png"))); // NOI18N
+        btnReportePrestamos.setText("Reporte prestamos");
+        btnReportePrestamos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportePrestamosActionPerformed(evt);
+            }
+        });
+        jpmReporte.add(btnReportePrestamos);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ADBiapp");
@@ -175,6 +210,20 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(jButton1);
+
+        btnReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/reporte.png"))); // NOI18N
+        btnReporte.setText("Reportes");
+        btnReporte.setContentAreaFilled(false);
+        btnReporte.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnReporte.setFocusable(false);
+        btnReporte.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnReporte.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnReporte.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnReporteMouseClicked(evt);
+            }
+        });
+        jToolBar1.add(btnReporte);
 
         btnResumen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/grafica.png"))); // NOI18N
         btnResumen.setText("Resumen");
@@ -349,6 +398,23 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void btnReporteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReporteMouseClicked
+       if(evt.getButton()== 1)
+           this.jpmReporte.show(this.btnReporte, evt.getX(), evt.getY());
+    }//GEN-LAST:event_btnReporteMouseClicked
+
+    private void btnReporteLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteLibrosActionPerformed
+        reporte.cargarReporteLibros();
+    }//GEN-LAST:event_btnReporteLibrosActionPerformed
+
+    private void btnReporteUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteUsuariosActionPerformed
+        reporte.cargarReporteUsuarios();
+    }//GEN-LAST:event_btnReporteUsuariosActionPerformed
+
+    private void btnReportePrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportePrestamosActionPerformed
+        reporte.cargarReportePrestamos();
+    }//GEN-LAST:event_btnReportePrestamosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -387,6 +453,10 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLector;
     private javax.swing.JButton btnLibro;
+    private javax.swing.JButton btnReporte;
+    private javax.swing.JMenuItem btnReporteLibros;
+    private javax.swing.JMenuItem btnReportePrestamos;
+    private javax.swing.JMenuItem btnReporteUsuarios;
     private javax.swing.JButton btnResumen;
     private javax.swing.JButton btnUsuario;
     private javax.swing.JButton jButton1;
@@ -396,6 +466,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmiMostrarLibros;
     private javax.swing.JMenuItem jpmGestionLibro;
     private javax.swing.JPopupMenu jpmLibro;
+    private javax.swing.JPopupMenu jpmReporte;
     private javax.swing.JPopupMenu jpmUsuario;
     public javax.swing.JDesktopPane panel;
     // End of variables declaration//GEN-END:variables

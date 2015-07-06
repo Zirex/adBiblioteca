@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3921b9cd-4f07-43d6-9bc4-33e7723a877a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#8FAFCC">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#CFDBE6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#8FAFCC">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#CFDBE6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#8FAFCC">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#CFDBE6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#F3F6F8"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="dataSetPrestamos" uuid="02b047ad-0a71-4751-b078-ef09441dfa0f">
+		<parameter name="green" class="java.io.InputStream" isForPrompting="false"/>
+		<parameter name="red" class="java.io.InputStream" isForPrompting="false"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT p.id_prestamo AS 'Cod. Prestamo', p.fecha_prestamo AS 'Fecha del prestamo', u.id_usuario AS 'Cod. Usuario', CONCAT(u.nombre_usu,' ',apellido_usu) AS 'Nombres y Apellidos', l.devuelto AS 'Devuelto' FROM prestamo p, lector l, usuario u WHERE p.id_lector=l.id_lector AND l.id_usuario=u.id_usuario;]]>
+		</queryString>
+		<field name="Cod. Prestamo" class="java.lang.Integer"/>
+		<field name="Fecha del prestamo" class="java.sql.Date"/>
+		<field name="Cod. Usuario" class="java.lang.Integer"/>
+		<field name="Nombres y Apellidos" class="java.lang.String"/>
+		<field name="Devuelto" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<group name="Cod. Prestamo">
+			<groupExpression><![CDATA[$F{Cod. Prestamo}]]></groupExpression>
+		</group>
+	</subDataset>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<parameter name="green" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="red" class="java.io.InputStream" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT 1 FROM dual;]]>
+	</queryString>
+	<field name="1" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="74" splitType="Stretch">
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="0" width="572" height="74" uuid="9fe7d233-ed7d-48e2-97cd-7a70cb41fcc7"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table 2" style="table 2" x="36" y="0" width="500" height="50" uuid="15f15236-fa9f-4aff-aa1f-c525ae6b1011"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="dataSetPrestamos" uuid="afd2b02e-c2a4-4223-b064-e7a2be036f6b">
+						<datasetParameter name="green">
+							<datasetParameterExpression><![CDATA[$P{green}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="red">
+							<datasetParameterExpression><![CDATA[$P{red}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="64" uuid="fb3a0ddb-81a0-4076-be37-e76df1ad6510">
+						<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="64" height="30" uuid="3a934501-5399-4583-b7ff-4a84d165d818"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Cod. Prestamo]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="64" height="20" uuid="81635fbc-928a-41e6-ad48-1db246668c23"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{Cod. Prestamo}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="95" uuid="91ebae64-bdfa-4d84-9a3d-d41f81322416">
+						<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="95" height="30" uuid="c531d166-4c5c-446d-bbcb-217b83371d05"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Fecha del prestamo]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="95" height="20" uuid="e38a2fc4-7b7f-4fc1-ba18-2948bed6bd8a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($F{Fecha del prestamo})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="55" uuid="1ff07b83-4d07-4347-8c95-d7e046517a2a">
+						<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="55" height="30" uuid="cefc33b2-d7e4-4335-8c33-9713bc47b1cd"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Cod. Usuario]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="55" height="20" uuid="5e6dd04f-ac9b-493e-b805-5df8c0c4076c"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{Cod. Usuario}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="195" uuid="976be11e-aa46-483f-a604-1e088b0b42b3">
+						<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="195" height="30" uuid="57e0f6e0-6729-4266-9812-4bb16b23548d"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Nombres y Apellidos]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="195" height="20" uuid="882dc96e-112b-449a-bd8d-126fee028cc3"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{Nombres y Apellidos}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="68d4ba6b-c64d-4652-b024-d8f45eccb970">
+						<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="4d247ca4-927c-4300-ba65-b80f7cbece6d"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Devuelto]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
+							<image hAlign="Center" vAlign="Middle">
+								<reportElement x="0" y="0" width="90" height="20" uuid="bdd7b405-d31a-445c-9100-097cfe06bba4"/>
+								<imageExpression><![CDATA[($F{Devuelto}.intValue() == 1 ? $P{green}:$P{red})]]></imageExpression>
+							</image>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="246" y="0" width="80" height="20" uuid="1690629c-2840-4399-a00e-7bc6ccf355e8"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="326" y="0" width="40" height="20" uuid="cb9573f7-0506-43d0-abf4-2cbd06f4ea87"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

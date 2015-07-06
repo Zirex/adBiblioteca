@@ -52,4 +52,54 @@ public class IReporte extends Conexion{
             System.err.println(e.getMessage());
         }
     }
+    
+    public void cargarReporteLibros(){
+        JasperReport repor;
+        JasperPrint re;
+        try{
+            URL in= this.getClass().getResource("ReporteLibros.jasper");
+            repor= (JasperReport) JRLoader.loadObject(in);
+            Map<String, Object> parametros= new HashMap<>();
+            parametros.clear();
+            parametros.put("logo", this.getClass().getResourceAsStream(logo));
+            re= JasperFillManager.fillReport(repor, parametros, this.getConexion());
+            JasperViewer.viewReport(re, false);
+        }catch(JRException e){
+            System.err.println(e.getMessage());
+        }
+    }
+    
+    public void cargarReporteUsuarios(){
+        JasperReport repor;
+        JasperPrint re;
+        try{
+            URL in= this.getClass().getResource("ReporteUsuarios.jasper");
+            repor= (JasperReport) JRLoader.loadObject(in);
+            Map<String, Object> parametros= new HashMap<>();
+            parametros.clear();
+            parametros.put("logo", this.getClass().getResourceAsStream(logo));
+            re= JasperFillManager.fillReport(repor, parametros, this.getConexion());
+            JasperViewer.viewReport(re, false);
+        }catch(JRException e){
+            System.err.println(e.getMessage());
+        }
+    }
+    
+    public void cargarReportePrestamos(){
+        JasperReport repor;
+        JasperPrint re;
+        try{
+            URL in= this.getClass().getResource("ReportePrestamos.jasper");
+            repor= (JasperReport) JRLoader.loadObject(in);
+            Map<String, Object> parametros= new HashMap<>();
+            parametros.clear();
+            parametros.put("logo", this.getClass().getResourceAsStream(logo));
+            parametros.put("green", this.getClass().getResourceAsStream("/Imagenes/green.png"));
+            parametros.put("red", this.getClass().getResourceAsStream("/Imagenes/red.png"));
+            re= JasperFillManager.fillReport(repor, parametros, this.getConexion());
+            JasperViewer.viewReport(re, false);
+        }catch(JRException e){
+            System.err.println(e.getMessage());
+        }
+    }
 }
