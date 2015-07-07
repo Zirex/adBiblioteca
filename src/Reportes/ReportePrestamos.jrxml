@@ -67,11 +67,31 @@
 			<style backcolor="#F3F6F8"/>
 		</conditionalStyle>
 	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#8FAFCC">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#CFDBE6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
 	<subDataset name="dataSetPrestamos" uuid="02b047ad-0a71-4751-b078-ef09441dfa0f">
-		<parameter name="green" class="java.io.InputStream" isForPrompting="false"/>
-		<parameter name="red" class="java.io.InputStream" isForPrompting="false"/>
-		<queryString language="SQL">
-			<![CDATA[SELECT p.id_prestamo AS 'Cod. Prestamo', p.fecha_prestamo AS 'Fecha del prestamo', u.id_usuario AS 'Cod. Usuario', CONCAT(u.nombre_usu,' ',apellido_usu) AS 'Nombres y Apellidos', l.devuelto AS 'Devuelto' FROM prestamo p, lector l, usuario u WHERE p.id_lector=l.id_lector AND l.id_usuario=u.id_usuario;]]>
+		<parameter name="green" class="java.io.InputStream"/>
+		<parameter name="red" class="java.io.InputStream"/>
+		<queryString>
+			<![CDATA[SELECT p.id_prestamo AS 'Cod. Prestamo', p.fecha_prestamo AS 'Fecha del prestamo', u.id_usuario AS 'Cod. Usuario', CONCAT(u.nombre_usu,' ',apellido_usu) AS 'Nombres y Apellidos', l.devuelto AS 'Devuelto' FROM prestamo p, lector l, usuario u WHERE p.id_lector=l.id_lector AND l.id_usuario=u.id_usuario ORDER BY p.id_prestamo DESC;]]>
 		</queryString>
 		<field name="Cod. Prestamo" class="java.lang.Integer"/>
 		<field name="Fecha del prestamo" class="java.sql.Date"/>
@@ -85,8 +105,8 @@
 		</group>
 	</subDataset>
 	<parameter name="logo" class="java.io.InputStream"/>
-	<parameter name="green" class="java.io.InputStream" isForPrompting="false"/>
-	<parameter name="red" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="green" class="java.io.InputStream"/>
+	<parameter name="red" class="java.io.InputStream"/>
 	<queryString>
 		<![CDATA[SELECT 1 FROM dual;]]>
 	</queryString>
@@ -107,7 +127,7 @@
 			<componentElement>
 				<reportElement key="table 2" style="table 2" x="36" y="0" width="500" height="50" uuid="15f15236-fa9f-4aff-aa1f-c525ae6b1011"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="dataSetPrestamos" uuid="afd2b02e-c2a4-4223-b064-e7a2be036f6b">
+					<datasetRun subDataset="dataSetPrestamos" uuid="23348688-1d16-43a8-a13b-d549c40a73e5">
 						<datasetParameter name="green">
 							<datasetParameterExpression><![CDATA[$P{green}]]></datasetParameterExpression>
 						</datasetParameter>
@@ -189,7 +209,7 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
-							<image hAlign="Center" vAlign="Middle">
+							<image hAlign="Center" vAlign="Middle" isUsingCache="true">
 								<reportElement x="0" y="0" width="90" height="20" uuid="bdd7b405-d31a-445c-9100-097cfe06bba4"/>
 								<imageExpression><![CDATA[($F{Devuelto}.intValue() == 1 ? $P{green}:$P{red})]]></imageExpression>
 							</image>
