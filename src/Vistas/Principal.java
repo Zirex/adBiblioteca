@@ -5,6 +5,7 @@
  */
 package Vistas;
 
+import Clases.Log;
 import Reportes.IReporte;
 import java.awt.Dimension;
 import java.beans.PropertyVetoException;
@@ -24,15 +25,25 @@ public class Principal extends javax.swing.JFrame {
     private internalMostrarUsuarios iMUsuario;
     private internalLector iLector;
     private internalPrestamo iPrestamo;
+    private internalConfigUser iConfigUser;
     private IReporte reporte;
+    private Log log;
 
-    /**
-     * Creates new form Principal
-     */
-    public Principal() {
+    public Principal(Log log) {
+        initComponents();
+        this.log = log;
+        this.setLocationRelativeTo(null);
+        this.reporte= new IReporte();
+        
+        btnUser.setText("Bienvenido "+this.log.getNomBibliotecario());
+        this.validarMenuUser(this.log.getTipoUsuario());
+    }
+    
+    private Principal() {
         initComponents();
         this.setLocationRelativeTo(null);
         this.reporte= new IReporte();
+        this.validarMenuUser(0);
     }
     
     public boolean estaCerrado(Object obj){
@@ -53,6 +64,13 @@ public class Principal extends javax.swing.JFrame {
                frame.setLocation((d.width - frame.getSize().width)/2,
                                 (d.height - frame.getSize().height)/2);
     }
+    
+    private void validarMenuUser(int tipo){
+        if(tipo != 1){
+            this.jpmGestionLibro.setVisible(false);
+            this.btnReporte.setVisible(false);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -63,42 +81,31 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jpmUsuario = new javax.swing.JPopupMenu();
-        jmGestionUsuario = new javax.swing.JMenuItem();
-        jmMostrarUsuarios = new javax.swing.JMenuItem();
         jpmLibro = new javax.swing.JPopupMenu();
         jpmGestionLibro = new javax.swing.JMenuItem();
         jmiMostrarLibros = new javax.swing.JMenuItem();
+        jpmUsuario = new javax.swing.JPopupMenu();
+        jmGestionUsuario = new javax.swing.JMenuItem();
+        jmMostrarUsuarios = new javax.swing.JMenuItem();
         jpmReporte = new javax.swing.JPopupMenu();
         btnReporteLibros = new javax.swing.JMenuItem();
         btnReporteUsuarios = new javax.swing.JMenuItem();
         btnReportePrestamos = new javax.swing.JMenuItem();
+        jpmUser = new javax.swing.JPopupMenu();
+        jmConfiguracion = new javax.swing.JMenuItem();
+        jmSalir = new javax.swing.JMenuItem();
+        Contenedor = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnLibro = new javax.swing.JButton();
         btnUsuario = new javax.swing.JButton();
         btnLector = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnPrestamo = new javax.swing.JButton();
         btnReporte = new javax.swing.JButton();
         btnResumen = new javax.swing.JButton();
+        btnControlUser = new javax.swing.JButton();
+        btnUser = new javax.swing.JButton();
+        ContenedorDesktop = new javax.swing.JPanel();
         panel = new javax.swing.JDesktopPane();
-
-        jmGestionUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/usuarioNuevo.png"))); // NOI18N
-        jmGestionUsuario.setText("Registrar usuario");
-        jmGestionUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmGestionUsuarioActionPerformed(evt);
-            }
-        });
-        jpmUsuario.add(jmGestionUsuario);
-
-        jmMostrarUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/1432716129_magnifier.png"))); // NOI18N
-        jmMostrarUsuarios.setText("Tabla usuarios");
-        jmMostrarUsuarios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmMostrarUsuariosActionPerformed(evt);
-            }
-        });
-        jpmUsuario.add(jmMostrarUsuarios);
 
         jpmGestionLibro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/bookMenu.png"))); // NOI18N
         jpmGestionLibro.setText("Gestion de libros");
@@ -117,6 +124,24 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jpmLibro.add(jmiMostrarLibros);
+
+        jmGestionUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/usuarioNuevo.png"))); // NOI18N
+        jmGestionUsuario.setText("Registrar usuario");
+        jmGestionUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmGestionUsuarioActionPerformed(evt);
+            }
+        });
+        jpmUsuario.add(jmGestionUsuario);
+
+        jmMostrarUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/1432716129_magnifier.png"))); // NOI18N
+        jmMostrarUsuarios.setText("Tabla usuarios");
+        jmMostrarUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmMostrarUsuariosActionPerformed(evt);
+            }
+        });
+        jpmUsuario.add(jmMostrarUsuarios);
 
         btnReporteLibros.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/pdf.png"))); // NOI18N
         btnReporteLibros.setText("Reporte libros");
@@ -145,10 +170,31 @@ public class Principal extends javax.swing.JFrame {
         });
         jpmReporte.add(btnReportePrestamos);
 
+        jmConfiguracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/tool.png"))); // NOI18N
+        jmConfiguracion.setText("Configuración");
+        jmConfiguracion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmConfiguracionActionPerformed(evt);
+            }
+        });
+        jpmUser.add(jmConfiguracion);
+
+        jmSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/outLog.png"))); // NOI18N
+        jmSalir.setText("Salir");
+        jmSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmSalirActionPerformed(evt);
+            }
+        });
+        jpmUser.add(jmSalir);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ADBiapp");
         setIconImage(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/library.png")).getImage()
         );
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
+
+        Contenedor.setLayout(new java.awt.BorderLayout());
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
@@ -196,20 +242,20 @@ public class Principal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnLector);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/prestamo1.png"))); // NOI18N
-        jButton1.setText("Prestamos");
-        jButton1.setBorderPainted(false);
-        jButton1.setContentAreaFilled(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnPrestamo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/prestamo1.png"))); // NOI18N
+        btnPrestamo.setText("Prestamos");
+        btnPrestamo.setBorderPainted(false);
+        btnPrestamo.setContentAreaFilled(false);
+        btnPrestamo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPrestamo.setFocusable(false);
+        btnPrestamo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnPrestamo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnPrestamo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnPrestamoActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton1);
+        jToolBar1.add(btnPrestamo);
 
         btnReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/reporte.png"))); // NOI18N
         btnReporte.setText("Reportes");
@@ -240,20 +286,41 @@ public class Principal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnResumen);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 782, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, 782, javax.swing.GroupLayout.PREFERRED_SIZE)
+        btnControlUser.setText("Cuentas");
+        btnControlUser.setFocusable(false);
+        btnControlUser.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnControlUser.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnControlUser);
+
+        btnUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/idUser.png"))); // NOI18N
+        btnUser.setContentAreaFilled(false);
+        btnUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUser.setFocusable(false);
+        btnUser.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnUserMouseClicked(evt);
+            }
+        });
+        jToolBar1.add(javax.swing.Box.createHorizontalGlue());
+        jToolBar1.add(btnUser);
+
+        Contenedor.add(jToolBar1, java.awt.BorderLayout.PAGE_START);
+
+        javax.swing.GroupLayout ContenedorDesktopLayout = new javax.swing.GroupLayout(ContenedorDesktop);
+        ContenedorDesktop.setLayout(ContenedorDesktopLayout);
+        ContenedorDesktopLayout.setHorizontalGroup(
+            ContenedorDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, 854, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, 645, javax.swing.GroupLayout.PREFERRED_SIZE))
+        ContenedorDesktopLayout.setVerticalGroup(
+            ContenedorDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
         );
+
+        Contenedor.add(ContenedorDesktop, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(Contenedor);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -380,7 +447,7 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jmiMostrarLibrosActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrestamoActionPerformed
         // TODO add your handling code here:
         if(this.estaCerrado(iPrestamo)){
             iPrestamo= new internalPrestamo(this, iUsuario);
@@ -396,7 +463,7 @@ public class Principal extends javax.swing.JFrame {
                 System.err.println(e.getMessage());
             }
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnPrestamoActionPerformed
 
     private void btnReporteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReporteMouseClicked
        if(evt.getButton()== 1)
@@ -414,6 +481,34 @@ public class Principal extends javax.swing.JFrame {
     private void btnReportePrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportePrestamosActionPerformed
         reporte.cargarReportePrestamos();
     }//GEN-LAST:event_btnReportePrestamosActionPerformed
+
+    private void btnUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUserMouseClicked
+        if(evt.getButton()==1){
+            this.jpmUser.show(this.btnUser, evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_btnUserMouseClicked
+
+    private void jmSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmSalirActionPerformed
+        this.dispose();
+        new GUILogin().setVisible(true);
+    }//GEN-LAST:event_jmSalirActionPerformed
+
+    private void jmConfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmConfiguracionActionPerformed
+        if(this.estaCerrado(iConfigUser)){
+            iConfigUser = new internalConfigUser(log);
+            panel.add(iConfigUser);
+            this.posicion(iConfigUser);
+            iConfigUser.show();
+        }
+        else{
+            iConfigUser.moveToFront();
+            try{
+                iConfigUser.setIcon(false);
+            }catch(PropertyVetoException e){
+                System.err.println(e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_jmConfiguracionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -451,22 +546,29 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel Contenedor;
+    private javax.swing.JPanel ContenedorDesktop;
+    private javax.swing.JButton btnControlUser;
     private javax.swing.JButton btnLector;
     private javax.swing.JButton btnLibro;
+    private javax.swing.JButton btnPrestamo;
     private javax.swing.JButton btnReporte;
     private javax.swing.JMenuItem btnReporteLibros;
     private javax.swing.JMenuItem btnReportePrestamos;
     private javax.swing.JMenuItem btnReporteUsuarios;
     private javax.swing.JButton btnResumen;
+    private javax.swing.JButton btnUser;
     private javax.swing.JButton btnUsuario;
-    private javax.swing.JButton jButton1;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JMenuItem jmConfiguracion;
     private javax.swing.JMenuItem jmGestionUsuario;
     private javax.swing.JMenuItem jmMostrarUsuarios;
+    private javax.swing.JMenuItem jmSalir;
     private javax.swing.JMenuItem jmiMostrarLibros;
     private javax.swing.JMenuItem jpmGestionLibro;
     private javax.swing.JPopupMenu jpmLibro;
     private javax.swing.JPopupMenu jpmReporte;
+    private javax.swing.JPopupMenu jpmUser;
     private javax.swing.JPopupMenu jpmUsuario;
     public javax.swing.JDesktopPane panel;
     // End of variables declaration//GEN-END:variables

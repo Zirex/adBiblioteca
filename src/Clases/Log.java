@@ -33,6 +33,40 @@ public class Log extends Conexion{
         this.pass= pass;
         this.tipoUsuario = tipoUsuario;
     }
+
+    public int getIdRol() {
+        return idRol;
+    }
+
+    public String getNomBibliotecario() {
+        return nomBibliotecario;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public int getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public boolean setPass(char[] pass) {
+        try{
+            String clave="";
+            for (char pas : pass) {
+                clave+=pas;
+            }
+            String q= "UPDATE rol SET clave=md5('"+clave+"') WHERE id_rol="+this.idRol;
+            PreparedStatement pstm= this.getConexion().prepareStatement(q);
+            pstm.execute();
+            pstm.close();
+            this.pass = pass;
+            return true;
+        }catch(SQLException e){
+            System.err.println(e.getMessage());
+            return false;
+        }
+    }
     
     public boolean insertarRol(){
         try{
@@ -146,11 +180,16 @@ public class Log extends Conexion{
                 }
             }
             res.close();
-            return new Log(Integer.parseInt(user.get("id_rol").toString()),
-                           user.get("nom_bibliotecario").toString(),
-                           user.get("username").toString(),
-                           user.get("clave").toString().toCharArray(),
-                           Integer.parseInt(user.get("tipo_rol").toString()));
+            if(!user.isEmpty()){
+                return new Log(Integer.parseInt(user.get("id_rol").toString()),
+                               user.get("nom_bibliotecario").toString(),
+                               user.get("username").toString(),
+                               user.get("clave").toString().toCharArray(),
+                               Integer.parseInt(user.get("tipo_rol").toString()));
+            }
+            else{
+                return null;
+            }
         }catch(SQLException | NumberFormatException e){
             System.err.println(e.getMessage());
             return null;

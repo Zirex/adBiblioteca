@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Vistas;
 
 import Clases.Log;
@@ -143,9 +138,13 @@ public class GUILogin extends javax.swing.JFrame {
         Log log= Log.existe(username, pass, tipoRol);
         if(log != null){
             this.dispose();
-            new Principal().setVisible(true);
+            new Principal(log).setVisible(true);
         }
-        
+        else{
+            JOptionPane.showMessageDialog(this, "Los datos no son los correctos o el usuario no existe, "
+                                              + "\nPor favor rectifique todos los campos o comuniquese con el administrador",
+                                         "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnEntrarActionPerformed
 
     private void txtUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsuarioFocusLost
