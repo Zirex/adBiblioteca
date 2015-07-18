@@ -142,8 +142,8 @@ public class GUILogin extends javax.swing.JFrame {
                 ok= false;
             }
             if(ok){
-                this.dispose();
                 new Principal(suso).setVisible(true);
+                this.dispose();
             }
             else{
                 JOptionPane.showMessageDialog(this, "Los datos suministrados no son los correctos... \nPor favor rectifique todos los campos", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
