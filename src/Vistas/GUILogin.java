@@ -130,19 +130,27 @@ public class GUILogin extends javax.swing.JFrame {
             return;
         }
         String username= txtUsuario.getText().trim();
-        char [] pass= txtClave.getPassword();
         int tipoRol= 0;
         if(cmbTipo.getSelectedItem().equals("Administrador"))
             tipoRol= 1;
         
-        Log log= Log.existe(username, pass, tipoRol);
-        if(log != null){
-            this.dispose();
-            new Principal(log).setVisible(true);
+        Log suso= Log.existe(username);
+        if(suso != null){
+            boolean ok= true;
+            ok=suso.passCorrecta(txtClave.getText());
+            if(suso.getTipoUsuario()!=tipoRol){
+                ok= false;
+            }
+            if(ok){
+                this.dispose();
+                new Principal(suso).setVisible(true);
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Los datos suministrados no son los correctos... \nPor favor rectifique todos los campos", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
         else{
-            JOptionPane.showMessageDialog(this, "Los datos no son los correctos o el usuario no existe, "
-                                              + "\nPor favor rectifique todos los campos o comuniquese con el administrador",
+            JOptionPane.showMessageDialog(this, "El usuario no existe, Por favor comuniquese con el administrador",
                                          "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnEntrarActionPerformed

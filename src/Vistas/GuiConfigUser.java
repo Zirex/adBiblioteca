@@ -12,15 +12,21 @@ import javax.swing.JOptionPane;
  *
  * @author zirex
  */
-public class internalConfigUser extends javax.swing.JInternalFrame {
-    private Log log;
-
+public class GuiConfigUser extends javax.swing.JDialog {
+    private Log suso;
     /**
-     * Creates new form internalConfigUser
+     * Creates new form GuiConfigUser
      */
-    public internalConfigUser(Log log) {
+    private GuiConfigUser(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
-        this.log= log;
+    }
+    
+    public GuiConfigUser(java.awt.Frame parent, boolean modal, String userName){
+        super(parent, modal);
+        initComponents();
+        this.setLocationRelativeTo(null);
+        this.suso= Log.existe(userName);
     }
     
     private char[] validarContraseña(){
@@ -60,9 +66,9 @@ public class internalConfigUser extends javax.swing.JInternalFrame {
         btnAceptar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
-        setClosable(true);
-        setIconifiable(true);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Configuración de login");
+        setResizable(false);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
         contenedor.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Gestion de Login"));
@@ -106,10 +112,10 @@ public class internalConfigUser extends javax.swing.JInternalFrame {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         char[] pass= this.validarContraseña();
         if(pass!=null){
-            this.log.setPass(pass);
+            this.suso.setPass(pass);
             JOptionPane.showMessageDialog(this, "Exito... Cambio de contraseña exitoso.", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
-        }   
+        }
         else{
             this.txtPass1.setText(null);
             this.txtPass2.setText(null);
@@ -121,6 +127,47 @@ public class internalConfigUser extends javax.swing.JInternalFrame {
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(GuiConfigUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(GuiConfigUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(GuiConfigUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(GuiConfigUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the dialog */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                GuiConfigUser dialog = new GuiConfigUser(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel botones;
