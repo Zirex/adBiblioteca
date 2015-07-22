@@ -176,6 +176,9 @@ public class internalMostrarUsuarios extends javax.swing.JInternalFrame {
                 int idUsuario= Integer.parseInt(map.get("id_usuario").toString());
                 this.reporte.cargarDetalleUsuario(idUsuario);
             }
+            else{
+                JOptionPane.showMessageDialog(this, "El usuario debe ser miembro de la biblioteca para imprimir el carnet", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
         else{
             JOptionPane.showMessageDialog(this, "No ha seleccionado ninguna usuario", "adBiblioteca", JOptionPane.ERROR_MESSAGE);

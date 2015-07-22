@@ -117,7 +117,7 @@ public class Principal extends javax.swing.JFrame {
         });
         jpmLibro.add(jmiGestionLibro);
 
-        jmiMostrarLibros.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/1432716129_magnifier.png"))); // NOI18N
+        jmiMostrarLibros.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/buscar3.png"))); // NOI18N
         jmiMostrarLibros.setText("Consulta de libros");
         jmiMostrarLibros.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -135,7 +135,7 @@ public class Principal extends javax.swing.JFrame {
         });
         jpmUsuario.add(jmiGestionUsuario);
 
-        jmiMostrarUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/1432716129_magnifier.png"))); // NOI18N
+        jmiMostrarUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/buscar3.png"))); // NOI18N
         jmiMostrarUsuarios.setText("Tabla usuarios");
         jmiMostrarUsuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -243,7 +243,7 @@ public class Principal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnLector);
 
-        btnPrestamo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/prestamo1.png"))); // NOI18N
+        btnPrestamo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/prestamo.png"))); // NOI18N
         btnPrestamo.setText("Prestamos");
         btnPrestamo.setBorderPainted(false);
         btnPrestamo.setContentAreaFilled(false);
@@ -325,7 +325,7 @@ public class Principal extends javax.swing.JFrame {
         );
         ContenedorDesktopLayout.setVerticalGroup(
             ContenedorDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
+            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
         );
 
         Contenedor.add(ContenedorDesktop, java.awt.BorderLayout.CENTER);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
     <Container class="javax.swing.JPopupMenu" name="jpmLibro">
 
@@ -22,7 +22,7 @@
         <MenuItem class="javax.swing.JMenuItem" name="jmiMostrarLibros">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Imagenes/1432716129_magnifier.png"/>
+              <Image iconType="3" name="/Imagenes/buscar3.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Consulta de libros"/>
           </Properties>
@@ -52,7 +52,7 @@
         <MenuItem class="javax.swing.JMenuItem" name="jmiMostrarUsuarios">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Imagenes/1432716129_magnifier.png"/>
+              <Image iconType="3" name="/Imagenes/buscar3.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Tabla usuarios"/>
           </Properties>
@@ -143,7 +143,6 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
-    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -235,7 +234,7 @@
             <Component class="javax.swing.JButton" name="btnPrestamo">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Imagenes/prestamo1.png"/>
+                  <Image iconType="3" name="/Imagenes/prestamo.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Prestamos"/>
                 <Property name="borderPainted" type="boolean" value="false"/>
@@ -343,7 +342,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="panel" alignment="0" pref="633" max="32767" attributes="0"/>
+                  <Component id="panel" alignment="0" pref="642" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
