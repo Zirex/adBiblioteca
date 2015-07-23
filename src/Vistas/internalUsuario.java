@@ -688,6 +688,7 @@ public class internalUsuario extends Interfaz {
 
     private void jdtFechaNacimientoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jdtFechaNacimientoFocusLost
         // TODO add your handling code here:
+        System.out.println("No entro al if");
         if(jdtFechaNacimiento.getDate() != null){
             System.out.println("entre en fecha nacimiento");
             normalizeInput(jdtFechaNacimiento);
