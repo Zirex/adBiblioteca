@@ -6,6 +6,9 @@
 package Vistas;
 
 import Clases.Usuario;
+import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -25,6 +28,17 @@ public class internalUsuario extends Interfaz {
      */
     public internalUsuario() {
         initComponents();
+        this.jdtFechaNacimiento.getDateEditor().getUiComponent().addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if("date".equals(evt.getPropertyName())){
+                    if(jdtFechaNacimiento.getDate() != null){
+                        normalizeInput(jdtFechaNacimiento);
+                    }
+                }
+            }
+        });
     }
     
     public void cargarUsuario(Usuario usuario){
@@ -288,6 +302,8 @@ public class internalUsuario extends Interfaz {
 
         contenedor.setLayout(new java.awt.BorderLayout());
 
+        jcfFoto.setBorder(null);
+
         javax.swing.GroupLayout panelFotoLayout = new javax.swing.GroupLayout(panelFoto);
         panelFoto.setLayout(panelFotoLayout);
         panelFotoLayout.setHorizontalGroup(
@@ -298,7 +314,7 @@ public class internalUsuario extends Interfaz {
             panelFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFotoLayout.createSequentialGroup()
                 .addComponent(jcfFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 220, Short.MAX_VALUE))
+                .addGap(0, 224, Short.MAX_VALUE))
         );
 
         contenedor.add(panelFoto, java.awt.BorderLayout.LINE_START);
@@ -342,19 +358,13 @@ public class internalUsuario extends Interfaz {
         jLabel4.setText("Sexo usuario:");
 
         cmbSexo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sexo", "M", "F" }));
-        cmbSexo.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                cmbSexoFocusLost(evt);
+        cmbSexo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbSexoItemStateChanged(evt);
             }
         });
 
         jLabel5.setText("Fecha nac. usuario:");
-
-        jdtFechaNacimiento.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jdtFechaNacimientoFocusLost(evt);
-            }
-        });
 
         jLabel6.setText("Tlf. Contacto 1:");
 
@@ -389,9 +399,9 @@ public class internalUsuario extends Interfaz {
         jLabel10.setText("Grado de estudio:");
 
         cmbGrado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Grado de estudio", "Primaria", "Secundaria", "Tecnico", "Universitario" }));
-        cmbGrado.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                cmbGradoFocusLost(evt);
+        cmbGrado.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbGradoItemStateChanged(evt);
             }
         });
 
@@ -453,7 +463,7 @@ public class internalUsuario extends Interfaz {
                                         .addComponent(cmbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(4, 4, 4))
                                     .addComponent(jdtFechaNacimiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(0, 97, Short.MAX_VALUE))
+                        .addGap(0, 101, Short.MAX_VALUE))
                     .addGroup(PanelDatosLayout.createSequentialGroup()
                         .addGroup(PanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -679,32 +689,22 @@ public class internalUsuario extends Interfaz {
         soloABC(evt);
     }//GEN-LAST:event_txtApUsuarioKeyTyped
 
-    private void cmbSexoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cmbSexoFocusLost
-        // TODO add your handling code here:
-        if(!cmbSexo.getSelectedItem().equals("Sexo")){
-            normalizeInput(cmbSexo);
-        }
-    }//GEN-LAST:event_cmbSexoFocusLost
-
-    private void jdtFechaNacimientoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jdtFechaNacimientoFocusLost
-        // TODO add your handling code here:
-        System.out.println("No entro al if");
-        if(jdtFechaNacimiento.getDate() != null){
-            System.out.println("entre en fecha nacimiento");
-            normalizeInput(jdtFechaNacimiento);
-        }
-    }//GEN-LAST:event_jdtFechaNacimientoFocusLost
-
     private void txtCedulaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyTyped
         // TODO add your handling code here:
         soloNum(evt);
     }//GEN-LAST:event_txtCedulaKeyTyped
 
-    private void cmbGradoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cmbGradoFocusLost
-        if(!cmbGrado.getSelectedItem().equals("Grado de estudio")){
+    private void cmbSexoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbSexoItemStateChanged
+        if(evt.getStateChange() != ItemEvent.SELECTED){
+            normalizeInput(cmbSexo);
+        }
+    }//GEN-LAST:event_cmbSexoItemStateChanged
+
+    private void cmbGradoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbGradoItemStateChanged
+        if(evt.getStateChange() != ItemEvent.SELECTED){
             normalizeInput(cmbGrado);
         }
-    }//GEN-LAST:event_cmbGradoFocusLost
+    }//GEN-LAST:event_cmbGradoItemStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelDatos;

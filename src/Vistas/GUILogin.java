@@ -2,6 +2,7 @@ package Vistas;
 
 import Clases.Log;
 import java.awt.Color;
+import java.awt.event.ItemEvent;
 import javax.swing.JOptionPane;
 
 /**
@@ -88,9 +89,9 @@ public class GUILogin extends javax.swing.JFrame {
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, -1, -1));
 
         cmbTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "---Tipo de usuario---", "Administrador", "Usuario" }));
-        cmbTipo.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                cmbTipoFocusLost(evt);
+        cmbTipo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbTipoItemStateChanged(evt);
             }
         });
         getContentPane().add(cmbTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 220, -1));
@@ -162,19 +163,19 @@ public class GUILogin extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtUsuarioFocusLost
 
-    private void cmbTipoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cmbTipoFocusLost
-        if(cmbTipo.getSelectedIndex() != 0){
-            cmbTipo.setBackground(javax.swing.UIManager.getColor("comboBox.Background"));
-            cmbTipo.setToolTipText(null);
-        }
-    }//GEN-LAST:event_cmbTipoFocusLost
-
     private void txtClaveFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtClaveFocusLost
         if(!txtClave.getText().isEmpty()){
             txtClave.setBorder(new javax.swing.JTextField().getBorder());
             txtClave.setToolTipText(null);
         }
     }//GEN-LAST:event_txtClaveFocusLost
+
+    private void cmbTipoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbTipoItemStateChanged
+        if(evt.getStateChange()!=ItemEvent.SELECTED){
+            cmbTipo.setBackground(javax.swing.UIManager.getColor("comboBox.Background"));
+            cmbTipo.setToolTipText(null);
+        }
+    }//GEN-LAST:event_cmbTipoItemStateChanged
 
     /**
      * @param args the command line arguments
