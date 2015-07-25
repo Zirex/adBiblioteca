@@ -37,7 +37,7 @@ public abstract class Interfaz extends javax.swing.JInternalFrame {
     }
     
     public static void showError(javax.swing.JTextArea txt, String msj) {
-        txt.setBackground(Color.red);
+        txt.setBorder(javax.swing.BorderFactory.createEtchedBorder(Color.lightGray, Color.red));
         txt.setToolTipText(msj);
     }
     

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Vistas;
 
 import Clases.Usuario;
@@ -564,7 +559,6 @@ public class internalUsuario extends Interfaz {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jcbEstudiaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jcbEstudiaStateChanged
-        // TODO add your handling code here:
         if(this.jcbEstudia.isSelected()){
             this.txtInstitucion.setEditable(true);
             this.txtInstitucion.setEnabled(true);
@@ -578,7 +572,6 @@ public class internalUsuario extends Interfaz {
     }//GEN-LAST:event_jcbEstudiaStateChanged
 
     private void jcbMiembroStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jcbMiembroStateChanged
-        // TODO add your handling code here:
         if(this.jcbMiembro.isSelected()){
             this.fechaMiembro = new Date();            
             this.txtFechaMiembro.setText(this.formateador.format(this.fechaMiembro));
@@ -590,7 +583,6 @@ public class internalUsuario extends Interfaz {
     }//GEN-LAST:event_jcbMiembroStateChanged
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
         String cedula = this.txtCedula.getText().trim().toUpperCase();
         String nombreUsu= this.txtNomUsuario.getText().trim();
         String apellidoUsu= this.txtApUsuario.getText().trim();
@@ -651,34 +643,28 @@ public class internalUsuario extends Interfaz {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
         this.limpiarCampo();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtTlf1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTlf1KeyTyped
-        // TODO add your handling code here:
         soloNum(evt);
     }//GEN-LAST:event_txtTlf1KeyTyped
 
     private void txtTlf2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTlf2KeyTyped
-        // TODO add your handling code here:
         soloNum(evt);
     }//GEN-LAST:event_txtTlf2KeyTyped
 
     private void txtNomUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNomUsuarioFocusLost
-        // TODO add your handling code here:
         if(!txtNomUsuario.getText().isEmpty()){
             normalizeInput(txtNomUsuario);
         }
     }//GEN-LAST:event_txtNomUsuarioFocusLost
 
     private void txtNomUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomUsuarioKeyTyped
-        // TODO add your handling code here:
         soloABC(evt);
     }//GEN-LAST:event_txtNomUsuarioKeyTyped
 
     private void txtApUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtApUsuarioFocusLost
-        // TODO add your handling code here:
         if(!txtApUsuario.getText().isEmpty()){
             normalizeInput(txtApUsuario);
         }
@@ -690,7 +676,6 @@ public class internalUsuario extends Interfaz {
     }//GEN-LAST:event_txtApUsuarioKeyTyped
 
     private void txtCedulaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyTyped
-        // TODO add your handling code here:
         soloNum(evt);
     }//GEN-LAST:event_txtCedulaKeyTyped
 
