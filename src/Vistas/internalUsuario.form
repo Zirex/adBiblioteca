@@ -289,6 +289,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtTlf1">
               <Events>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtTlf1FocusLost"/>
                 <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtTlf1KeyTyped"/>
               </Events>
             </Component>
@@ -299,6 +300,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtTlf2">
               <Events>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtTlf2FocusLost"/>
                 <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtTlf2KeyTyped"/>
               </Events>
             </Component>
@@ -308,6 +310,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtDireccion">
+              <Events>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtDireccionFocusLost"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JCheckBox" name="jcbEstudia">
               <Properties>

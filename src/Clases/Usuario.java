@@ -282,7 +282,7 @@ public class Usuario extends Conexion{
     //metodo que dada una cadena de bytes la convierte en una imagen con extension png
     private Image ConvertirImagen(byte[] bytes) throws IOException {
         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-        Iterator readers = ImageIO.getImageReadersByFormatName("png");
+        Iterator readers = ImageIO.getImageReadersByFormatName("jpg");
         ImageReader reader = (ImageReader) readers.next();
         Object source = bis; // File or InputStream
         ImageInputStream iis = ImageIO.createImageInputStream(source);

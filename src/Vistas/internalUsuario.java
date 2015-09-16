@@ -115,9 +115,11 @@ public class internalUsuario extends Interfaz {
             showError(txtFechaMiembro, "Por favor seleccione ser miembro");
             error = true;
         }
-        if(this.jcfFoto.getPathFoto() == null && !this.txtFechaMiembro.getText().isEmpty()){
-            JOptionPane.showMessageDialog(this, "Debe seleccionar una foto para poder ser miembro", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
-            error = true;
+        if(this.jcbMiembro.isEnabled()){
+            if(this.jcfFoto.getPathFoto() == null && !this.txtFechaMiembro.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Debe seleccionar una foto para poder ser miembro", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+                error = true;
+            }
         }
         return error;
     }
@@ -363,6 +365,11 @@ public class internalUsuario extends Interfaz {
 
         jLabel6.setText("Tlf. Contacto 1:");
 
+        txtTlf1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtTlf1FocusLost(evt);
+            }
+        });
         txtTlf1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtTlf1KeyTyped(evt);
@@ -371,6 +378,11 @@ public class internalUsuario extends Interfaz {
 
         jLabel7.setText("Tlf. Contacto 2:");
 
+        txtTlf2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtTlf2FocusLost(evt);
+            }
+        });
         txtTlf2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtTlf2KeyTyped(evt);
@@ -378,6 +390,12 @@ public class internalUsuario extends Interfaz {
         });
 
         jLabel8.setText("Dirección usuario:");
+
+        txtDireccion.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtDireccionFocusLost(evt);
+            }
+        });
 
         jcbEstudia.setText("Estudia");
         jcbEstudia.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
@@ -690,6 +708,24 @@ public class internalUsuario extends Interfaz {
             normalizeInput(cmbGrado);
         }
     }//GEN-LAST:event_cmbGradoItemStateChanged
+
+    private void txtTlf1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTlf1FocusLost
+        if(!txtTlf1.getText().trim().isEmpty()){
+            normalizeInput(txtTlf1);
+        }
+    }//GEN-LAST:event_txtTlf1FocusLost
+
+    private void txtTlf2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTlf2FocusLost
+        if(!txtTlf2.getText().trim().isEmpty()){
+            normalizeInput(txtTlf2);
+        }
+    }//GEN-LAST:event_txtTlf2FocusLost
+
+    private void txtDireccionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDireccionFocusLost
+        if(!txtDireccion.getText().trim().isEmpty()){
+            normalizeInput(txtDireccion);
+        }
+    }//GEN-LAST:event_txtDireccionFocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelDatos;
