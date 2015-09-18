@@ -111,6 +111,13 @@ public class internalUsuario extends Interfaz {
             showError(cmbGrado, "Seleccione un grado de estudio para el usuario");
             error = true;
         }
+        if(this.jcfFoto.getPathFoto() != null){
+            String [] subGetPathFoto= this.jcfFoto.getPathFoto().split("\\.");
+            if(!subGetPathFoto[1].equalsIgnoreCase("jpg")){
+                JOptionPane.showMessageDialog(this, "El formato de la foto no es el correcto. Verifique que sea jpg", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+                error= true;
+            }
+        }
         if(this.jcfFoto.getPathFoto() != null && this.txtFechaMiembro.getText().isEmpty()){
             showError(txtFechaMiembro, "Por favor seleccione ser miembro");
             error = true;
@@ -593,6 +600,7 @@ public class internalUsuario extends Interfaz {
         if(this.jcbMiembro.isSelected()){
             this.fechaMiembro = new Date();            
             this.txtFechaMiembro.setText(this.formateador.format(this.fechaMiembro));
+            normalizeInput(txtFechaMiembro);
         }
         else{
             this.txtFechaMiembro.setText("");

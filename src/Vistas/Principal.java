@@ -70,6 +70,7 @@ public class Principal extends javax.swing.JFrame {
             this.jmiGestionLibro.setVisible(false);
             this.btnReporte.setVisible(false);
             this.btnControlUser.setVisible(false);
+            this.btnBD.setVisible(false);
         }
     }
 
@@ -104,6 +105,7 @@ public class Principal extends javax.swing.JFrame {
         btnReporte = new javax.swing.JButton();
         btnResumen = new javax.swing.JButton();
         btnControlUser = new javax.swing.JButton();
+        btnBD = new javax.swing.JButton();
         btnUser = new javax.swing.JButton();
         ContenedorDesktop = new javax.swing.JPanel();
         panel = new javax.swing.JDesktopPane();
@@ -301,6 +303,15 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(btnControlUser);
+
+        btnBD.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/dataBases.png"))); // NOI18N
+        btnBD.setText("Gestión data");
+        btnBD.setBorderPainted(false);
+        btnBD.setContentAreaFilled(false);
+        btnBD.setFocusable(false);
+        btnBD.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnBD.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnBD);
 
         btnUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/idUser.png"))); // NOI18N
         btnUser.setContentAreaFilled(false);
@@ -562,6 +573,7 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Contenedor;
     private javax.swing.JPanel ContenedorDesktop;
+    private javax.swing.JButton btnBD;
     private javax.swing.JButton btnControlUser;
     private javax.swing.JButton btnLector;
     private javax.swing.JButton btnLibro;
