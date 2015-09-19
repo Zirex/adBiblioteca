@@ -5,13 +5,16 @@
  */
 package Vistas;
 
+import Clases.GestionBD;
 import Clases.Log;
 import Reportes.IReporte;
 import java.awt.Dimension;
 import java.beans.PropertyVetoException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -28,12 +31,14 @@ public class Principal extends javax.swing.JFrame {
     private internalGestionCuentas iCuentas;
     private IReporte reporte;
     private Log suso;
+    private GestionBD baseDatos;
 
     public Principal(Log suso) {
         initComponents();
         this.suso = suso;
         this.setLocationRelativeTo(null);
         this.reporte= new IReporte();
+        this.baseDatos= new GestionBD();
         
         btnUser.setText("Bienvenido "+this.suso.getNomBibliotecario());
         this.validarMenuUser(this.suso.getTipoUsuario());
@@ -96,6 +101,10 @@ public class Principal extends javax.swing.JFrame {
         jpmUser = new javax.swing.JPopupMenu();
         jmiConfiguracion = new javax.swing.JMenuItem();
         jmiSalir = new javax.swing.JMenuItem();
+        jpmBD = new javax.swing.JPopupMenu();
+        jmiExportarBD = new javax.swing.JMenuItem();
+        jmiImportarBD = new javax.swing.JMenuItem();
+        jfcSeleccion = new javax.swing.JFileChooser();
         Contenedor = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnLibro = new javax.swing.JButton();
@@ -190,6 +199,24 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jpmUser.add(jmiSalir);
+
+        jmiExportarBD.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ExportDB.png"))); // NOI18N
+        jmiExportarBD.setText("Exportar data");
+        jmiExportarBD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiExportarBDActionPerformed(evt);
+            }
+        });
+        jpmBD.add(jmiExportarBD);
+
+        jmiImportarBD.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/importDB.png"))); // NOI18N
+        jmiImportarBD.setText("Importar data");
+        jmiImportarBD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiImportarBDActionPerformed(evt);
+            }
+        });
+        jpmBD.add(jmiImportarBD);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ADBiapp");
@@ -308,9 +335,15 @@ public class Principal extends javax.swing.JFrame {
         btnBD.setText("Gestión data");
         btnBD.setBorderPainted(false);
         btnBD.setContentAreaFilled(false);
+        btnBD.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBD.setFocusable(false);
         btnBD.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnBD.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnBD.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBDMouseClicked(evt);
+            }
+        });
         jToolBar1.add(btnBD);
 
         btnUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/idUser.png"))); // NOI18N
@@ -535,6 +568,33 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnControlUserActionPerformed
 
+    private void btnBDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBDMouseClicked
+        if(evt.getButton()==1){
+            this.jpmBD.show(this.btnBD, evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_btnBDMouseClicked
+
+    private void jmiExportarBDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiExportarBDActionPerformed
+        if(this.jfcSeleccion.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
+            if(this.baseDatos.CrearBackup(this.jfcSeleccion.getSelectedFile().getAbsolutePath()+".sql")){
+                JOptionPane.showMessageDialog(this, "Archivo generado, vereficar la ruta seleccionada", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(this, "Ha ocurrido un error el archivo no fue generado", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jmiExportarBDActionPerformed
+
+    private void jmiImportarBDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiImportarBDActionPerformed
+        if(this.jfcSeleccion.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+            if(this.baseDatos.restaurarBackup(this.jfcSeleccion.getSelectedFile().getAbsolutePath())){
+                JOptionPane.showMessageDialog(this, "Exito... Se ha restaurado la base de datos", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Error... No se ha podido restaurar la base de datos", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jmiImportarBDActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -583,15 +643,19 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnUser;
     private javax.swing.JButton btnUsuario;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JFileChooser jfcSeleccion;
     private javax.swing.JMenuItem jmiConfiguracion;
+    private javax.swing.JMenuItem jmiExportarBD;
     private javax.swing.JMenuItem jmiGestionLibro;
     private javax.swing.JMenuItem jmiGestionUsuario;
+    private javax.swing.JMenuItem jmiImportarBD;
     private javax.swing.JMenuItem jmiMostrarLibros;
     private javax.swing.JMenuItem jmiMostrarUsuarios;
     private javax.swing.JMenuItem jmiReporteLibros;
     private javax.swing.JMenuItem jmiReportePrestamos;
     private javax.swing.JMenuItem jmiReporteUsuarios;
     private javax.swing.JMenuItem jmiSalir;
+    private javax.swing.JPopupMenu jpmBD;
     private javax.swing.JPopupMenu jpmLibro;
     private javax.swing.JPopupMenu jpmReporte;
     private javax.swing.JPopupMenu jpmUser;

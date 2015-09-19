@@ -53,7 +53,6 @@ public class Grafico {
         
         // Se coloca el grafico en memoria
         this._imagen= this.grafico.createBufferedImage(this.d.width, this.d.height);
-        System.out.println("Grafico creado");
     }
     
     public void mostrarGrafico(JLabel lb){
