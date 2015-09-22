@@ -102,7 +102,7 @@ public class internalUsuario extends Interfaz {
             }
         }
         if(this.jcbEstudia.isSelected()){
-            if(this.txtInstitucion.getText().trim().equals("Nombre institución")){
+            if(this.txtInstitucion.getText().isEmpty()){
                 showError(txtInstitucion, "Por favor digite el nombre de la institución");
                 error = true;
             }
@@ -113,10 +113,10 @@ public class internalUsuario extends Interfaz {
         }
         if(this.jcfFoto.getPathFoto() != null){
             String [] subGetPathFoto= this.jcfFoto.getPathFoto().split("\\.");
-            if(!subGetPathFoto[1].equalsIgnoreCase("jpg")){
-                JOptionPane.showMessageDialog(this, "El formato de la foto no es el correcto. Verifique que sea jpg", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
-                error= true;
-            }
+            int leng= subGetPathFoto.length-1;
+            if(subGetPathFoto[leng].equalsIgnoreCase("jpg"))
+            JOptionPane.showMessageDialog(this, "El formato de la foto no es el correcto. Verifique que sea jpg", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
+            error= true;
         }
         if(this.jcfFoto.getPathFoto() != null && this.txtFechaMiembro.getText().isEmpty()){
             showError(txtFechaMiembro, "Por favor seleccione ser miembro");
@@ -415,6 +415,11 @@ public class internalUsuario extends Interfaz {
         txtInstitucion.setEditable(false);
         txtInstitucion.setText("Nombre institución");
         txtInstitucion.setEnabled(false);
+        txtInstitucion.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtInstitucionFocusLost(evt);
+            }
+        });
 
         jLabel10.setText("Grado de estudio:");
 
@@ -734,6 +739,12 @@ public class internalUsuario extends Interfaz {
             normalizeInput(txtDireccion);
         }
     }//GEN-LAST:event_txtDireccionFocusLost
+
+    private void txtInstitucionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtInstitucionFocusLost
+        if(jcbEstudia.isSelected() && !txtInstitucion.getText().isEmpty()){
+            normalizeInput(txtInstitucion);
+        }
+    }//GEN-LAST:event_txtInstitucionFocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelDatos;
