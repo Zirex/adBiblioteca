@@ -114,7 +114,7 @@ public class internalUsuario extends Interfaz {
         if(this.jcfFoto.getPathFoto() != null){
             String [] subGetPathFoto= this.jcfFoto.getPathFoto().split("\\.");
             int leng= subGetPathFoto.length-1;
-            if(subGetPathFoto[leng].equalsIgnoreCase("jpg"))
+            if(!subGetPathFoto[leng].equalsIgnoreCase("jpg"))
             JOptionPane.showMessageDialog(this, "El formato de la foto no es el correcto. Verifique que sea jpg", "adBiblioteca", JOptionPane.INFORMATION_MESSAGE);
             error= true;
         }
@@ -642,7 +642,7 @@ public class internalUsuario extends Interfaz {
         }
         if(this.validarCampos()){
             JOptionPane.showMessageDialog(this, "Por favor verifique los datos obligatorios"
-                                              + "\npara el registros de usuarios", "adBiblioteca", 
+                                              + "\npara el registro de usuarios", "adBiblioteca", 
                                           JOptionPane.INFORMATION_MESSAGE);
             return;
         }
